@@ -1,0 +1,325 @@
+/* CSS Variables for easy customization */
+:root {
+    --primary-color: #2563eb;
+    --primary-hover: #1d4ed8;
+    --secondary-color: #64748b;
+    --secondary-hover: #475569;
+    --success-color: #22c55e;
+    --error-color: #ef4444;
+    --warning-color: #f59e0b;
+    --background-color: #f8fafc;
+    --card-background: #ffffff;
+    --text-primary: #1e293b;
+    --text-secondary: #64748b;
+    --border-color: #e2e8f0;
+    --border-radius: 8px;
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+    --transition: all 0.2s ease-in-out;
+}
+
+/* Reset and Base Styles */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-primary);
+    line-height: 1.6;
+    min-height: 100vh;
+}
+
+/* Container */
+.container {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+}
+
+/* Header */
+header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+header h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+}
+
+.subtitle {
+    color: var(--text-secondary);
+    font-size: 1rem;
+}
+
+/* Form Styles */
+.request-form {
+    background: var(--card-background);
+    padding: 2rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-md);
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+}
+
+.required {
+    color: var(--error-color);
+}
+
+/* Input Styles */
+input[type="text"],
+input[type="email"],
+input[type="number"],
+input[type="date"],
+select,
+textarea {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    font-size: 1rem;
+    font-family: inherit;
+    color: var(--text-primary);
+    background-color: var(--card-background);
+    transition: var(--transition);
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+input::placeholder,
+textarea::placeholder {
+    color: var(--text-secondary);
+}
+
+textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+/* Priority Radio Buttons */
+.priority-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.radio-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    font-weight: 400;
+}
+
+.radio-label input[type="radio"] {
+    width: 1rem;
+    height: 1rem;
+    accent-color: var(--primary-color);
+}
+
+/* Buttons */
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.btn {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 500;
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-hover);
+}
+
+.btn-secondary {
+    background-color: var(--card-background);
+    color: var(--secondary-color);
+    border: 1px solid var(--border-color);
+}
+
+.btn-secondary:hover {
+    background-color: var(--background-color);
+    color: var(--secondary-hover);
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    margin-top: 2rem;
+    padding-top: 1rem;
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+}
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal.active {
+    display: flex;
+}
+
+.modal-content {
+    background: var(--card-background);
+    padding: 2rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-lg);
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+    position: relative;
+}
+
+.close-btn {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--text-secondary);
+    transition: var(--transition);
+}
+
+.close-btn:hover {
+    color: var(--text-primary);
+}
+
+.modal-icon {
+    width: 60px;
+    height: 60px;
+    background-color: var(--success-color);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    margin: 0 auto 1rem;
+}
+
+.modal-content h2 {
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+}
+
+.modal-content p {
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+}
+
+.request-id {
+    font-weight: 500;
+    color: var(--text-primary);
+    background-color: var(--background-color);
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-radius);
+    display: inline-block;
+    margin: 1rem 0;
+}
+
+.request-id span {
+    color: var(--primary-color);
+    font-family: monospace;
+}
+
+/* Validation States */
+input:invalid:not(:placeholder-shown),
+select:invalid:not(:placeholder-shown) {
+    border-color: var(--error-color);
+}
+
+input:valid:not(:placeholder-shown),
+select:valid {
+    border-color: var(--success-color);
+}
+
+/* Responsive Design */
+@media (max-width: 640px) {
+    .container {
+        padding: 1rem;
+    }
+
+    header h1 {
+        font-size: 1.5rem;
+    }
+
+    .request-form {
+        padding: 1.5rem;
+    }
+
+    .form-actions {
+        flex-direction: column-reverse;
+    }
+
+    .btn {
+        width: 100%;
+    }
+
+    .priority-options {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+}
+
+/* Print Styles */
+@media print {
+    body {
+        background: white;
+    }
+
+    .container {
+        max-width: 100%;
+    }
+
+    .form-actions,
+    footer {
+        display: none;
+    }
+}

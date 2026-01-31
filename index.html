@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Material Request Form</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Material Request</h1>
+            <p class="subtitle">Submit your material request using the form below</p>
+        </header>
+
+        <main>
+            <form id="request-form" class="request-form">
+                <div class="form-group">
+                    <label for="requester-name">Your Name <span class="required">*</span></label>
+                    <input type="text" id="requester-name" name="requesterName" required placeholder="Enter your full name">
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email Address <span class="required">*</span></label>
+                    <input type="email" id="email" name="email" required placeholder="your.email@example.com">
+                </div>
+
+                <div class="form-group">
+                    <label for="department">Department</label>
+                    <select id="department" name="department">
+                        <option value="">Select a department</option>
+                        <option value="engineering">Engineering</option>
+                        <option value="design">Design</option>
+                        <option value="marketing">Marketing</option>
+                        <option value="operations">Operations</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="material-type">Material Type <span class="required">*</span></label>
+                    <select id="material-type" name="materialType" required>
+                        <option value="">Select material type</option>
+                        <option value="office-supplies">Office Supplies</option>
+                        <option value="equipment">Equipment</option>
+                        <option value="software">Software</option>
+                        <option value="hardware">Hardware</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="material-name">Material Name <span class="required">*</span></label>
+                    <input type="text" id="material-name" name="materialName" required placeholder="What material do you need?">
+                </div>
+
+                <div class="form-group">
+                    <label for="quantity">Quantity <span class="required">*</span></label>
+                    <input type="number" id="quantity" name="quantity" required min="1" value="1">
+                </div>
+
+                <div class="form-group">
+                    <label for="priority">Priority Level</label>
+                    <div class="priority-options">
+                        <label class="radio-label">
+                            <input type="radio" name="priority" value="low"> Low
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="priority" value="medium" checked> Medium
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="priority" value="high"> High
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="priority" value="urgent"> Urgent
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="needed-by">Needed By</label>
+                    <input type="date" id="needed-by" name="neededBy">
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Additional Details</label>
+                    <textarea id="description" name="description" rows="4" placeholder="Provide any additional information about your request..."></textarea>
+                </div>
+
+                <div class="form-actions">
+                    <button type="reset" class="btn btn-secondary">Clear Form</button>
+                    <button type="submit" class="btn btn-primary">Submit Request</button>
+                </div>
+            </form>
+        </main>
+
+        <footer>
+            <p>&copy; 2026 Material Request System</p>
+        </footer>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="success-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <div class="modal-icon">&#10003;</div>
+            <h2>Request Submitted!</h2>
+            <p>Your material request has been successfully submitted.</p>
+            <p class="request-id">Request ID: <span id="request-id"></span></p>
+            <button class="btn btn-primary" id="close-modal">Close</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
