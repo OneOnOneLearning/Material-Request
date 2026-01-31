@@ -69,15 +69,16 @@ function populateStates() {
 }
 
 /**
- * Populate the program coordinators dropdown from index/coordinators.js
+ * Populate the program coordinators dropdown from index/programcoordinators.js
  */
 function populateProgramCoordinators() {
     // Check if PROGRAM_COORDINATORS is defined and has entries
     if (typeof PROGRAM_COORDINATORS !== 'undefined' && PROGRAM_COORDINATORS.length > 0) {
         PROGRAM_COORDINATORS.forEach(coordinator => {
             const option = document.createElement('option');
-            option.value = coordinator;
-            option.textContent = coordinator;
+            option.value = coordinator.email;  // Use email as value for backend
+            option.textContent = coordinator.name;  // Display name to user
+            option.dataset.name = coordinator.name;  // Store name in data attribute
             programCoordinatorSelect.appendChild(option);
         });
     } else {
@@ -87,7 +88,7 @@ function populateProgramCoordinators() {
         option.textContent = "No coordinators configured";
         option.disabled = true;
         programCoordinatorSelect.appendChild(option);
-        console.warn('No program coordinators defined in index/coordinators.js');
+        console.warn('No program coordinators defined in index/programcoordinators.js');
     }
 }
 
@@ -310,13 +311,21 @@ function generateRequestId() {
  * @returns {Object} The complete form data
  */
 function collectFormData() {
+    // Get selected coordinator's name from data attribute
+    const selectedOption = programCoordinatorSelect.selectedOptions[0];
+    const coordinatorName = selectedOption ? selectedOption.dataset.name || '' : '';
+    const coordinatorEmail = programCoordinatorSelect.value;
+
     const formData = {
         requestId: generateRequestId(),
         submittedAt: new Date().toISOString(),
         tutor: {
             name: document.getElementById('tutor-name').value,
             email: document.getElementById('tutor-email').value,
-            programCoordinator: programCoordinatorSelect.value,
+            programCoordinator: {
+                name: coordinatorName,
+                email: coordinatorEmail
+            },
             school: document.getElementById('school').value,
             state: stateSelect.value
         },
