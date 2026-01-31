@@ -24,8 +24,10 @@ const requestIdSpan = document.getElementById('request-id');
 // Section elements
 const tutorSection = document.getElementById('tutor-section');
 const studentsSection = document.getElementById('students-section');
-const continueBtn = document.getElementById('continue-to-students');
 const formActions = document.querySelector('.form-actions');
+
+// Track if students section has been shown
+let studentsSectionShown = false;
 
 // State tracking
 let studentCount = 0;
@@ -50,8 +52,8 @@ function init() {
     requestForm.addEventListener('submit', handleSubmit);
     requestForm.addEventListener('reset', handleReset);
 
-    // Section progression
-    continueBtn.addEventListener('click', handleContinueToStudents);
+    // Add listeners to tutor section fields for auto-transition
+    setupTutorFieldListeners();
 
     // Modal event listeners
     closeBtn.addEventListener('click', hideSuccessModal);
@@ -66,6 +68,56 @@ function init() {
     });
 
     console.log('Material Request Form initialized');
+}
+
+/**
+ * Setup listeners on tutor section fields to auto-show students section
+ */
+function setupTutorFieldListeners() {
+    const tutorName = document.getElementById('tutor-name');
+    const tutorEmail = document.getElementById('tutor-email');
+    const school = document.getElementById('school');
+
+    // Add input/change listeners to all tutor fields
+    tutorName.addEventListener('input', checkTutorSectionComplete);
+    tutorEmail.addEventListener('input', checkTutorSectionComplete);
+    programCoordinatorSelect.addEventListener('change', checkTutorSectionComplete);
+    school.addEventListener('input', checkTutorSectionComplete);
+    stateSelect.addEventListener('change', checkTutorSectionComplete);
+}
+
+/**
+ * Check if all tutor section fields are complete and show students section
+ */
+function checkTutorSectionComplete() {
+    // Don't re-trigger if already shown
+    if (studentsSectionShown) return;
+
+    if (validateTutorSection()) {
+        showStudentsSection();
+    }
+}
+
+/**
+ * Show the students section with fade-in
+ */
+function showStudentsSection() {
+    studentsSectionShown = true;
+
+    // Show students section
+    showSection(studentsSection);
+
+    // Show form actions after a slight delay
+    setTimeout(() => {
+        formActions.style.display = 'flex';
+        formActions.offsetHeight;
+        formActions.classList.add('visible');
+    }, 300);
+
+    // Scroll to students section smoothly
+    setTimeout(() => {
+        studentsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 100);
 }
 
 /**
@@ -110,35 +162,6 @@ function validateTutorSection() {
     }
 
     return true;
-}
-
-/**
- * Handle continue to students section
- */
-function handleContinueToStudents() {
-    // Validate tutor section
-    if (!validateTutorSection()) {
-        // Trigger HTML5 validation by trying to submit
-        const tutorInputs = tutorSection.querySelectorAll('input[required], select[required]');
-        for (const input of tutorInputs) {
-            if (!input.value.trim()) {
-                input.reportValidity();
-                return;
-            }
-        }
-        return;
-    }
-
-    // Show students section and form actions
-    showSection(studentsSection);
-    setTimeout(() => {
-        formActions.style.display = 'flex';
-        formActions.offsetHeight;
-        formActions.classList.add('visible');
-    }, 300);
-
-    // Scroll to students section
-    studentsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 /**
@@ -514,6 +537,9 @@ function handleReset() {
 
     // Add one student back
     addStudent();
+
+    // Reset section visibility flag
+    studentsSectionShown = false;
 
     // Reset section visibility - show only tutor section
     studentsSection.classList.remove('visible');
