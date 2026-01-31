@@ -9,84 +9,67 @@
 <body>
     <div class="container">
         <header>
-            <h1>Material Request</h1>
-            <p class="subtitle">Submit your material request using the form below</p>
+            <img src="logo.png" alt="Company Logo" class="logo">
+            <h1>Material Request Form</h1>
+            <p class="subtitle">Request learning materials for your students</p>
         </header>
 
         <main>
             <form id="request-form" class="request-form">
-                <div class="form-group">
-                    <label for="requester-name">Your Name <span class="required">*</span></label>
-                    <input type="text" id="requester-name" name="requesterName" required placeholder="Enter your full name">
-                </div>
+                <!-- Tutor Information Section -->
+                <section class="form-section">
+                    <h2 class="section-title">Tutor Information</h2>
 
-                <div class="form-group">
-                    <label for="email">Email Address <span class="required">*</span></label>
-                    <input type="email" id="email" name="email" required placeholder="your.email@example.com">
-                </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="tutor-name">Your Name <span class="required">*</span></label>
+                            <input type="text" id="tutor-name" name="tutorName" required placeholder="Enter your full name">
+                        </div>
 
-                <div class="form-group">
-                    <label for="department">Department</label>
-                    <select id="department" name="department">
-                        <option value="">Select a department</option>
-                        <option value="engineering">Engineering</option>
-                        <option value="design">Design</option>
-                        <option value="marketing">Marketing</option>
-                        <option value="operations">Operations</option>
-                        <option value="other">Other</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="material-type">Material Type <span class="required">*</span></label>
-                    <select id="material-type" name="materialType" required>
-                        <option value="">Select material type</option>
-                        <option value="office-supplies">Office Supplies</option>
-                        <option value="equipment">Equipment</option>
-                        <option value="software">Software</option>
-                        <option value="hardware">Hardware</option>
-                        <option value="other">Other</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="material-name">Material Name <span class="required">*</span></label>
-                    <input type="text" id="material-name" name="materialName" required placeholder="What material do you need?">
-                </div>
-
-                <div class="form-group">
-                    <label for="quantity">Quantity <span class="required">*</span></label>
-                    <input type="number" id="quantity" name="quantity" required min="1" value="1">
-                </div>
-
-                <div class="form-group">
-                    <label for="priority">Priority Level</label>
-                    <div class="priority-options">
-                        <label class="radio-label">
-                            <input type="radio" name="priority" value="low"> Low
-                        </label>
-                        <label class="radio-label">
-                            <input type="radio" name="priority" value="medium" checked> Medium
-                        </label>
-                        <label class="radio-label">
-                            <input type="radio" name="priority" value="high"> High
-                        </label>
-                        <label class="radio-label">
-                            <input type="radio" name="priority" value="urgent"> Urgent
-                        </label>
+                        <div class="form-group">
+                            <label for="tutor-email">Email Address <span class="required">*</span></label>
+                            <input type="email" id="tutor-email" name="tutorEmail" required placeholder="your.email@example.com">
+                        </div>
                     </div>
-                </div>
 
-                <div class="form-group">
-                    <label for="needed-by">Needed By</label>
-                    <input type="date" id="needed-by" name="neededBy">
-                </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="coordinator">Coordinator <span class="required">*</span></label>
+                            <input type="text" id="coordinator" name="coordinator" required placeholder="Coordinator name">
+                        </div>
 
-                <div class="form-group">
-                    <label for="description">Additional Details</label>
-                    <textarea id="description" name="description" rows="4" placeholder="Provide any additional information about your request..."></textarea>
-                </div>
+                        <div class="form-group">
+                            <label for="school">School <span class="required">*</span></label>
+                            <input type="text" id="school" name="school" required placeholder="School name">
+                        </div>
+                    </div>
 
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="state">State <span class="required">*</span></label>
+                            <select id="state" name="state" required>
+                                <option value="">Select a state</option>
+                                <!-- States populated by JavaScript -->
+                            </select>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Students Section -->
+                <section class="form-section">
+                    <h2 class="section-title">Student Information</h2>
+                    <p class="subtitle" style="margin-bottom: 1rem;">Add 1-4 students and select their requested materials</p>
+
+                    <div id="students-container" class="students-container">
+                        <!-- Student cards will be added here dynamically -->
+                    </div>
+
+                    <button type="button" id="add-student-btn" class="add-student-btn">
+                        <span>+</span> Add Another Student
+                    </button>
+                </section>
+
+                <!-- Form Actions -->
                 <div class="form-actions">
                     <button type="reset" class="btn btn-secondary">Clear Form</button>
                     <button type="submit" class="btn btn-primary">Submit Request</button>
@@ -98,6 +81,93 @@
             <p>&copy; 2026 Material Request System</p>
         </footer>
     </div>
+
+    <!-- Student Card Template -->
+    <template id="student-template">
+        <div class="student-card" data-student-index="">
+            <div class="student-header">
+                <span class="student-number">Student 1</span>
+                <button type="button" class="remove-student-btn">Remove</button>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Student Name <span class="required">*</span></label>
+                    <input type="text" name="studentName" required placeholder="Student's full name">
+                </div>
+
+                <div class="form-group">
+                    <label>Current Grade <span class="required">*</span></label>
+                    <select name="currentGrade" required>
+                        <option value="">Select grade</option>
+                        <!-- Grades populated by JavaScript -->
+                    </select>
+                </div>
+            </div>
+
+            <!-- Math Section -->
+            <div class="subject-section">
+                <div class="subject-title math">Math Materials</div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Math Request Grade <span class="required">*</span></label>
+                        <select name="mathGrade" required>
+                            <option value="">Select grade for materials</option>
+                            <!-- Grades populated by JavaScript -->
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Select Standards (max 4)</label>
+                    <div class="standards-container math-standards">
+                        <p class="empty-state">Select a math grade to see available standards</p>
+                    </div>
+                    <p class="standards-note math-standards-note">Select up to 4 standards</p>
+                </div>
+
+                <div class="form-group other-request">
+                    <label>Other Math Request</label>
+                    <input type="text" name="mathOther" placeholder="Any additional math materials needed...">
+                </div>
+            </div>
+
+            <!-- ELA Section -->
+            <div class="subject-section">
+                <div class="subject-title ela">ELA Materials</div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>ELA Request Grade <span class="required">*</span></label>
+                        <select name="elaGrade" required>
+                            <option value="">Select grade for materials</option>
+                            <!-- Grades populated by JavaScript -->
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Select Standards (max 4)</label>
+                    <div class="standards-container ela-standards">
+                        <p class="empty-state">Select an ELA grade to see available standards</p>
+                    </div>
+                    <p class="standards-note ela-standards-note">Select up to 4 standards</p>
+                </div>
+
+                <div class="form-group other-request">
+                    <label>Other ELA Request</label>
+                    <input type="text" name="elaOther" placeholder="Any additional ELA materials needed...">
+                </div>
+            </div>
+
+            <!-- Notes Section -->
+            <div class="form-group" style="margin-top: 1rem;">
+                <label>Notes for This Student</label>
+                <textarea name="studentNotes" rows="3" placeholder="Any special notes or requests for this student..."></textarea>
+            </div>
+        </div>
+    </template>
 
     <!-- Success Modal -->
     <div id="success-modal" class="modal">
@@ -111,6 +181,7 @@
         </div>
     </div>
 
+    <script src="standards.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
