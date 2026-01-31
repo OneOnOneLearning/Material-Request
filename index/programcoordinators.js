@@ -10,11 +10,22 @@
  */
 
 const PROGRAM_COORDINATORS = [
-    // Add your program coordinators here
-    // Example:
-    // { name: "John Smith", email: "john.smith@example.com" },
-    // { name: "Jane Doe", email: "jane.doe@example.com" },
-    // { name: "Robert Johnson", email: "robert.johnson@example.com" },
+    { name: "Amber Barnes", email: "amber@oneononelearning.com" },
+    { name: "Ayesha Turner", email: "ayesha@oneononelearning.com" },
+    { name: "Christine Simo", email: "christine@oneononelearning.com" },
+    { name: "Cristina Morejon", email: "cristina@oneononelearning.com" },
+    { name: "Eli Coenen", email: "eli@oneononelearning.com" },
+    { name: "Ester Solano", email: "ester@oneononelearning.com" },
+    { name: "Gabby Pinder", email: "gabby@oneononelearning.com" },
+    { name: "Gayle Thurston", email: "gayle@oneononelearning.com" },
+    { name: "Gretchen Ruiz", email: "gretchen@oneononelearning.com" },
+    { name: "James Justice", email: "james@oneononelearning.com" },
+    { name: "Katia Almeida", email: "katia@oneononelearning.com" },
+    { name: "Kelly Pippin", email: "kelly@oneononelearning.com" },
+    { name: "Margiet Zuniga", email: "margiet@oneononelearning.com" },
+    { name: "Susan N", email: "susan@oneononelearning.com" },
+    { name: "Tauheedah Barnes", email: "tauheedah@oneononelearning.com" },
+    { name: "Yesenia Miranda", email: "yesenia@oneononelearning.com" },
 ];
 
 // Export for use in other files (if using modules)
