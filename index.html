@@ -17,7 +17,7 @@
         <main>
             <form id="request-form" class="request-form">
                 <!-- Tutor Information Section -->
-                <section class="form-section">
+                <section id="tutor-section" class="form-section">
                     <h2 class="section-title">Tutor Information</h2>
 
                     <div class="form-row">
@@ -56,10 +56,14 @@
                             </select>
                         </div>
                     </div>
+
+                    <div class="section-actions">
+                        <button type="button" id="continue-to-students" class="btn btn-primary">Continue to Student Information</button>
+                    </div>
                 </section>
 
                 <!-- Students Section -->
-                <section class="form-section">
+                <section id="students-section" class="form-section">
                     <h2 class="section-title">Student Information</h2>
                     <p class="subtitle" style="margin-bottom: 1rem;">Add 1-4 students and select their requested materials</p>
 
@@ -114,8 +118,8 @@
 
                 <div class="form-row">
                     <div class="form-group">
-                        <label>Math Request Grade <span class="required">*</span></label>
-                        <select name="mathGrade" required>
+                        <label>Math Request Grade</label>
+                        <select name="mathGrade">
                             <option value="">Select grade for materials</option>
                             <!-- Grades populated by JavaScript -->
                         </select>
@@ -142,8 +146,8 @@
 
                 <div class="form-row">
                     <div class="form-group">
-                        <label>ELA Request Grade <span class="required">*</span></label>
-                        <select name="elaGrade" required>
+                        <label>ELA Request Grade</label>
+                        <select name="elaGrade">
                             <option value="">Select grade for materials</option>
                             <!-- Grades populated by JavaScript -->
                         </select>

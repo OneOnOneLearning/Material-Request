@@ -21,6 +21,12 @@ const closeBtn = document.querySelector('.close-btn');
 const closeModalBtn = document.getElementById('close-modal');
 const requestIdSpan = document.getElementById('request-id');
 
+// Section elements
+const tutorSection = document.getElementById('tutor-section');
+const studentsSection = document.getElementById('students-section');
+const continueBtn = document.getElementById('continue-to-students');
+const formActions = document.querySelector('.form-actions');
+
 // State tracking
 let studentCount = 0;
 
@@ -35,11 +41,17 @@ function init() {
     // Add first student automatically
     addStudent();
 
+    // Show first section with fade-in
+    showSection(tutorSection);
+
     // Event listeners
     addStudentBtn.addEventListener('click', addStudent);
     stateSelect.addEventListener('change', handleStateChange);
     requestForm.addEventListener('submit', handleSubmit);
     requestForm.addEventListener('reset', handleReset);
+
+    // Section progression
+    continueBtn.addEventListener('click', handleContinueToStudents);
 
     // Modal event listeners
     closeBtn.addEventListener('click', hideSuccessModal);
@@ -54,6 +66,79 @@ function init() {
     });
 
     console.log('Material Request Form initialized');
+}
+
+/**
+ * Show a section with fade-in animation
+ * @param {HTMLElement} section - The section to show
+ */
+function showSection(section) {
+    section.style.display = 'block';
+    // Trigger reflow for animation
+    section.offsetHeight;
+    section.classList.add('visible');
+}
+
+/**
+ * Hide a section
+ * @param {HTMLElement} section - The section to hide
+ */
+function hideSection(section) {
+    section.classList.remove('visible');
+    section.classList.add('hidden');
+}
+
+/**
+ * Validate tutor section fields
+ * @returns {boolean} True if all required fields are filled
+ */
+function validateTutorSection() {
+    const tutorName = document.getElementById('tutor-name').value.trim();
+    const tutorEmail = document.getElementById('tutor-email').value.trim();
+    const coordinator = programCoordinatorSelect.value;
+    const school = document.getElementById('school').value.trim();
+    const state = stateSelect.value;
+
+    if (!tutorName || !tutorEmail || !coordinator || !school || !state) {
+        return false;
+    }
+
+    // Basic email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(tutorEmail)) {
+        return false;
+    }
+
+    return true;
+}
+
+/**
+ * Handle continue to students section
+ */
+function handleContinueToStudents() {
+    // Validate tutor section
+    if (!validateTutorSection()) {
+        // Trigger HTML5 validation by trying to submit
+        const tutorInputs = tutorSection.querySelectorAll('input[required], select[required]');
+        for (const input of tutorInputs) {
+            if (!input.value.trim()) {
+                input.reportValidity();
+                return;
+            }
+        }
+        return;
+    }
+
+    // Show students section and form actions
+    showSection(studentsSection);
+    setTimeout(() => {
+        formActions.style.display = 'flex';
+        formActions.offsetHeight;
+        formActions.classList.add('visible');
+    }, 300);
+
+    // Scroll to students section
+    studentsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 /**
@@ -429,6 +514,16 @@ function handleReset() {
 
     // Add one student back
     addStudent();
+
+    // Reset section visibility - show only tutor section
+    studentsSection.classList.remove('visible');
+    studentsSection.style.display = 'none';
+    formActions.classList.remove('visible');
+    formActions.style.display = 'none';
+
+    // Scroll to top and show tutor section
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    showSection(tutorSection);
 }
 
 /**
