@@ -250,7 +250,31 @@ function addStudent() {
         handleGradeChange(card, 'ela', e.target.value);
     });
 
-    // Add remove button handler
+    // Add material buttons event listeners
+    const addMathBtn = card.querySelector('.add-material-btn.math-btn');
+    const addElaBtn = card.querySelector('.add-material-btn.ela-btn');
+
+    addMathBtn.addEventListener('click', () => {
+        showSubjectSection(card, 'math');
+    });
+
+    addElaBtn.addEventListener('click', () => {
+        showSubjectSection(card, 'ela');
+    });
+
+    // Remove subject buttons event listeners
+    const removeMathBtn = card.querySelector('.remove-subject-btn[data-subject="math"]');
+    const removeElaBtn = card.querySelector('.remove-subject-btn[data-subject="ela"]');
+
+    removeMathBtn.addEventListener('click', () => {
+        hideSubjectSection(card, 'math');
+    });
+
+    removeElaBtn.addEventListener('click', () => {
+        hideSubjectSection(card, 'ela');
+    });
+
+    // Add remove student button handler
     const removeBtn = card.querySelector('.remove-student-btn');
     removeBtn.addEventListener('click', () => removeStudent(card));
 
@@ -262,6 +286,41 @@ function addStudent() {
     studentsContainer.appendChild(studentCard);
     updateAddButton();
     updateRemoveButtons();
+}
+
+/**
+ * Show a subject section (Math or ELA)
+ * @param {HTMLElement} card - The student card
+ * @param {string} subject - 'math' or 'ela'
+ */
+function showSubjectSection(card, subject) {
+    const section = card.querySelector(`.${subject}-section`);
+    const addBtn = card.querySelector(`.add-material-btn.${subject}-btn`);
+
+    section.style.display = 'block';
+    addBtn.classList.add('hidden');
+}
+
+/**
+ * Hide a subject section (Math or ELA)
+ * @param {HTMLElement} card - The student card
+ * @param {string} subject - 'math' or 'ela'
+ */
+function hideSubjectSection(card, subject) {
+    const section = card.querySelector(`.${subject}-section`);
+    const addBtn = card.querySelector(`.add-material-btn.${subject}-btn`);
+    const gradeSelect = card.querySelector(`select[name="${subject}Grade"]`);
+    const otherInput = card.querySelector(`input[name="${subject}Other"]`);
+    const standardsContainer = card.querySelector(`.${subject}-standards`);
+
+    // Reset the section
+    gradeSelect.value = '';
+    otherInput.value = '';
+    standardsContainer.innerHTML = `<p class="empty-state">Select ${subject === 'math' ? 'a math' : 'an ELA'} grade to see available standards</p>`;
+
+    // Hide section and show button
+    section.style.display = 'none';
+    addBtn.classList.remove('hidden');
 }
 
 /**

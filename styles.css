@@ -213,6 +213,55 @@ textarea {
     background-color: rgba(240, 24, 35, 0.1);
 }
 
+/* Add Materials Buttons */
+.add-materials-buttons {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+    flex-wrap: wrap;
+}
+
+.add-material-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.25rem;
+    border: 2px dashed var(--border-color);
+    border-radius: var(--border-radius);
+    background: transparent;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.add-material-btn .btn-icon {
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.add-material-btn.math-btn {
+    color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.add-material-btn.math-btn:hover {
+    background-color: rgba(44, 141, 60, 0.1);
+}
+
+.add-material-btn.ela-btn {
+    color: var(--accent-color);
+    border-color: var(--accent-color);
+}
+
+.add-material-btn.ela-btn:hover {
+    background-color: rgba(240, 24, 35, 0.1);
+}
+
+.add-material-btn.hidden {
+    display: none;
+}
+
 /* Subject Section */
 .subject-section {
     background: var(--card-background);
@@ -220,12 +269,55 @@ textarea {
     border-radius: var(--border-radius);
     padding: 1rem;
     margin-top: 1rem;
+    animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.subject-section.math-section {
+    border-left: 3px solid var(--primary-color);
+}
+
+.subject-section.ela-section {
+    border-left: 3px solid var(--accent-color);
+}
+
+.subject-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+}
+
+.remove-subject-btn {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-size: 0.8rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    transition: var(--transition);
+}
+
+.remove-subject-btn:hover {
+    color: var(--accent-color);
+    background-color: rgba(240, 24, 35, 0.1);
 }
 
 .subject-title {
     font-weight: 600;
     font-size: 0.95rem;
-    margin-bottom: 0.75rem;
+    margin-bottom: 0;
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -236,7 +328,7 @@ textarea {
 }
 
 .subject-title.ela {
-    color: var(--secondary-color);
+    color: var(--accent-color);
 }
 
 /* Standards Checkboxes */

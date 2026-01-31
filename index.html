@@ -108,9 +108,22 @@
                 </div>
             </div>
 
-            <!-- Math Section -->
-            <div class="subject-section">
-                <div class="subject-title math">Math Materials</div>
+            <!-- Add Materials Buttons -->
+            <div class="add-materials-buttons">
+                <button type="button" class="add-material-btn math-btn" data-subject="math">
+                    <span class="btn-icon">+</span> Math Materials
+                </button>
+                <button type="button" class="add-material-btn ela-btn" data-subject="ela">
+                    <span class="btn-icon">+</span> ELA Materials
+                </button>
+            </div>
+
+            <!-- Math Section (Hidden by default) -->
+            <div class="subject-section math-section" data-subject="math" style="display: none;">
+                <div class="subject-header">
+                    <div class="subject-title math">Math Materials</div>
+                    <button type="button" class="remove-subject-btn" data-subject="math">Remove</button>
+                </div>
 
                 <div class="form-row">
                     <div class="form-group">
@@ -136,9 +149,12 @@
                 </div>
             </div>
 
-            <!-- ELA Section -->
-            <div class="subject-section">
-                <div class="subject-title ela">ELA Materials</div>
+            <!-- ELA Section (Hidden by default) -->
+            <div class="subject-section ela-section" data-subject="ela" style="display: none;">
+                <div class="subject-header">
+                    <div class="subject-title ela">ELA Materials</div>
+                    <button type="button" class="remove-subject-btn" data-subject="ela">Remove</button>
+                </div>
 
                 <div class="form-row">
                     <div class="form-group">
@@ -165,7 +181,7 @@
             </div>
 
             <!-- Notes Section -->
-            <div class="form-group" style="margin-top: 1rem;">
+            <div class="form-group student-notes-section" style="margin-top: 1rem;">
                 <label>Notes for This Student</label>
                 <textarea name="studentNotes" rows="3" placeholder="Any special notes or requests for this student..."></textarea>
             </div>
