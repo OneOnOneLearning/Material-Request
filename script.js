@@ -66,6 +66,11 @@ function populateStates() {
         option.textContent = state.name;
         stateSelect.appendChild(option);
     });
+
+    // Auto-select if only one state is available
+    if (US_STATES.length === 1) {
+        stateSelect.value = US_STATES[0].code;
+    }
 }
 
 /**

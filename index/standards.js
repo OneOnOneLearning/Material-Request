@@ -328,11 +328,11 @@ const STANDARDS = {
 // Edit this to add/remove states available in the dropdown
 // =========================================================================
 const US_STATES = [
-    { code: "TX", name: "Texas" },
-    { code: "CA", name: "California" },
-    { code: "NY", name: "New York" },
     { code: "FL", name: "Florida" }
     // Add more states as needed:
+    // { code: "TX", name: "Texas" },
+    // { code: "CA", name: "California" },
+    // { code: "NY", name: "New York" },
     // { code: "AZ", name: "Arizona" },
     // { code: "CO", name: "Colorado" },
     // { code: "GA", name: "Georgia" },
