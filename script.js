@@ -15,6 +15,7 @@ const studentsContainer = document.getElementById('students-container');
 const addStudentBtn = document.getElementById('add-student-btn');
 const studentTemplate = document.getElementById('student-template');
 const stateSelect = document.getElementById('state');
+const programCoordinatorSelect = document.getElementById('program-coordinator');
 const successModal = document.getElementById('success-modal');
 const closeBtn = document.querySelector('.close-btn');
 const closeModalBtn = document.getElementById('close-modal');
@@ -27,8 +28,9 @@ let studentCount = 0;
  * Initialize the application
  */
 function init() {
-    // Populate state dropdown
+    // Populate dropdowns from index constants
     populateStates();
+    populateProgramCoordinators();
 
     // Add first student automatically
     addStudent();
@@ -55,7 +57,7 @@ function init() {
 }
 
 /**
- * Populate the state dropdown
+ * Populate the state dropdown from index/standards.js
  */
 function populateStates() {
     US_STATES.forEach(state => {
@@ -64,6 +66,29 @@ function populateStates() {
         option.textContent = state.name;
         stateSelect.appendChild(option);
     });
+}
+
+/**
+ * Populate the program coordinators dropdown from index/coordinators.js
+ */
+function populateProgramCoordinators() {
+    // Check if PROGRAM_COORDINATORS is defined and has entries
+    if (typeof PROGRAM_COORDINATORS !== 'undefined' && PROGRAM_COORDINATORS.length > 0) {
+        PROGRAM_COORDINATORS.forEach(coordinator => {
+            const option = document.createElement('option');
+            option.value = coordinator;
+            option.textContent = coordinator;
+            programCoordinatorSelect.appendChild(option);
+        });
+    } else {
+        // If no coordinators defined, show a message
+        const option = document.createElement('option');
+        option.value = "";
+        option.textContent = "No coordinators configured";
+        option.disabled = true;
+        programCoordinatorSelect.appendChild(option);
+        console.warn('No program coordinators defined in index/coordinators.js');
+    }
 }
 
 /**
@@ -291,7 +316,7 @@ function collectFormData() {
         tutor: {
             name: document.getElementById('tutor-name').value,
             email: document.getElementById('tutor-email').value,
-            coordinator: document.getElementById('coordinator').value,
+            programCoordinator: programCoordinatorSelect.value,
             school: document.getElementById('school').value,
             state: stateSelect.value
         },
