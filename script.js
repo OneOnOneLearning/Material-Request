@@ -77,6 +77,7 @@ function setupTutorFieldListeners() {
     const tutorName = document.getElementById('tutor-name');
     const tutorEmail = document.getElementById('tutor-email');
     const school = document.getElementById('school');
+    const otherPCName = document.getElementById('other-pc-name');
 
     // Add input/change listeners to all tutor fields
     tutorName.addEventListener('input', checkTutorSectionComplete);
@@ -84,6 +85,7 @@ function setupTutorFieldListeners() {
     programCoordinatorSelect.addEventListener('change', checkTutorSectionComplete);
     school.addEventListener('input', checkTutorSectionComplete);
     stateSelect.addEventListener('change', checkTutorSectionComplete);
+    otherPCName.addEventListener('input', checkTutorSectionComplete);
 }
 
 /**
@@ -155,6 +157,14 @@ function validateTutorSection() {
         return false;
     }
 
+    // If "Other" is selected, check that the custom input has a value
+    if (coordinator === 'other') {
+        const otherPCName = document.getElementById('other-pc-name').value.trim();
+        if (!otherPCName) {
+            return false;
+        }
+    }
+
     // Basic email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(tutorEmail)) {
@@ -194,6 +204,13 @@ function populateProgramCoordinators() {
             option.dataset.name = coordinator.name;  // Store name in data attribute
             programCoordinatorSelect.appendChild(option);
         });
+
+        // Add "Other" option at the end
+        const otherOption = document.createElement('option');
+        otherOption.value = "other";
+        otherOption.textContent = "Other";
+        otherOption.dataset.name = "Other";
+        programCoordinatorSelect.appendChild(otherOption);
     } else {
         // If no coordinators defined, show a message
         const option = document.createElement('option');
@@ -202,6 +219,27 @@ function populateProgramCoordinators() {
         option.disabled = true;
         programCoordinatorSelect.appendChild(option);
         console.warn('No program coordinators defined in index/programcoordinators.js');
+    }
+
+    // Add event listener for "Other" option
+    programCoordinatorSelect.addEventListener('change', handlePCChange);
+}
+
+/**
+ * Handle Program Coordinator selection change
+ */
+function handlePCChange() {
+    const otherContainer = document.getElementById('other-pc-container');
+    const otherInput = document.getElementById('other-pc-name');
+
+    if (programCoordinatorSelect.value === 'other') {
+        otherContainer.style.display = 'block';
+        otherInput.required = true;
+        otherInput.focus();
+    } else {
+        otherContainer.style.display = 'none';
+        otherInput.required = false;
+        otherInput.value = '';
     }
 }
 
@@ -485,8 +523,14 @@ function generateRequestId() {
 function collectFormData() {
     // Get selected coordinator's name from data attribute
     const selectedOption = programCoordinatorSelect.selectedOptions[0];
-    const coordinatorName = selectedOption ? selectedOption.dataset.name || '' : '';
-    const coordinatorEmail = programCoordinatorSelect.value;
+    let coordinatorName = selectedOption ? selectedOption.dataset.name || '' : '';
+    let coordinatorEmail = programCoordinatorSelect.value;
+
+    // Handle "Other" option - use the custom input value
+    if (programCoordinatorSelect.value === 'other') {
+        coordinatorName = document.getElementById('other-pc-name').value;
+        coordinatorEmail = ''; // No email for custom coordinators
+    }
 
     const formData = {
         requestId: generateRequestId(),
