@@ -272,7 +272,7 @@ function addStudent() {
 
     // Set student index
     card.dataset.studentIndex = studentCount;
-    card.querySelector('.student-number').textContent = `Student ${studentCount}`;
+    card.querySelector('.student-number').textContent = `Student/Group ${studentCount}`;
 
     // Populate grade dropdowns
     const gradeSelects = card.querySelectorAll('select[name="currentGrade"], select[name="mathGrade"], select[name="elaGrade"]');
@@ -377,7 +377,7 @@ function removeStudent(card) {
     const cards = studentsContainer.querySelectorAll('.student-card');
     cards.forEach((c, index) => {
         c.dataset.studentIndex = index + 1;
-        c.querySelector('.student-number').textContent = `Student ${index + 1}`;
+        c.querySelector('.student-number').textContent = `Student/Group ${index + 1}`;
     });
 
     updateAddButton();
@@ -390,9 +390,9 @@ function removeStudent(card) {
 function updateAddButton() {
     addStudentBtn.disabled = studentCount >= MAX_STUDENTS;
     if (studentCount >= MAX_STUDENTS) {
-        addStudentBtn.innerHTML = '<span>Maximum students reached</span>';
+        addStudentBtn.innerHTML = '<span>Maximum students/groups reached</span>';
     } else {
-        addStudentBtn.innerHTML = '<span>+</span> Add Another Student';
+        addStudentBtn.innerHTML = '<span>+</span> Add Another Student/Group';
     }
 }
 
@@ -589,6 +589,9 @@ function getSelectedStandards(card, subject) {
     }));
 }
 
+// Power Automate Flow URL
+const POWER_AUTOMATE_URL = 'https://default24ab4d38cbff431eb3833bd64b05be.87.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/6de60a5025344286bc02fad3dfc4a545/triggers/manual/paths/invoke?api-version=1';
+
 /**
  * Handle form submission
  * @param {Event} event - The submit event
@@ -601,22 +604,26 @@ async function handleSubmit(event) {
     // Log to console (for development)
     console.log('Form submitted:', formData);
 
-    // TODO: Add your backend integration here
-    // Example:
-    // try {
-    //     const response = await fetch('/api/requests', {
-    //         method: 'POST',
-    //         headers: { 'Content-Type': 'application/json' },
-    //         body: JSON.stringify(formData)
-    //     });
-    //     if (!response.ok) throw new Error('Submission failed');
-    // } catch (error) {
-    //     console.error('Error:', error);
-    //     alert('Failed to submit request. Please try again.');
-    //     return;
-    // }
+    // Submit to Power Automate
+    try {
+        const response = await fetch(POWER_AUTOMATE_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(formData)
+        });
 
-    // Save to localStorage
+        if (!response.ok) {
+            throw new Error('Submission failed');
+        }
+
+        console.log('Successfully submitted to Power Automate');
+    } catch (error) {
+        console.error('Error submitting to Power Automate:', error);
+        // Still show success and save locally even if Power Automate fails
+        // This ensures the user doesn't lose their data
+    }
+
+    // Save to localStorage as backup
     saveToLocalStorage(formData);
 
     // Show success modal

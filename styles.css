@@ -6,6 +6,9 @@
     --secondary-hover: #041f45;
     --accent-color: #f01823;
     --accent-hover: #d01520;
+    --math-color: #e67e22;
+    --math-hover: #d35400;
+    --ela-color: #2c8d3c;
     --success-color: #2c8d3c;
     --error-color: #f01823;
     --warning-color: #f59e0b;
@@ -318,21 +321,21 @@ textarea {
 }
 
 .add-material-btn.math-btn {
-    color: var(--primary-color);
-    border-color: var(--primary-color);
+    color: var(--math-color);
+    border-color: var(--math-color);
 }
 
 .add-material-btn.math-btn:hover {
-    background-color: rgba(44, 141, 60, 0.1);
+    background-color: rgba(230, 126, 34, 0.1);
 }
 
 .add-material-btn.ela-btn {
-    color: var(--accent-color);
-    border-color: var(--accent-color);
+    color: var(--ela-color);
+    border-color: var(--ela-color);
 }
 
 .add-material-btn.ela-btn:hover {
-    background-color: rgba(240, 24, 35, 0.1);
+    background-color: rgba(44, 141, 60, 0.1);
 }
 
 .add-material-btn.hidden {
@@ -361,11 +364,11 @@ textarea {
 }
 
 .subject-section.math-section {
-    border-left: 3px solid var(--primary-color);
+    border-left: 3px solid var(--math-color);
 }
 
 .subject-section.ela-section {
-    border-left: 3px solid var(--accent-color);
+    border-left: 3px solid var(--ela-color);
 }
 
 .subject-header {
@@ -401,11 +404,11 @@ textarea {
 }
 
 .subject-title.math {
-    color: var(--primary-color);
+    color: var(--math-color);
 }
 
 .subject-title.ela {
-    color: var(--accent-color);
+    color: var(--ela-color);
 }
 
 /* Standards Checkboxes */

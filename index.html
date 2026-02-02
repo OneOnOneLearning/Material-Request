@@ -67,15 +67,15 @@
 
                 <!-- Students Section -->
                 <section id="students-section" class="form-section">
-                    <h2 class="section-title">Student Information</h2>
-                    <p class="subtitle" style="margin-bottom: 1rem;">Add 1-4 students and select their requested materials</p>
+                    <h2 class="section-title">Student/Group Information</h2>
+                    <p class="subtitle" style="margin-bottom: 1rem;">Add 1-4 students or groups and select their requested materials</p>
 
                     <div id="students-container" class="students-container">
                         <!-- Student cards will be added here dynamically -->
                     </div>
 
                     <button type="button" id="add-student-btn" class="add-student-btn">
-                        <span>+</span> Add Another Student
+                        <span>+</span> Add Another Student/Group
                     </button>
                 </section>
 
@@ -96,14 +96,14 @@
     <template id="student-template">
         <div class="student-card" data-student-index="">
             <div class="student-header">
-                <span class="student-number">Student 1</span>
+                <span class="student-number">Student/Group 1</span>
                 <button type="button" class="remove-student-btn">Remove</button>
             </div>
 
             <div class="form-row">
                 <div class="form-group">
-                    <label>Student Name <span class="required">*</span></label>
-                    <input type="text" name="studentName" required placeholder="Student's full name">
+                    <label>Student/Group Name <span class="required">*</span></label>
+                    <input type="text" name="studentName" required placeholder="Student or group name">
                 </div>
 
                 <div class="form-group">
@@ -189,8 +189,8 @@
 
             <!-- Notes Section -->
             <div class="form-group student-notes-section" style="margin-top: 1rem;">
-                <label>Notes for This Student</label>
-                <textarea name="studentNotes" rows="3" placeholder="Any special notes or requests for this student..."></textarea>
+                <label>Notes for This Student/Group</label>
+                <textarea name="studentNotes" rows="3" placeholder="Any special notes or requests..."></textarea>
             </div>
         </div>
     </template>
