@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <!-- Define the shapes with different colors -->
+    <style>
+      .green { fill: #2c8d3c; }
+      .blue { fill: #021938; }
+      .red { fill: #f01823; }
+    </style>
+  </defs>
+
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="#f8f9fa"/>
+
+  <!-- Scattered Shapes with low opacity -->
+  <g opacity="0.06">
+    <!-- Top left area -->
+    <polygon class="green" points="80,60 140,160 20,160"/> <!-- Triangle -->
+    <ellipse class="blue" cx="280" cy="120" rx="60" ry="35"/> <!-- Oval -->
+    <rect class="red" x="150" y="200" width="80" height="50" rx="4"/> <!-- Rectangle -->
+
+    <!-- Top right area -->
+    <polygon class="red" points="1750,80 1820,180 1680,180"/> <!-- Triangle -->
+    <ellipse class="green" cx="1600" cy="150" rx="70" ry="40"/> <!-- Oval -->
+    <rect class="blue" x="1820" y="60" width="70" height="45" rx="4"/> <!-- Rectangle -->
+
+    <!-- Middle left -->
+    <polygon class="blue" points="60,450 130,550 -10,550"/> <!-- Triangle -->
+    <ellipse class="red" cx="180" cy="380" rx="55" ry="30"/> <!-- Oval -->
+    <rect class="green" x="30" y="580" width="90" height="55" rx="4"/> <!-- Rectangle -->
+
+    <!-- Middle right -->
+    <polygon class="green" points="1850,420 1920,520 1780,520"/> <!-- Triangle -->
+    <ellipse class="blue" cx="1700" cy="500" rx="65" ry="38"/> <!-- Oval -->
+    <rect class="red" x="1800" y="320" width="75" height="48" rx="4"/> <!-- Rectangle -->
+
+    <!-- Bottom left -->
+    <polygon class="red" points="120,850 190,950 50,950"/> <!-- Triangle -->
+    <ellipse class="green" cx="250" cy="920" rx="50" ry="28"/> <!-- Oval -->
+    <rect class="blue" x="60" y="750" width="85" height="52" rx="4"/> <!-- Rectangle -->
+
+    <!-- Bottom right -->
+    <polygon class="blue" points="1780,880 1850,980 1710,980"/> <!-- Triangle -->
+    <ellipse class="red" cx="1650" cy="850" rx="58" ry="32"/> <!-- Oval -->
+    <rect class="green" x="1840" y="780" width="65" height="42" rx="4"/> <!-- Rectangle -->
+
+    <!-- Extra scattered shapes for balance -->
+    <polygon class="green" points="400,50 450,120 350,120"/> <!-- Small triangle top -->
+    <ellipse class="red" cx="1400" cy="80" rx="45" ry="25"/> <!-- Small oval top -->
+
+    <polygon class="blue" points="1500,950 1560,1030 1440,1030"/> <!-- Triangle bottom -->
+    <ellipse class="green" cx="500" cy="980" rx="52" ry="30"/> <!-- Oval bottom -->
+
+    <rect class="red" x="1550" cy="650" width="60" height="38" rx="4"/> <!-- Rectangle mid-right -->
+    <rect class="blue" x="100" y="300" width="55" height="35" rx="4"/> <!-- Rectangle mid-left -->
+
+    <!-- Additional subtle shapes -->
+    <polygon class="red" points="1900,250 1950,320 1850,320" opacity="0.8"/>
+    <polygon class="green" points="30,680 90,760 -30,760" opacity="0.8"/>
+    <ellipse class="blue" cx="1850" cy="600" rx="40" ry="22" opacity="0.7"/>
+    <ellipse class="red" cx="70" cy="180" rx="35" ry="20" opacity="0.7"/>
+  </g>
+</svg>
