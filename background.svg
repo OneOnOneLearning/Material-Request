@@ -10,42 +10,57 @@
   <!-- Background -->
   <rect width="100%" height="100%" fill="#f8f9fa"/>
 
-  <!-- Scattered Shapes with low opacity - carefully spaced to avoid overlap -->
-  <g opacity="0.06">
+  <!-- Scattered Shapes - varied sizes, rotations, spreading from center -->
+  <g opacity="0.055">
 
-    <!-- TOP ROW -->
-    <polygon class="green" points="50,40 110,130 -10,130"/> <!-- Triangle - far left -->
-    <ellipse class="blue" cx="280" cy="80" rx="55" ry="32"/> <!-- Oval -->
-    <rect class="red" x="480" y="50" width="70" height="45" rx="4"/> <!-- Rectangle -->
-    <polygon class="red" points="1450,60 1510,140 1390,140"/> <!-- Triangle -->
-    <ellipse class="green" cx="1680" cy="90" rx="50" ry="30"/> <!-- Oval -->
-    <rect class="blue" x="1850" y="40" width="60" height="40" rx="4"/> <!-- Rectangle - far right -->
+    <!-- CENTER AREA - shapes peeking from behind the form -->
+    <!-- Left side of center -->
+    <polygon class="green" points="0,0 70,0 35,60" transform="translate(380, 200) rotate(15)"/> <!-- Triangle -->
+    <ellipse class="blue" cx="420" cy="450" rx="45" ry="28" transform="rotate(-10, 420, 450)"/> <!-- Oval -->
+    <rect class="red" x="350" y="650" width="55" height="35" rx="4" transform="rotate(8, 377, 667)"/> <!-- Rectangle -->
+    <polygon class="blue" points="0,0 50,0 25,45" transform="translate(400, 850) rotate(-20)"/> <!-- Small triangle -->
 
-    <!-- UPPER MIDDLE ROW -->
-    <ellipse class="red" cx="100" cy="280" rx="45" ry="28"/> <!-- Oval - left -->
-    <rect class="green" x="320" y="250" width="65" height="42" rx="4"/> <!-- Rectangle -->
-    <polygon class="blue" points="1600,240 1660,320 1540,320"/> <!-- Triangle -->
-    <rect class="red" x="1820" y="270" width="55" height="38" rx="4"/> <!-- Rectangle - right -->
+    <!-- Right side of center -->
+    <ellipse class="red" cx="1500" cy="250" rx="50" ry="30" transform="rotate(12, 1500, 250)"/> <!-- Oval -->
+    <polygon class="green" points="0,0 80,0 40,70" transform="translate(1480, 480) rotate(-8)"/> <!-- Triangle -->
+    <rect class="blue" x="1520" y="700" width="60" height="40" rx="4" transform="rotate(-15, 1550, 720)"/> <!-- Rectangle -->
+    <ellipse class="green" cx="1480" cy="920" rx="40" ry="25" transform="rotate(20, 1480, 920)"/> <!-- Small oval -->
 
-    <!-- MIDDLE ROW -->
-    <polygon class="blue" points="40,480 100,560 -20,560"/> <!-- Triangle - left edge -->
-    <rect class="red" x="200" y="450" width="60" height="40" rx="4"/> <!-- Rectangle -->
-    <ellipse class="green" cx="1750" cy="500" rx="48" ry="28"/> <!-- Oval -->
-    <polygon class="green" points="1880,460 1930,530 1830,530"/> <!-- Triangle - right edge -->
+    <!-- TOP EDGES - larger shapes -->
+    <polygon class="green" points="0,0 90,0 45,80" transform="translate(30, 40) rotate(5)"/> <!-- Large triangle -->
+    <ellipse class="blue" cx="250" cy="100" rx="65" ry="38" transform="rotate(-8, 250, 100)"/> <!-- Large oval -->
+    <rect class="red" x="520" y="60" width="80" height="50" rx="4" transform="rotate(12, 560, 85)"/> <!-- Large rectangle -->
 
-    <!-- LOWER MIDDLE ROW -->
-    <ellipse class="blue" cx="80" cy="700" rx="50" ry="30"/> <!-- Oval - left -->
-    <polygon class="red" points="280,680 340,760 220,760"/> <!-- Triangle -->
-    <rect class="blue" x="1650" y="690" width="58" height="38" rx="4"/> <!-- Rectangle -->
-    <ellipse class="red" cx="1860" cy="720" rx="45" ry="26"/> <!-- Oval - right -->
+    <polygon class="red" points="0,0 75,0 37,65" transform="translate(1650, 50) rotate(-12)"/> <!-- Triangle -->
+    <ellipse class="green" cx="1820" cy="120" rx="55" ry="32" transform="rotate(18, 1820, 120)"/> <!-- Oval -->
+    <rect class="blue" x="1400" y="80" width="65" height="42" rx="4" transform="rotate(-5, 1432, 101)"/> <!-- Rectangle -->
 
-    <!-- BOTTOM ROW -->
-    <rect class="green" x="30" y="900" width="65" height="42" rx="4"/> <!-- Rectangle - left -->
-    <polygon class="green" points="260,880 320,960 200,960"/> <!-- Triangle -->
-    <ellipse class="blue" cx="500" cy="950" rx="52" ry="30"/> <!-- Oval -->
-    <rect class="red" x="1400" y="920" width="60" height="40" rx="4"/> <!-- Rectangle -->
-    <polygon class="blue" points="1650,900 1710,980 1590,980"/> <!-- Triangle -->
-    <ellipse class="green" cx="1870" cy="940" rx="45" ry="28"/> <!-- Oval - right -->
+    <!-- MIDDLE EDGES -->
+    <polygon class="blue" points="0,0 65,0 32,55" transform="translate(20, 380) rotate(25)"/> <!-- Triangle -->
+    <rect class="green" x="60" y="550" width="70" height="45" rx="4" transform="rotate(-18, 95, 572)"/> <!-- Rectangle -->
+    <ellipse class="red" cx="100" cy="750" rx="48" ry="28" transform="rotate(10, 100, 750)"/> <!-- Oval -->
+
+    <ellipse class="blue" cx="1850" cy="350" rx="52" ry="30" transform="rotate(-15, 1850, 350)"/> <!-- Oval -->
+    <polygon class="red" points="0,0 60,0 30,52" transform="translate(1820, 550) rotate(22)"/> <!-- Triangle -->
+    <rect class="green" x="1800" y="780" width="58" height="38" rx="4" transform="rotate(8, 1829, 799)"/> <!-- Rectangle -->
+
+    <!-- BOTTOM EDGES -->
+    <rect class="blue" x="40" y="920" width="75" height="48" rx="4" transform="rotate(-10, 77, 944)"/> <!-- Rectangle -->
+    <polygon class="green" points="0,0 70,0 35,60" transform="translate(200, 950) rotate(15)"/> <!-- Triangle -->
+    <ellipse class="red" cx="450" cy="1000" rx="58" ry="34" transform="rotate(-5, 450, 1000)"/> <!-- Oval -->
+
+    <ellipse class="blue" cx="1350" cy="980" rx="50" ry="30" transform="rotate(12, 1350, 980)"/> <!-- Oval -->
+    <polygon class="red" points="0,0 55,0 27,48" transform="translate(1600, 920) rotate(-18)"/> <!-- Triangle -->
+    <rect class="green" x="1780" y="950" width="68" height="44" rx="4" transform="rotate(6, 1814, 972)"/> <!-- Rectangle -->
+
+    <!-- EXTRA SMALL ACCENT SHAPES - scattered throughout -->
+    <polygon class="red" points="0,0 35,0 17,30" transform="translate(280, 320) rotate(30)"/> <!-- Tiny triangle -->
+    <ellipse class="green" cx="180" cy="600" rx="28" ry="18" transform="rotate(-25, 180, 600)"/> <!-- Tiny oval -->
+    <rect class="blue" x="320" y="780" width="38" height="25" rx="3" transform="rotate(35, 339, 792)"/> <!-- Tiny rectangle -->
+
+    <ellipse class="red" cx="1680" cy="380" rx="32" ry="20" transform="rotate(15, 1680, 380)"/> <!-- Tiny oval -->
+    <polygon class="blue" points="0,0 40,0 20,35" transform="translate(1600, 620) rotate(-30)"/> <!-- Tiny triangle -->
+    <rect class="green" x="1650" y="850" width="42" height="28" rx="3" transform="rotate(-12, 1671, 864)"/> <!-- Tiny rectangle -->
 
   </g>
 </svg>
