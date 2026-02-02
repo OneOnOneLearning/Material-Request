@@ -40,9 +40,6 @@ function init() {
     populateStates();
     populateProgramCoordinators();
 
-    // Add first student automatically
-    addStudent();
-
     // Show first section with fade-in
     showSection(tutorSection);
 
@@ -52,7 +49,7 @@ function init() {
     requestForm.addEventListener('submit', handleSubmit);
     requestForm.addEventListener('reset', handleReset);
 
-    // Add listeners to tutor section fields for auto-transition
+    // Add listeners to tutor section fields to enable continue button
     setupTutorFieldListeners();
 
     // Modal event listeners
@@ -71,13 +68,14 @@ function init() {
 }
 
 /**
- * Setup listeners on tutor section fields to auto-show students section
+ * Setup listeners on tutor section fields to enable/disable continue button
  */
 function setupTutorFieldListeners() {
     const tutorName = document.getElementById('tutor-name');
     const tutorEmail = document.getElementById('tutor-email');
     const school = document.getElementById('school');
     const otherPCName = document.getElementById('other-pc-name');
+    const continueBtn = document.getElementById('continue-to-students');
 
     // Add input/change listeners to all tutor fields
     tutorName.addEventListener('input', checkTutorSectionComplete);
@@ -86,28 +84,32 @@ function setupTutorFieldListeners() {
     school.addEventListener('input', checkTutorSectionComplete);
     stateSelect.addEventListener('change', checkTutorSectionComplete);
     otherPCName.addEventListener('input', checkTutorSectionComplete);
+
+    // Add click listener for continue button
+    continueBtn.addEventListener('click', handleContinueToStudents);
 }
 
 /**
- * Check if all tutor section fields are complete and show students section
+ * Check if all tutor section fields are complete and enable/disable continue button
  */
 function checkTutorSectionComplete() {
-    // Don't re-trigger if already shown
-    if (studentsSectionShown) return;
-
-    if (validateTutorSection()) {
-        showStudentsSection();
-    }
+    const continueBtn = document.getElementById('continue-to-students');
+    continueBtn.disabled = !validateTutorSection();
 }
 
 /**
- * Show the students section with fade-in
+ * Handle continue button click - show students section
  */
-function showStudentsSection() {
+function handleContinueToStudents() {
+    if (!validateTutorSection()) return;
+
     studentsSectionShown = true;
 
     // Show students section
     showSection(studentsSection);
+
+    // Add first student
+    addStudent();
 
     // Show form actions after a slight delay
     setTimeout(() => {
@@ -629,7 +631,7 @@ async function handleSubmit(event) {
  * Handle form reset
  */
 function handleReset() {
-    // Remove all students except one
+    // Remove all students
     while (studentCount > 0) {
         const cards = studentsContainer.querySelectorAll('.student-card');
         if (cards.length > 0) {
@@ -637,9 +639,6 @@ function handleReset() {
             studentCount--;
         }
     }
-
-    // Add one student back
-    addStudent();
 
     // Reset section visibility flag
     studentsSectionShown = false;
@@ -649,6 +648,10 @@ function handleReset() {
     studentsSection.style.display = 'none';
     formActions.classList.remove('visible');
     formActions.style.display = 'none';
+
+    // Reset continue button
+    const continueBtn = document.getElementById('continue-to-students');
+    continueBtn.disabled = true;
 
     // Scroll to top and show tutor section
     window.scrollTo({ top: 0, behavior: 'smooth' });
