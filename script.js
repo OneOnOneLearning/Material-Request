@@ -519,8 +519,33 @@ function generateRequestId() {
 }
 
 /**
- * Collect form data
- * @returns {Object} The complete form data
+ * Format date in local timezone
+ * @returns {string} Formatted local date/time string
+ */
+function getLocalDateTime() {
+    const now = new Date();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    const year = now.getFullYear();
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    return `${month}/${day}/${year} ${hours}:${minutes}`;
+}
+
+/**
+ * Get grade label from value
+ * @param {string} value - Grade value (e.g., "K", "1", "2")
+ * @returns {string} Grade label (e.g., "Kindergarten", "Grade 1")
+ */
+function getGradeLabel(value) {
+    if (!value) return '';
+    const grade = GRADE_LEVELS.find(g => g.value === value);
+    return grade ? grade.label : value;
+}
+
+/**
+ * Collect form data with summaries for SharePoint display
+ * @returns {Object} The complete form data with readable summaries
  */
 function collectFormData() {
     // Get selected coordinator's name from data attribute
@@ -534,23 +559,10 @@ function collectFormData() {
         coordinatorEmail = ''; // No email for custom coordinators
     }
 
-    const formData = {
-        requestId: generateRequestId(),
-        submittedAt: new Date().toISOString(),
-        tutor: {
-            name: document.getElementById('tutor-name').value,
-            email: document.getElementById('tutor-email').value,
-            programCoordinator: {
-                name: coordinatorName,
-                email: coordinatorEmail
-            },
-            school: document.getElementById('school').value,
-            state: stateSelect.value
-        },
-        students: []
-    };
-
+    // Collect all students data
+    const students = [];
     const cards = studentsContainer.querySelectorAll('.student-card');
+
     cards.forEach((card, index) => {
         const studentData = {
             index: index + 1,
@@ -568,8 +580,60 @@ function collectFormData() {
             },
             notes: card.querySelector('textarea[name="studentNotes"]').value
         };
-        formData.students.push(studentData);
+        students.push(studentData);
     });
+
+    // Build readable summaries for SharePoint list view
+    const studentsSummary = students.map(s =>
+        `${s.name} (${getGradeLabel(s.currentGrade)})`
+    ).join(' | ');
+
+    const mathSummary = students.map(s => {
+        if (!s.math.requestGrade && s.math.standards.length === 0 && !s.math.other) return null;
+        const parts = [`${s.name}:`];
+        if (s.math.requestGrade) parts.push(`Grade ${s.math.requestGrade}`);
+        if (s.math.standards.length > 0) parts.push(s.math.standards.map(st => st.code).join(', '));
+        if (s.math.other) parts.push(`Other: ${s.math.other}`);
+        return parts.join(' ');
+    }).filter(Boolean).join(' | ');
+
+    const elaSummary = students.map(s => {
+        if (!s.ela.requestGrade && s.ela.standards.length === 0 && !s.ela.other) return null;
+        const parts = [`${s.name}:`];
+        if (s.ela.requestGrade) parts.push(`Grade ${s.ela.requestGrade}`);
+        if (s.ela.standards.length > 0) parts.push(s.ela.standards.map(st => st.code).join(', '));
+        if (s.ela.other) parts.push(`Other: ${s.ela.other}`);
+        return parts.join(' ');
+    }).filter(Boolean).join(' | ');
+
+    const notesSummary = students.map(s => {
+        if (!s.notes) return null;
+        return `${s.name}: ${s.notes}`;
+    }).filter(Boolean).join(' | ');
+
+    const formData = {
+        requestId: generateRequestId(),
+        submittedAt: getLocalDateTime(),
+
+        // Tutor info (flat for easy SharePoint mapping)
+        tutorName: document.getElementById('tutor-name').value,
+        tutorEmail: document.getElementById('tutor-email').value,
+        programCoordinator: coordinatorName,
+        school: document.getElementById('school').value,
+        state: stateSelect.value,
+
+        // Student count
+        studentCount: students.length,
+
+        // Readable summaries for SharePoint list view
+        studentsSummary: studentsSummary,
+        mathSummary: mathSummary || 'None requested',
+        elaSummary: elaSummary || 'None requested',
+        notesSummary: notesSummary || '',
+
+        // Full JSON string for PowerApps (stores complete student data)
+        studentsJSON: JSON.stringify(students)
+    };
 
     return formData;
 }
