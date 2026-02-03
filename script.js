@@ -590,7 +590,7 @@ function getSelectedStandards(card, subject) {
 }
 
 // Power Automate Flow URL
-const POWER_AUTOMATE_URL = 'https://default24ab4d38cbff431eb3833bd64b05be.87.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/6de60a5025344286bc02fad3dfc4a545/triggers/manual/paths/invoke?api-version=1';
+const POWER_AUTOMATE_URL = 'https://default24ab4d38cbff431eb3833bd64b05be.87.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/6de60a5025344286bc02fad3dfc4a545/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=DrfMrtxYKNM_OXtv4Ad-ZUIIELvdeZUacJARG8m6psM';
 
 /**
  * Handle form submission
