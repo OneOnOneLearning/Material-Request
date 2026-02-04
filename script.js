@@ -577,11 +577,13 @@ function collectFormData() {
                 requestGrade: card.querySelector('select[name="elaGrade"]').value,
                 standards: getSelectedStandards(card, 'ela'),
                 other: card.querySelector('input[name="elaOther"]').value
-            },
-            notes: card.querySelector('textarea[name="studentNotes"]').value
+            }
         };
         students.push(studentData);
     });
+
+    // Get overall request notes
+    const requestNotes = document.getElementById('request-notes').value;
 
     // Build readable summaries for SharePoint list view (bullet points)
     const studentsList = students.map(s =>
@@ -589,31 +591,31 @@ function collectFormData() {
     );
     const studentsSummary = studentsList.length > 0 ? '• ' + studentsList.join('\n• ') : '';
 
+    // Build detailed Math summary (structured format for cleaner display)
     const mathList = students.map(s => {
         if (!s.math.requestGrade && s.math.standards.length === 0 && !s.math.other) return null;
-        const parts = [`${s.name}:`];
-        if (s.math.requestGrade) parts.push(`Grade ${s.math.requestGrade}`);
-        if (s.math.standards.length > 0) parts.push(s.math.standards.map(st => st.code).join(', '));
-        if (s.math.other) parts.push(`Other: ${s.math.other}`);
-        return parts.join(' ');
+        let lines = [`📚 ${s.name}`];
+        if (s.math.requestGrade) lines.push(`   Grade: ${s.math.requestGrade}`);
+        if (s.math.standards.length > 0) {
+            lines.push(`   Standards: ${s.math.standards.map(st => st.code).join(', ')}`);
+        }
+        if (s.math.other) lines.push(`   Other: ${s.math.other}`);
+        return lines.join('\n');
     }).filter(Boolean);
-    const mathSummary = mathList.length > 0 ? '• ' + mathList.join('\n• ') : '';
+    const mathSummary = mathList.join('\n\n');
 
+    // Build detailed ELA summary (structured format for cleaner display)
     const elaList = students.map(s => {
         if (!s.ela.requestGrade && s.ela.standards.length === 0 && !s.ela.other) return null;
-        const parts = [`${s.name}:`];
-        if (s.ela.requestGrade) parts.push(`Grade ${s.ela.requestGrade}`);
-        if (s.ela.standards.length > 0) parts.push(s.ela.standards.map(st => st.code).join(', '));
-        if (s.ela.other) parts.push(`Other: ${s.ela.other}`);
-        return parts.join(' ');
+        let lines = [`📖 ${s.name}`];
+        if (s.ela.requestGrade) lines.push(`   Grade: ${s.ela.requestGrade}`);
+        if (s.ela.standards.length > 0) {
+            lines.push(`   Standards: ${s.ela.standards.map(st => st.code).join(', ')}`);
+        }
+        if (s.ela.other) lines.push(`   Other: ${s.ela.other}`);
+        return lines.join('\n');
     }).filter(Boolean);
-    const elaSummary = elaList.length > 0 ? '• ' + elaList.join('\n• ') : '';
-
-    const notesList = students.map(s => {
-        if (!s.notes) return null;
-        return `${s.name}: ${s.notes}`;
-    }).filter(Boolean);
-    const notesSummary = notesList.length > 0 ? '• ' + notesList.join('\n• ') : '';
+    const elaSummary = elaList.join('\n\n');
 
     const formData = {
         requestId: generateRequestId(),
@@ -633,7 +635,7 @@ function collectFormData() {
         studentsSummary: studentsSummary,
         mathSummary: mathSummary || 'None requested',
         elaSummary: elaSummary || 'None requested',
-        notesSummary: notesSummary || '',
+        requestNotes: requestNotes || '',
 
         // Full JSON string for PowerApps (stores complete student data)
         studentsJSON: JSON.stringify(students)
