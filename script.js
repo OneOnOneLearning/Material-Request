@@ -625,6 +625,7 @@ function collectFormData() {
         tutorName: document.getElementById('tutor-name').value,
         tutorEmail: document.getElementById('tutor-email').value,
         programCoordinator: coordinatorName,
+        programCoordinatorEmail: coordinatorEmail,
         school: document.getElementById('school').value,
         state: stateSelect.value,
 
