@@ -22,11 +22,11 @@ const STANDARDS = {
     // FLORIDA (FL)
     // =========================================================================
     FL: {
-        // Kindergarten - Uses SKILLS (Spectrum workbook)
+        // Kindergarten - Has BOTH skills (Spectrum workbook) and standards (Common Core)
         K: {
             math: {
-                type: "skills",
-                items: [
+                type: "both",
+                skills: [
                     // Chapter 1: Counting and Writing Numbers
                     { name: "Counting 0, 1, and 2" },
                     { name: "Writing 0, 1, and 2" },
@@ -107,11 +107,41 @@ const STANDARDS = {
                     { name: "Problem Solving: Finding Shapes" },
                     { name: "Tracing and Drawing Shapes" },
                     { name: "Composing Shapes" }
+                ],
+                standards: [
+                    // Counting and Cardinality
+                    { code: "K.CC.1", desc: "Count to 100 by ones and by tens." },
+                    { code: "K.CC.2", desc: "Count forward beginning from a given number within the known sequence (instead of having to begin at 1)." },
+                    { code: "K.CC.3", desc: "Write numbers from 0 to 20. Represent a number of objects with a written numeral 0–20 (with 0 representing a count of no objects)." },
+                    { code: "K.CC.4", desc: "Understand the relationship between numbers and quantities; connect counting to cardinality." },
+                    { code: "K.CC.5", desc: "Count to answer 'how many?' questions about as many as 20 things arranged in a line, a rectangular array, or a circle, or as many as 10 things in a scattered configuration." },
+                    { code: "K.CC.6", desc: "Identify whether the number of objects in one group is greater than, less than, or equal to the number of objects in another group, e.g., by using matching and counting strategies." },
+                    { code: "K.CC.7", desc: "Compare two numbers between 1 and 10 presented as written numerals." },
+                    // Operations and Algebraic Thinking
+                    { code: "K.OA.1", desc: "Represent addition and subtraction with objects, fingers, mental images, drawings, sounds (e.g., claps), acting out situations, verbal explanations, expressions, or equations." },
+                    { code: "K.OA.2", desc: "Solve addition and subtraction word problems, and add and subtract within 10." },
+                    { code: "K.OA.3", desc: "Decompose numbers less than or equal to 10 into pairs in more than one way, e.g., by using objects or drawings, and record each decomposition by a drawing or equation." },
+                    { code: "K.OA.4", desc: "For any number from 1 to 9, find the number that makes 10 when added to the given number, e.g., by using objects or drawings, and record the answer with a drawing or equation." },
+                    { code: "K.OA.5", desc: "Fluently add and subtract within 5." },
+                    // Number and Operations in Base Ten
+                    { code: "K.NBT.1", desc: "Compose and decompose numbers from 11 to 19 into ten ones and some further ones, e.g., by using objects or drawings, and record each composition or decomposition by a drawing or equation." },
+                    // Measurement and Data
+                    { code: "K.MD.1", desc: "Describe measurable attributes of objects, such as length or weight. Describe several measurable attributes of a single object." },
+                    { code: "K.MD.2", desc: "Directly compare two objects with a measurable attribute in common, to see which object has 'more of'/'less of' the attribute, and describe the difference." },
+                    { code: "K.MD.3", desc: "Classify objects into given categories; count the numbers of objects in each category and sort the categories by count." },
+                    // Geometry
+                    { code: "K.G.1", desc: "Describe objects in the environment using names of shapes, and describe the relative positions of these objects using terms such as above, below, beside, in front of, behind, and next to." },
+                    { code: "K.G.2", desc: "Correctly name shapes regardless of their orientations or overall size." },
+                    { code: "K.G.3", desc: "Identify shapes as two-dimensional (lying in a plane, 'flat') or three-dimensional ('solid')." },
+                    { code: "K.G.4", desc: "Analyze and compare two- and three-dimensional shapes, in different sizes and orientations, using informal language to describe their similarities, differences, parts and other attributes." },
+                    { code: "K.G.5", desc: "Model shapes in the world by building shapes from components (e.g., sticks and clay balls) and drawing shapes." },
+                    { code: "K.G.6", desc: "Compose simple shapes to form larger shapes." }
                 ]
             },
             ela: {
-                type: "skills",
-                items: []  // ELA data coming later
+                type: "both",
+                skills: [],
+                standards: []  // ELA data coming later
             }
         },
         // 1st Grade - Has BOTH skills (Spectrum) and standards (Common Core)
@@ -197,7 +227,7 @@ const STANDARDS = {
                     { code: "1.G.3", desc: "Partition circles and rectangles into two and four equal shares, describe the shares using words halves, fourths, and quarters." }
                 ]
             },
-            ela: { type: "skills", items: [] }
+            ela: { type: "both", skills: [], standards: [] }
         },
         // 2nd Grade - Has BOTH skills (Spectrum) and standards (Common Core)
         2: {
@@ -258,7 +288,7 @@ const STANDARDS = {
                     { code: "2.G.3", desc: "Partition circles and rectangles into two, three, or four equal shares, describe the shares using the words halves, thirds, half of, a third of, etc." }
                 ]
             },
-            ela: { type: "skills", items: [] }
+            ela: { type: "both", skills: [], standards: [] }
         },
         // 3rd Grade - Has BOTH skills (Spectrum) and standards (Common Core)
         3: {
@@ -326,7 +356,7 @@ const STANDARDS = {
                     { code: "3.G.1", desc: "Understand that shapes in different categories may share attributes, and that the shared attributes can define a larger category. Recognize rhombuses, rectangles, and squares as examples of quadrilaterals." }
                 ]
             },
-            ela: { type: "skills", items: [] }
+            ela: { type: "both", skills: [], standards: [] }
         },
         // 4th Grade - Has BOTH skills (Spectrum) and standards (Common Core)
         4: {
@@ -394,13 +424,14 @@ const STANDARDS = {
                     { code: "4.G.2", desc: "Classify two-dimensional figures based on the presence or absence of parallel or perpendicular lines, or the presence or absence of angles of a specified size." }
                 ]
             },
-            ela: { type: "skills", items: [] }
+            ela: { type: "both", skills: [], standards: [] }
         },
-        // 5th Grade - Uses STANDARDS (Common Core)
+        // 5th Grade - Has BOTH skills (Spectrum) and standards (Common Core)
         5: {
             math: {
-                type: "standards",
-                items: [
+                type: "both",
+                skills: [],  // Spectrum skills coming later
+                standards: [
                     // Operations and Algebraic Thinking
                     { code: "5.OA.1", desc: "Use parentheses, brackets, or braces in numerical expressions, and evaluate expressions with these symbols." },
                     { code: "5.OA.2", desc: "Write simple expressions that record calculations with numbers, and interpret numerical expressions without evaluating them." },
@@ -435,8 +466,9 @@ const STANDARDS = {
                 ]
             },
             ela: {
-                type: "standards",
-                items: []  // ELA standards coming later
+                type: "both",
+                skills: [],
+                standards: []  // ELA data coming later
             }
         },
         // 6th Grade
