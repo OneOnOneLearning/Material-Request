@@ -535,6 +535,51 @@ textarea {
     margin-bottom: 0;
 }
 
+/* Type toggle (Skills / Standards) - appears when grade has both */
+.standards-container.has-type-toggle {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.standards-container.has-type-toggle .items-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 0.5rem;
+    padding-top: 0.5rem;
+}
+
+.type-toggle-group {
+    display: flex;
+    gap: 0.375rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 0.25rem;
+}
+
+.type-toggle-btn {
+    padding: 0.3rem 0.85rem;
+    font-size: 0.8rem;
+    font-weight: 500;
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    background: transparent;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.type-toggle-btn:hover {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+.type-toggle-btn.active {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: white;
+}
+
 .standards-note {
     font-size: 0.8rem;
     color: var(--text-secondary);

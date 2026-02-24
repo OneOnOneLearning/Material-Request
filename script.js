@@ -434,32 +434,101 @@ function handleGradeChange(card, subject, grade) {
 
     if (!state) {
         container.innerHTML = '<p class="empty-state">Please select a state first</p>';
+        container.classList.remove('has-type-toggle');
         noteElement.textContent = 'Select up to 4 items';
         return;
     }
 
     if (!grade) {
         container.innerHTML = `<p class="empty-state">Select ${subject === 'math' ? 'a math' : 'an ELA'} grade to see available options</p>`;
+        container.classList.remove('has-type-toggle');
         noteElement.textContent = 'Select up to 4 items';
         return;
     }
 
     const data = getStandardsData(state, subject, grade);
-    const items = data.items || [];
-    const isStandards = data.type === "standards";
     const framework = getStandardsFramework(state);
 
+    if (data.type === "both") {
+        // Grade has both skills and standards — show toggle
+        container.classList.add('has-type-toggle');
+        container.innerHTML = `
+            <div class="type-toggle-group">
+                <button type="button" class="type-toggle-btn active" data-type="skills" onclick="switchStandardsType(this)">Skills</button>
+                <button type="button" class="type-toggle-btn" data-type="standards" onclick="switchStandardsType(this)">Standards</button>
+            </div>
+            <div class="items-list"></div>
+        `;
+        // Store data on the element so switchStandardsType can access it
+        container._bothData = { skills: data.skills || [], standards: data.standards || [], framework };
+        // Default to skills
+        const itemsList = container.querySelector('.items-list');
+        renderItemsInto(itemsList, noteElement, data.skills || [], false, card, subject, framework);
+    } else {
+        container.classList.remove('has-type-toggle');
+        const items = data.items || [];
+        const isStandards = data.type === "standards";
+
+        if (items.length === 0) {
+            container.innerHTML = `<p class="empty-state">No ${isStandards ? 'standards' : 'skills'} found for this grade level</p>`;
+            noteElement.textContent = `Select up to 4 ${isStandards ? 'standards' : 'skills'}`;
+            return;
+        }
+
+        renderItemsInto(container, noteElement, items, isStandards, card, subject, framework);
+    }
+}
+
+/**
+ * Switch between Skills and Standards when a grade has both
+ * @param {HTMLElement} button - The toggle button clicked
+ */
+function switchStandardsType(button) {
+    const toggleGroup = button.closest('.type-toggle-group');
+    const container = button.closest('.has-type-toggle');
+    const type = button.dataset.type;
+
+    // Update active button
+    toggleGroup.querySelectorAll('.type-toggle-btn').forEach(btn => btn.classList.remove('active'));
+    button.classList.add('active');
+
+    // Retrieve stored data
+    const bothData = container._bothData;
+    const items = type === 'skills' ? bothData.skills : bothData.standards;
+    const isStandards = type === 'standards';
+
+    // Determine subject from container class
+    const subject = container.classList.contains('math-standards') ? 'math' : 'ela';
+    const card = container.closest('.student-card');
+    const noteElement = card.querySelector(`.${subject}-standards-note`);
+
+    // Re-render items in the inner list
+    const itemsList = container.querySelector('.items-list');
+    renderItemsInto(itemsList, noteElement, items, isStandards, card, subject, bothData.framework);
+}
+
+/**
+ * Render skill or standard checkboxes into a container element
+ * @param {HTMLElement} itemsContainer - Element to render into
+ * @param {HTMLElement} noteElement - The note/count element below
+ * @param {Array} items - Array of skill or standard objects
+ * @param {boolean} isStandards - True for standards (code+desc), false for skills (name)
+ * @param {HTMLElement} card - The student card
+ * @param {string} subject - 'math' or 'ela'
+ * @param {string} framework - Framework name (e.g. "FL Standards")
+ */
+function renderItemsInto(itemsContainer, noteElement, items, isStandards, card, subject, framework) {
     if (items.length === 0) {
-        container.innerHTML = `<p class="empty-state">No ${isStandards ? 'standards' : 'skills'} found for this grade level</p>`;
+        itemsContainer.innerHTML = `<p class="empty-state">No ${isStandards ? 'standards' : 'skills'} found for this grade level</p>`;
         noteElement.textContent = `Select up to 4 ${isStandards ? 'standards' : 'skills'}`;
         return;
     }
 
-    // Build checkboxes based on type (skills vs standards)
+    const studentIndex = card.dataset.studentIndex;
+
     if (isStandards) {
-        // Standards: Show code with expandable description
-        container.innerHTML = items.map((item, index) => {
-            const uniqueId = `${subject}-${card.dataset.studentIndex}-${index}`;
+        itemsContainer.innerHTML = items.map((item, index) => {
+            const uniqueId = `${subject}-${studentIndex}-${index}`;
             return `
                 <div class="standard-item">
                     <div class="standard-row">
@@ -483,9 +552,8 @@ function handleGradeChange(card, subject, grade) {
         }).join('');
         noteElement.textContent = `Select up to 4 standards (${framework})`;
     } else {
-        // Skills: Show just the skill name
-        container.innerHTML = items.map((item, index) => {
-            const uniqueId = `${subject}-${card.dataset.studentIndex}-${index}`;
+        itemsContainer.innerHTML = items.map((item, index) => {
+            const uniqueId = `${subject}-${studentIndex}-${index}`;
             return `
                 <div class="standard-item skill-item">
                     <input type="checkbox"
@@ -502,10 +570,10 @@ function handleGradeChange(card, subject, grade) {
         noteElement.textContent = `Select up to 4 skills`;
     }
 
-    // Add change listeners to enforce max selection
-    const checkboxes = container.querySelectorAll('input[type="checkbox"]');
+    // Enforce max selection within this items container
+    const checkboxes = itemsContainer.querySelectorAll('input[type="checkbox"]');
     checkboxes.forEach(cb => {
-        cb.addEventListener('change', () => enforceMaxStandards(container, noteElement, isStandards));
+        cb.addEventListener('change', () => enforceMaxStandards(itemsContainer, noteElement, isStandards));
     });
 }
 
