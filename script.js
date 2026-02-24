@@ -422,7 +422,7 @@ function handleStateChange() {
 }
 
 /**
- * Handle grade selection change - populate standards
+ * Handle grade selection change - populate standards/skills
  * @param {HTMLElement} card - The student card
  * @param {string} subject - 'math' or 'ela'
  * @param {string} grade - The selected grade
@@ -434,59 +434,113 @@ function handleGradeChange(card, subject, grade) {
 
     if (!state) {
         container.innerHTML = '<p class="empty-state">Please select a state first</p>';
-        noteElement.textContent = 'Select up to 4 standards';
+        noteElement.textContent = 'Select up to 4 items';
         return;
     }
 
     if (!grade) {
-        container.innerHTML = `<p class="empty-state">Select ${subject === 'math' ? 'a math' : 'an ELA'} grade to see available standards</p>`;
-        noteElement.textContent = 'Select up to 4 standards';
+        container.innerHTML = `<p class="empty-state">Select ${subject === 'math' ? 'a math' : 'an ELA'} grade to see available options</p>`;
+        noteElement.textContent = 'Select up to 4 items';
         return;
     }
 
-    const standards = getStandards(state, subject, grade);
+    const data = getStandardsData(state, subject, grade);
+    const items = data.items || [];
+    const isStandards = data.type === "standards";
     const framework = getStandardsFramework(state);
 
-    if (standards.length === 0) {
-        container.innerHTML = `<p class="empty-state">No standards found for this grade level</p>`;
-        noteElement.textContent = 'Select up to 4 standards';
+    if (items.length === 0) {
+        container.innerHTML = `<p class="empty-state">No ${isStandards ? 'standards' : 'skills'} found for this grade level</p>`;
+        noteElement.textContent = `Select up to 4 ${isStandards ? 'standards' : 'skills'}`;
         return;
     }
 
-    // Build standards checkboxes
-    container.innerHTML = standards.map((standard, index) => {
-        const uniqueId = `${subject}-${card.dataset.studentIndex}-${index}`;
-        return `
-            <div class="standard-item">
-                <input type="checkbox"
-                       id="${uniqueId}"
-                       name="${subject}Standards"
-                       value="${standard.code}"
-                       data-desc="${standard.desc}">
-                <label for="${uniqueId}">
-                    <strong>${standard.code}</strong>: ${standard.desc}
-                </label>
-            </div>
-        `;
-    }).join('');
+    // Build checkboxes based on type (skills vs standards)
+    if (isStandards) {
+        // Standards: Show code with expandable description
+        container.innerHTML = items.map((item, index) => {
+            const uniqueId = `${subject}-${card.dataset.studentIndex}-${index}`;
+            return `
+                <div class="standard-item">
+                    <div class="standard-row">
+                        <input type="checkbox"
+                               id="${uniqueId}"
+                               name="${subject}Standards"
+                               value="${item.code}"
+                               data-desc="${item.desc}">
+                        <label for="${uniqueId}">
+                            <strong>${item.code}</strong>
+                        </label>
+                        <button type="button" class="info-toggle" onclick="toggleDescription(this)" title="Show description">
+                            <span class="info-icon">i</span>
+                        </button>
+                    </div>
+                    <div class="standard-description" style="display: none;">
+                        ${item.desc}
+                    </div>
+                </div>
+            `;
+        }).join('');
+        noteElement.textContent = `Select up to 4 standards (${framework})`;
+    } else {
+        // Skills: Show just the skill name
+        container.innerHTML = items.map((item, index) => {
+            const uniqueId = `${subject}-${card.dataset.studentIndex}-${index}`;
+            return `
+                <div class="standard-item skill-item">
+                    <input type="checkbox"
+                           id="${uniqueId}"
+                           name="${subject}Standards"
+                           value="${item.name}"
+                           data-desc="${item.name}">
+                    <label for="${uniqueId}">
+                        ${item.name}
+                    </label>
+                </div>
+            `;
+        }).join('');
+        noteElement.textContent = `Select up to 4 skills`;
+    }
 
     // Add change listeners to enforce max selection
     const checkboxes = container.querySelectorAll('input[type="checkbox"]');
     checkboxes.forEach(cb => {
-        cb.addEventListener('change', () => enforceMaxStandards(container, noteElement));
+        cb.addEventListener('change', () => enforceMaxStandards(container, noteElement, isStandards));
     });
-
-    noteElement.textContent = `Select up to 4 standards (${framework})`;
 }
 
 /**
- * Enforce maximum standards selection
+ * Toggle the description visibility for a standard
+ * @param {HTMLElement} button - The info toggle button
+ */
+function toggleDescription(button) {
+    const item = button.closest('.standard-item');
+    const desc = item.querySelector('.standard-description');
+    const icon = button.querySelector('.info-icon');
+
+    if (desc.style.display === 'none') {
+        desc.style.display = 'block';
+        icon.textContent = '−';
+        button.classList.add('expanded');
+        button.title = 'Hide description';
+    } else {
+        desc.style.display = 'none';
+        icon.textContent = 'i';
+        button.classList.remove('expanded');
+        button.title = 'Show description';
+    }
+}
+
+/**
+ * Enforce maximum standards/skills selection
  * @param {HTMLElement} container - The standards container
  * @param {HTMLElement} noteElement - The note element to update
+ * @param {boolean} isStandards - Whether these are standards (vs skills)
  */
-function enforceMaxStandards(container, noteElement) {
+function enforceMaxStandards(container, noteElement, isStandards = true) {
     const checkboxes = container.querySelectorAll('input[type="checkbox"]');
     const checkedCount = container.querySelectorAll('input[type="checkbox"]:checked').length;
+    const itemType = isStandards ? 'standards' : 'skills';
 
     checkboxes.forEach(cb => {
         const item = cb.closest('.standard-item');
@@ -501,7 +555,7 @@ function enforceMaxStandards(container, noteElement) {
 
     // Update note
     if (checkedCount >= MAX_STANDARDS_PER_SUBJECT) {
-        noteElement.innerHTML = `<span class="max-reached">Maximum ${MAX_STANDARDS_PER_SUBJECT} standards selected</span>`;
+        noteElement.innerHTML = `<span class="max-reached">Maximum ${MAX_STANDARDS_PER_SUBJECT} ${itemType} selected</span>`;
     } else {
         const framework = getStandardsFramework(stateSelect.value);
         noteElement.textContent = `${checkedCount}/${MAX_STANDARDS_PER_SUBJECT} standards selected (${framework})`;

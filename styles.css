@@ -452,6 +452,89 @@ textarea {
     pointer-events: none;
 }
 
+/* Standards with expandable descriptions */
+.standard-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+}
+
+.standard-row input[type="checkbox"] {
+    width: 1rem;
+    height: 1rem;
+    accent-color: var(--primary-color);
+    flex-shrink: 0;
+}
+
+.standard-row label {
+    font-size: 0.85rem;
+    color: var(--text-primary);
+    cursor: pointer;
+    flex-grow: 1;
+}
+
+.info-toggle {
+    background: none;
+    border: 1px solid var(--border-color);
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    padding: 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: var(--transition);
+}
+
+.info-toggle:hover {
+    border-color: var(--primary-color);
+    background-color: rgba(44, 141, 60, 0.1);
+}
+
+.info-toggle.expanded {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.info-toggle.expanded .info-icon {
+    color: white;
+}
+
+.info-icon {
+    font-size: 0.7rem;
+    font-weight: 600;
+    font-style: italic;
+    color: var(--text-secondary);
+    line-height: 1;
+}
+
+.standard-description {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    padding: 0.5rem 0.75rem;
+    margin-top: 0.25rem;
+    margin-left: 1.5rem;
+    background-color: rgba(44, 141, 60, 0.05);
+    border-left: 2px solid var(--primary-color);
+    border-radius: 0 4px 4px 0;
+    line-height: 1.4;
+    animation: slideDown 0.2s ease;
+}
+
+/* Skills items (simpler display without info button) */
+.skill-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.skill-item label {
+    margin-bottom: 0;
+}
+
 .standards-note {
     font-size: 0.8rem;
     color: var(--text-secondary);
