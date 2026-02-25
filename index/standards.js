@@ -109,37 +109,20 @@ const STANDARDS = {
                     { name: "Composing Shapes" }
                 ],
                 standards: [
-                    // Counting and Cardinality — Know number names and the count sequence
-                    { code: "K.CC.1", desc: "Know number names and the count sequence." },
-                    { code: "K.CC.2", desc: "Know number names and the count sequence." },
-                    { code: "K.CC.3", desc: "Know number names and the count sequence." },
-                    // Counting and Cardinality — Count to tell the number of objects
-                    { code: "K.CC.4", desc: "Count to tell the number of objects." },
-                    { code: "K.CC.5", desc: "Count to tell the number of objects." },
-                    // Counting and Cardinality — Compare numbers
-                    { code: "K.CC.6", desc: "Compare numbers." },
-                    { code: "K.CC.7", desc: "Compare numbers." },
+                    // Counting and Cardinality
+                    { code: "K.CC.1–K.CC.3", desc: "Know number names and the count sequence." },
+                    { code: "K.CC.4, K.CC.5", desc: "Count to tell the number of objects." },
+                    { code: "K.CC.6, K.CC.7", desc: "Compare numbers." },
                     // Operations and Algebraic Thinking
-                    { code: "K.OA.1", desc: "Understand addition as putting together and adding to, and understand subtraction as taking apart and taking from." },
-                    { code: "K.OA.2", desc: "Understand addition as putting together and adding to, and understand subtraction as taking apart and taking from." },
-                    { code: "K.OA.3", desc: "Understand addition as putting together and adding to, and understand subtraction as taking apart and taking from." },
-                    { code: "K.OA.4", desc: "Understand addition as putting together and adding to, and understand subtraction as taking apart and taking from." },
-                    { code: "K.OA.5", desc: "Understand addition as putting together and adding to, and understand subtraction as taking apart and taking from." },
+                    { code: "K.OA.1–K.OA.5", desc: "Understand addition as putting together and adding to, and understand subtraction as taking apart and taking from." },
                     // Number and Operations in Base Ten
                     { code: "K.NBT.1", desc: "Work with numbers 11–19 to gain foundations for place value." },
-                    // Measurement and Data — Describe and compare measurable attributes
-                    { code: "K.MD.1", desc: "Describe and compare measurable attributes." },
-                    { code: "K.MD.2", desc: "Describe and compare measurable attributes." },
-                    // Measurement and Data — Classify objects
+                    // Measurement and Data
+                    { code: "K.MD.1, K.MD.2", desc: "Describe and compare measurable attributes." },
                     { code: "K.MD.3", desc: "Classify objects and count the number of objects in each category." },
-                    // Geometry — Identify and describe shapes
-                    { code: "K.G.1", desc: "Identify and describe shapes." },
-                    { code: "K.G.2", desc: "Identify and describe shapes." },
-                    { code: "K.G.3", desc: "Identify and describe shapes." },
-                    // Geometry — Analyze, compare, create, and compose shapes
-                    { code: "K.G.4", desc: "Analyze, compare, create, and compose shapes." },
-                    { code: "K.G.5", desc: "Analyze, compare, create, and compose shapes." },
-                    { code: "K.G.6", desc: "Analyze, compare, create, and compose shapes." }
+                    // Geometry
+                    { code: "K.G.1–K.G.3", desc: "Identify and describe shapes." },
+                    { code: "K.G.4–K.G.6", desc: "Analyze, compare, create, and compose shapes." }
                 ]
             },
             ela: { type: "both", skills: [], standards: [] }
