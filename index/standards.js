@@ -108,7 +108,39 @@ const STANDARDS = {
                     { name: "Tracing and Drawing Shapes" },
                     { name: "Composing Shapes" }
                 ],
-                standards: []  // Standards coming later
+                standards: [
+                    // Counting and Cardinality — Know number names and the count sequence
+                    { code: "K.CC.1", desc: "Know number names and the count sequence." },
+                    { code: "K.CC.2", desc: "Know number names and the count sequence." },
+                    { code: "K.CC.3", desc: "Know number names and the count sequence." },
+                    // Counting and Cardinality — Count to tell the number of objects
+                    { code: "K.CC.4", desc: "Count to tell the number of objects." },
+                    { code: "K.CC.5", desc: "Count to tell the number of objects." },
+                    // Counting and Cardinality — Compare numbers
+                    { code: "K.CC.6", desc: "Compare numbers." },
+                    { code: "K.CC.7", desc: "Compare numbers." },
+                    // Operations and Algebraic Thinking
+                    { code: "K.OA.1", desc: "Understand addition as putting together and adding to, and understand subtraction as taking apart and taking from." },
+                    { code: "K.OA.2", desc: "Understand addition as putting together and adding to, and understand subtraction as taking apart and taking from." },
+                    { code: "K.OA.3", desc: "Understand addition as putting together and adding to, and understand subtraction as taking apart and taking from." },
+                    { code: "K.OA.4", desc: "Understand addition as putting together and adding to, and understand subtraction as taking apart and taking from." },
+                    { code: "K.OA.5", desc: "Understand addition as putting together and adding to, and understand subtraction as taking apart and taking from." },
+                    // Number and Operations in Base Ten
+                    { code: "K.NBT.1", desc: "Work with numbers 11–19 to gain foundations for place value." },
+                    // Measurement and Data — Describe and compare measurable attributes
+                    { code: "K.MD.1", desc: "Describe and compare measurable attributes." },
+                    { code: "K.MD.2", desc: "Describe and compare measurable attributes." },
+                    // Measurement and Data — Classify objects
+                    { code: "K.MD.3", desc: "Classify objects and count the number of objects in each category." },
+                    // Geometry — Identify and describe shapes
+                    { code: "K.G.1", desc: "Identify and describe shapes." },
+                    { code: "K.G.2", desc: "Identify and describe shapes." },
+                    { code: "K.G.3", desc: "Identify and describe shapes." },
+                    // Geometry — Analyze, compare, create, and compose shapes
+                    { code: "K.G.4", desc: "Analyze, compare, create, and compose shapes." },
+                    { code: "K.G.5", desc: "Analyze, compare, create, and compose shapes." },
+                    { code: "K.G.6", desc: "Analyze, compare, create, and compose shapes." }
+                ]
             },
             ela: { type: "both", skills: [], standards: [] }
         },
@@ -138,50 +170,10 @@ const STANDARDS = {
             math: { type: "both", skills: [], standards: [] },
             ela: { type: "both", skills: [], standards: [] }
         },
-        // 5th Grade - Has BOTH skills (Spectrum) and standards (Common Core)
+        // 5th Grade
         5: {
-            math: {
-                type: "both",
-                skills: [],  // Spectrum skills coming later
-                standards: [
-                    // Operations and Algebraic Thinking
-                    { code: "5.OA.1", desc: "Use parentheses, brackets, or braces in numerical expressions, and evaluate expressions with these symbols." },
-                    { code: "5.OA.2", desc: "Write simple expressions that record calculations with numbers, and interpret numerical expressions without evaluating them." },
-                    { code: "5.OA.3", desc: "Generate two numerical patterns using two given rules. Identify apparent relationships between corresponding terms." },
-                    // Number and Operations in Base Ten
-                    { code: "5.NBT.1", desc: "Recognize that in a multi-digit number, a digit in one place represents 10 times as much as it represents in the place to its right and 1/10 of what it represents in the place to its left." },
-                    { code: "5.NBT.2", desc: "Explain patterns in the number of zeros of the product when multiplying a number by powers of 10." },
-                    { code: "5.NBT.3", desc: "Read, write, and compare decimals to thousandths." },
-                    { code: "5.NBT.4", desc: "Use place value understanding to round decimals to any place." },
-                    { code: "5.NBT.5", desc: "Fluently multiply multi-digit whole numbers using the standard algorithm." },
-                    { code: "5.NBT.6", desc: "Find whole-number quotients of whole numbers with up to four-digit dividends and two-digit divisors." },
-                    { code: "5.NBT.7", desc: "Add, subtract, multiply, and divide decimals to hundredths, using concrete models or drawings and strategies based on place value." },
-                    // Number and Operations—Fractions
-                    { code: "5.NF.1", desc: "Add and subtract fractions with unlike denominators (including mixed numbers) by replacing given fractions with equivalent fractions." },
-                    { code: "5.NF.2", desc: "Solve word problems involving addition and subtraction of fractions referring to the same whole." },
-                    { code: "5.NF.3", desc: "Interpret a fraction as division of the numerator by the denominator (a/b = a ÷ b)." },
-                    { code: "5.NF.4", desc: "Apply and extend previous understandings of multiplication to multiply a fraction or whole number by a fraction." },
-                    { code: "5.NF.5", desc: "Interpret multiplication as scaling (resizing)." },
-                    { code: "5.NF.6", desc: "Solve real world problems involving multiplication of fractions and mixed numbers." },
-                    { code: "5.NF.7", desc: "Apply and extend previous understandings of division to divide unit fractions by whole numbers and whole numbers by unit fractions." },
-                    // Measurement and Data
-                    { code: "5.MD.1", desc: "Convert among different-sized standard measurement units within a given measurement system." },
-                    { code: "5.MD.2", desc: "Make a line plot to display a data set of measurements in fractions of a unit (1/2, 1/4, 1/8)." },
-                    { code: "5.MD.3", desc: "Recognize volume as an attribute of solid figures and understand concepts of volume measurement." },
-                    { code: "5.MD.4", desc: "Measure volumes by counting unit cubes, using cubic cm, cubic in, cubic ft, and improvised units." },
-                    { code: "5.MD.5", desc: "Relate volume to the operations of multiplication and addition and solve real world and mathematical problems involving volume." },
-                    // Geometry
-                    { code: "5.G.1", desc: "Use a pair of perpendicular number lines, called axes, to define a coordinate system." },
-                    { code: "5.G.2", desc: "Represent real world and mathematical problems by graphing points in the first quadrant of the coordinate plane." },
-                    { code: "5.G.3", desc: "Understand that attributes belonging to a category of two-dimensional figures also belong to all subcategories of that category." },
-                    { code: "5.G.4", desc: "Classify two-dimensional figures in a hierarchy based on properties." }
-                ]
-            },
-            ela: {
-                type: "both",
-                skills: [],
-                standards: []  // ELA data coming later
-            }
+            math: { type: "both", skills: [], standards: [] },
+            ela: { type: "both", skills: [], standards: [] }
         },
         // 6th Grade
         6: {
