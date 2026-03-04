@@ -307,7 +307,12 @@ function renderDetail(req) {
     } else {
         completedTag.classList.add('hidden');
     }
-    $('d-email').textContent       = req.tutorEmail   || '—';
+    const emailEl = $('d-email');
+    if (req.tutorEmail) {
+        emailEl.innerHTML = `<a href="mailto:${esc(req.tutorEmail)}" class="email-link">${esc(req.tutorEmail)}</a>`;
+    } else {
+        emailEl.textContent = '—';
+    }
     $('d-school').textContent      = req.school       || '—';
     $('d-state').textContent       = req.state        || '—';
     $('d-coordinator').textContent = req.coordinator  || '—';
