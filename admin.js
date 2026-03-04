@@ -41,7 +41,7 @@ const COLS = {
     status:       'Status'
 };
 
-const SP_SCOPES = [`${SP_SITE}/.default`];
+const SP_SCOPES = ['https://netorgft11829358.sharepoint.com/.default'];
 
 // ── State ────────────────────────────────────────────────────────────
 let msalInstance = null;
