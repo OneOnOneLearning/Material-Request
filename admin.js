@@ -26,19 +26,19 @@ const LIST_NAME = 'Material Requests';
 
 const COLS = {
     id:           'ID',
-    requestId:    'RequestId',
-    submittedAt:  'SubmittedAt',
-    tutorName:    'TutorName',
-    tutorEmail:   'TutorEmail',
-    coordinator:  'ProgramCoordinator',
-    school:       'School',
-    state:        'State0',           // SharePoint reserves "State" → often becomes "State0"
-    studentCount: 'StudentCount',
-    mathSummary:  'MathSummary',
-    elaSummary:   'ELASummary',
-    notes:        'RequestNotes',
-    studentsJSON: 'StudentsJSON',
-    status:       'Status'
+    requestId:    'Title',
+    submittedAt:  'field_16',
+    tutorName:    'field_4',
+    tutorEmail:   'field_5',
+    coordinator:  'field_3',
+    school:       'field_6',
+    state:        'field_2',
+    studentCount: 'field_7',
+    mathSummary:  'field_9',
+    elaSummary:   'field_12',
+    notes:        'field_13',
+    studentsJSON: 'field_14',
+    status:       'field_1'
 };
 
 const SP_SCOPES = ['https://netorgft11829358.sharepoint.com/.default'];
@@ -156,13 +156,6 @@ async function loadRequests(account) {
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
         const data = await res.json();
-        if (data.value && data.value.length > 0) {
-            const item = data.value[0];
-            const fields = ['field_1','field_2','field_3','field_4','field_5','field_6','field_7','field_8','field_9','field_12','field_13','field_14','field_16','CurriculumNotes','CompletedDate','Title'];
-            const mapped = {};
-            fields.forEach(f => { mapped[f] = item[f]; });
-            console.log('SP field values:', JSON.stringify(mapped, null, 2));
-        }
         allRequests = (data.value || []).map(normalizeItem);
         renderAll();
     } catch (err) {
