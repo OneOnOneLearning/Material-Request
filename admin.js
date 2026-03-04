@@ -143,9 +143,8 @@ async function loadRequests(account) {
 
     try {
         const token   = await getToken(account);
-        const select  = Object.values(COLS).join(',');
         const url     = `${SP_SITE}/_api/web/lists/getbytitle('${LIST_NAME}')/items`
-                      + `?$select=${select}&$orderby=Created desc&$top=500`;
+                      + `?$orderby=Created desc&$top=500`;
 
         const res  = await fetch(url, {
             headers: {
