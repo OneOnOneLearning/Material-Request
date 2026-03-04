@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin — Material Requests</title>
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+
+<!-- ── Password Gate ─────────────────────────────────────────────────── -->
+<div id="gate" class="gate-overlay">
+    <div class="gate-card glass-strong">
+        <img src="logo.png" alt="One on One Learning" class="gate-logo">
+        <h2>Admin Access</h2>
+        <p class="gate-subtitle">Enter the admin password to continue</p>
+        <div class="gate-field">
+            <input type="password" id="gate-input" class="glass-input" placeholder="Password" autocomplete="current-password">
+            <button id="gate-btn" class="btn-primary">Enter →</button>
+        </div>
+        <p id="gate-error" class="gate-error hidden">Incorrect password. Try again.</p>
+    </div>
+</div>
+
+<!-- ── App Shell ─────────────────────────────────────────────────────── -->
+<div id="app" class="hidden">
+
+    <!-- Header -->
+    <header class="app-header glass">
+        <div class="header-brand">
+            <img src="logo.png" alt="One on One Learning" class="header-logo">
+            <div class="header-titles">
+                <span class="header-title">Material Requests</span>
+                <span class="header-sub">Admin Dashboard</span>
+            </div>
+        </div>
+        <div class="header-actions">
+            <div id="user-chip" class="user-chip glass hidden">
+                <span id="user-initials" class="user-avatar"></span>
+                <span id="user-display-name"></span>
+            </div>
+            <button id="btn-login" class="btn-ghost">Sign in with Microsoft</button>
+            <button id="btn-logout" class="btn-ghost hidden">Sign out</button>
+        </div>
+    </header>
+
+    <!-- Body -->
+    <div class="app-body">
+
+        <!-- Sidebar -->
+        <aside class="sidebar glass">
+
+            <div class="stats-bar">
+                <div class="stat glass-subtle" id="stat-new" title="Filter: New">
+                    <span class="stat-value" id="count-new">—</span>
+                    <span class="stat-key">New</span>
+                </div>
+                <div class="stat glass-subtle" id="stat-progress" title="Filter: In Progress">
+                    <span class="stat-value" id="count-progress">—</span>
+                    <span class="stat-key">In Progress</span>
+                </div>
+                <div class="stat glass-subtle" id="stat-done" title="Filter: Completed">
+                    <span class="stat-value" id="count-done">—</span>
+                    <span class="stat-key">Done</span>
+                </div>
+            </div>
+
+            <div class="sidebar-search">
+                <input type="text" id="search" class="glass-input" placeholder="🔍  Search by name, school...">
+            </div>
+
+            <div class="filter-row">
+                <button class="filter-btn active" data-status="all">All</button>
+                <button class="filter-btn" data-status="New">New</button>
+                <button class="filter-btn" data-status="In Progress">In Progress</button>
+                <button class="filter-btn" data-status="Completed">Done</button>
+            </div>
+
+            <div class="list-wrap">
+                <div id="list-empty" class="list-empty">Sign in to load requests</div>
+                <div id="request-list"></div>
+            </div>
+
+        </aside>
+
+        <!-- Detail Panel -->
+        <main class="detail-panel">
+
+            <div id="detail-empty" class="detail-empty">
+                <div class="empty-icon">📋</div>
+                <p>Select a request to view its details</p>
+            </div>
+
+            <div id="detail-view" class="hidden">
+
+                <div class="detail-top glass">
+                    <div class="detail-top-left">
+                        <h2 id="d-tutor"></h2>
+                        <code id="d-request-id" class="request-id-badge"></code>
+                    </div>
+                    <div class="detail-top-right">
+                        <span id="d-submitted" class="meta-tag glass-subtle"></span>
+                        <div class="status-control">
+                            <select id="d-status" class="glass-input status-select">
+                                <option value="New">New</option>
+                                <option value="In Progress">In Progress</option>
+                                <option value="Completed">Completed</option>
+                            </select>
+                            <button id="btn-save-status" class="btn-primary btn-sm">Save</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="detail-grid">
+                    <div class="detail-card glass">
+                        <h3 class="card-title">Tutor Info</h3>
+                        <dl class="info-dl">
+                            <dt>Email</dt><dd id="d-email"></dd>
+                            <dt>School</dt><dd id="d-school"></dd>
+                            <dt>State</dt><dd id="d-state"></dd>
+                            <dt>Coordinator</dt><dd id="d-coordinator"></dd>
+                        </dl>
+                    </div>
+                    <div class="detail-card glass">
+                        <h3 class="card-title">Request Overview</h3>
+                        <dl class="info-dl">
+                            <dt>Students</dt><dd id="d-count"></dd>
+                            <dt>Math</dt><dd id="d-has-math"></dd>
+                            <dt>ELA</dt><dd id="d-has-ela"></dd>
+                        </dl>
+                    </div>
+                </div>
+
+                <div id="d-students" class="students-section"></div>
+
+                <div id="d-notes-card" class="detail-card glass hidden">
+                    <h3 class="card-title">Notes</h3>
+                    <p id="d-notes" class="notes-body"></p>
+                </div>
+
+            </div>
+        </main>
+
+    </div>
+</div>
+
+<script src="https://alcdn.msauth.net/browser/2.38.3/js/msal-browser.min.js"></script>
+<script src="admin.js"></script>
+</body>
+</html>
