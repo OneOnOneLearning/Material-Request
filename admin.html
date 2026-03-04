@@ -69,6 +69,12 @@
                 <input type="text" id="search" class="glass-input" placeholder="🔍  Search by name, school...">
             </div>
 
+            <div class="sidebar-search">
+                <select id="pc-filter" class="glass-input">
+                    <option value="all">All Coordinators</option>
+                </select>
+            </div>
+
             <div class="filter-row">
                 <button class="filter-btn active" data-status="all">All</button>
                 <button class="filter-btn" data-status="New">New</button>
@@ -100,6 +106,7 @@
                     </div>
                     <div class="detail-top-right">
                         <span id="d-submitted" class="meta-tag glass-subtle"></span>
+                        <span id="d-completed" class="meta-tag glass-subtle completed-tag hidden"></span>
                         <div class="status-control">
                             <select id="d-status" class="glass-input status-select">
                                 <option value="New">New</option>

@@ -496,6 +496,8 @@ body {
     border-radius: 50px;
 }
 
+.completed-tag { color: #86efac !important; background: rgba(44,141,60,0.15); border: 1px solid rgba(44,141,60,0.3); }
+
 .status-control { display: flex; align-items: center; gap: 0.5rem; }
 .status-select  { width: auto; min-width: 148px; }
 
@@ -587,9 +589,22 @@ body {
 .subject-label.math { background: rgba(230,126,34,0.2); color: #fdba74; border: 1px solid rgba(230,126,34,0.35); }
 .subject-label.ela  { background: rgba(44,141,60,0.2);  color: #86efac; border: 1px solid rgba(44,141,60,0.35);  }
 
-.subject-detail        { color: var(--t2); flex: 1; line-height: 1.6; }
-.subject-detail .stds  { color: var(--t1); font-weight: 500; }
-.subject-detail .gr    { color: var(--t3); font-size: 0.8rem; }
+.subject-detail { flex: 1; }
+
+.std-chips { display: flex; flex-wrap: wrap; gap: 0.35rem; align-items: flex-start; }
+
+.std-chip {
+    font-size:     0.78rem;
+    color:         var(--t2);
+    background:    rgba(255,255,255,0.06);
+    border:        1px solid rgba(255,255,255,0.1);
+    border-radius: 6px;
+    padding:       0.2rem 0.5rem;
+    line-height:   1.45;
+}
+.std-chip strong { color: var(--t1); }
+.std-chip.grade-chip { color: var(--t3); font-style: italic; }
+.std-chip.other-chip { color: var(--t3); font-style: italic; }
 
 /* ── Notes ──────────────────────────────────────────────────── */
 .notes-body {

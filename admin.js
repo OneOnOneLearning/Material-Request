@@ -37,8 +37,9 @@ const COLS = {
     mathSummary:  'field_9',
     elaSummary:   'field_12',
     notes:        'field_13',
-    studentsJSON: 'field_14',
-    status:       'field_1'
+    studentsJSON:  'field_14',
+    status:        'field_1',
+    completedDate: 'CompletedDate'
 };
 
 const SP_SCOPES = ['https://netorgft11829358.sharepoint.com/.default'];
@@ -47,6 +48,7 @@ const SP_SCOPES = ['https://netorgft11829358.sharepoint.com/.default'];
 let msalInstance = null;
 let allRequests  = [];
 let activeFilter = 'all';
+let activePCFilter = 'all';
 let searchQuery  = '';
 let selectedId   = null;
 
@@ -157,6 +159,7 @@ async function loadRequests(account) {
 
         const data = await res.json();
         allRequests = (data.value || []).map(normalizeItem);
+        populatePCFilter();
         renderAll();
     } catch (err) {
         console.error('Failed to load requests:', err);
@@ -180,8 +183,9 @@ function normalizeItem(raw) {
         mathSummary:  raw[COLS.mathSummary]  || 'None requested',
         elaSummary:   raw[COLS.elaSummary]   || 'None requested',
         notes:        raw[COLS.notes]        || '',
-        studentsJSON: raw[COLS.studentsJSON] || '[]',
-        status:       raw[COLS.status]       || 'New'
+        studentsJSON:  raw[COLS.studentsJSON]  || '[]',
+        status:        raw[COLS.status]        || 'New',
+        completedDate: raw[COLS.completedDate] || null
     };
 }
 
@@ -202,7 +206,8 @@ async function updateStatus(itemId, newStatus) {
         },
         body: JSON.stringify({
             __metadata: { type: listType },
-            [COLS.status]: newStatus
+            [COLS.status]: newStatus,
+            [COLS.completedDate]: newStatus === 'Completed' ? new Date().toISOString() : null
         })
     });
 
@@ -225,12 +230,13 @@ function getFiltered() {
     const q = searchQuery.toLowerCase();
     return allRequests.filter(r => {
         const matchStatus = activeFilter === 'all' || r.status === activeFilter;
+        const matchPC     = activePCFilter === 'all' || r.coordinator === activePCFilter;
         const matchSearch = !q
             || r.tutorName.toLowerCase().includes(q)
             || r.school.toLowerCase().includes(q)
             || r.requestId.toLowerCase().includes(q)
             || r.coordinator.toLowerCase().includes(q);
-        return matchStatus && matchSearch;
+        return matchStatus && matchPC && matchSearch;
     });
 }
 
@@ -293,6 +299,14 @@ function renderDetail(req) {
     $('d-tutor').textContent       = req.tutorName;
     $('d-request-id').textContent  = req.requestId;
     $('d-submitted').textContent   = `Submitted ${formatDate(req.submittedAt)}`;
+
+    const completedTag = $('d-completed');
+    if (req.status === 'Completed' && req.completedDate) {
+        completedTag.textContent = `Completed ${formatDate(req.completedDate)}`;
+        completedTag.classList.remove('hidden');
+    } else {
+        completedTag.classList.add('hidden');
+    }
     $('d-email').textContent       = req.tutorEmail   || '—';
     $('d-school').textContent      = req.school       || '—';
     $('d-state').textContent       = req.state        || '—';
@@ -330,18 +344,26 @@ function renderStudents(req) {
 
     const subjectBlock = (subj, data, cls) => {
         if (!data) return '';
-        const hasMath = data.requestGrade || (data.standards?.length > 0) || data.other;
-        if (!hasMath) return '';
+        const hasContent = data.requestGrade || (data.standards?.length > 0) || data.other;
+        if (!hasContent) return '';
 
-        const parts = [];
-        if (data.requestGrade)         parts.push(`<span class="gr">${gradeLabel(data.requestGrade)} materials</span>`);
-        if (data.standards?.length > 0) parts.push(`<span class="stds">${data.standards.map(s => s.code || s.description).join(', ')}</span>`);
-        if (data.other)                 parts.push(`<span class="gr">Other: ${esc(data.other)}</span>`);
+        const chips = [];
+        if (data.requestGrade) chips.push(`<span class="std-chip grade-chip">${gradeLabel(data.requestGrade)} materials</span>`);
+        if (data.standards?.length > 0) {
+            data.standards.forEach(s => {
+                const code = s.code ? `<strong>${esc(s.code)}</strong> ` : '';
+                const desc = s.description ? esc(s.description) : '';
+                chips.push(`<span class="std-chip">${code}${desc}</span>`);
+            });
+        }
+        if (data.other) chips.push(`<span class="std-chip other-chip">Other: ${esc(data.other)}</span>`);
 
         return `
             <div class="subject-row">
                 <span class="subject-label ${cls}">${subj}</span>
-                <div class="subject-detail">${parts.join('<br>')}</div>
+                <div class="subject-detail">
+                    <div class="std-chips">${chips.join('')}</div>
+                </div>
             </div>`;
     };
 
@@ -378,7 +400,10 @@ $('btn-save-status').addEventListener('click', async () => {
     try {
         await updateStatus(selectedId, newStatus);
         const req = allRequests.find(r => r.id === selectedId);
-        if (req) req.status = newStatus;
+        if (req) {
+            req.status = newStatus;
+            req.completedDate = newStatus === 'Completed' ? new Date().toISOString() : null;
+        }
         updateCounts();
         renderList();
         btn.textContent       = 'Saved ✓';
@@ -401,6 +426,26 @@ $('btn-save-status').addEventListener('click', async () => {
 });
 
 // ── Search & Filter ──────────────────────────────────────────────────
+function populatePCFilter() {
+    const sel = $('pc-filter');
+    const current = sel.value;
+    const pcs = [...new Set(allRequests.map(r => r.coordinator).filter(Boolean))].sort();
+    // Remove old dynamic options (keep the "All" option)
+    [...sel.options].slice(1).forEach(o => o.remove());
+    pcs.forEach(pc => {
+        const opt = document.createElement('option');
+        opt.value = pc;
+        opt.textContent = pc;
+        sel.appendChild(opt);
+    });
+    sel.value = pcs.includes(current) ? current : 'all';
+}
+
+$('pc-filter').addEventListener('change', e => {
+    activePCFilter = e.target.value;
+    renderList();
+});
+
 $('search').addEventListener('input', e => {
     searchQuery = e.target.value;
     renderList();
