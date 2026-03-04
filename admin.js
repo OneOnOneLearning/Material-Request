@@ -156,6 +156,10 @@ async function loadRequests(account) {
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
         const data = await res.json();
+        if (data.value && data.value.length > 0) {
+            console.log('SP column names:', Object.keys(data.value[0]));
+            console.log('SP first item sample:', data.value[0]);
+        }
         allRequests = (data.value || []).map(normalizeItem);
         renderAll();
     } catch (err) {
