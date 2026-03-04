@@ -10,8 +10,8 @@ const ADMIN_PASSWORD = 'YOUR_PASSWORD_HERE'; // ← change this
 
 const MSAL_CONFIG = {
     auth: {
-        clientId:    'YOUR_AZURE_APP_CLIENT_ID', // Azure AD App Registration → Application (client) ID
-        authority:   'https://login.microsoftonline.com/YOUR_TENANT_ID', // Azure AD → Tenant ID
+        clientId:    'edbed6c4-b7eb-47ea-b509-5332757d06d4',
+        authority:   'https://login.microsoftonline.com/24ab4d38-cbff-431e-b383-3bd64b05be87',
         redirectUri: window.location.href.split('?')[0].split('#')[0]
     },
     cache: { cacheLocation: 'sessionStorage' }
