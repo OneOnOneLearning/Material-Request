@@ -6,7 +6,7 @@
 // ── CONFIG  ─────────────────────────────────────────────────────────
 // Fill these in before deploying. See README for Azure setup steps.
 
-const ADMIN_PASSWORD = 'YOUR_PASSWORD_HERE'; // ← change this
+const ADMIN_PASSWORD = 'Learning123';
 
 const MSAL_CONFIG = {
     auth: {
@@ -21,8 +21,8 @@ const MSAL_CONFIG = {
 // SP_SITE: your SharePoint site URL (no trailing slash)
 // LIST_NAME: the exact display name of your SharePoint list
 // COLS: internal column names — check list settings if any are wrong
-const SP_SITE   = 'https://YOUR_ORG.sharepoint.com/sites/YOUR_SITE';
-const LIST_NAME = 'MaterialRequests';
+const SP_SITE   = 'https://netorgft11829358.sharepoint.com/sites/MaterialRequests';
+const LIST_NAME = 'Material Requests';
 
 const COLS = {
     id:           'ID',
