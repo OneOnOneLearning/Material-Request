@@ -157,8 +157,11 @@ async function loadRequests(account) {
 
         const data = await res.json();
         if (data.value && data.value.length > 0) {
-            console.log('SP column names:', Object.keys(data.value[0]));
-            console.log('SP first item sample:', data.value[0]);
+            const item = data.value[0];
+            const fields = ['field_1','field_2','field_3','field_4','field_5','field_6','field_7','field_8','field_9','field_12','field_13','field_14','field_16','CurriculumNotes','CompletedDate','Title'];
+            const mapped = {};
+            fields.forEach(f => { mapped[f] = item[f]; });
+            console.log('SP field values:', JSON.stringify(mapped, null, 2));
         }
         allRequests = (data.value || []).map(normalizeItem);
         renderAll();
