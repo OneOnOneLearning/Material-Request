@@ -44,6 +44,12 @@ const COLS = {
 
 const SP_SCOPES = ['https://netorgft11829358.sharepoint.com/.default'];
 
+// ── Materials folder base URL ─────────────────────────────────────────
+// TODO: Replace with the real SharePoint folder URL once materials are uploaded.
+// Standard folders should be named exactly after their code (e.g. "K.CC.1").
+// Example: 'https://netorgft11829358.sharepoint.com/sites/YourSite/Shared%20Documents/Materials'
+const MATERIALS_BASE_URL = null; // set to the folder URL string when ready
+
 // ── State ────────────────────────────────────────────────────────────
 let msalInstance = null;
 let allRequests  = [];
@@ -356,9 +362,17 @@ function renderStudents(req) {
         if (data.requestGrade) chips.push(`<span class="std-chip grade-chip">${gradeLabel(data.requestGrade)} materials</span>`);
         if (data.standards?.length > 0) {
             data.standards.forEach(s => {
-                const code = s.code ? `<strong>${esc(s.code)}</strong> ` : '';
                 const desc = s.description ? esc(s.description) : '';
-                chips.push(`<span class="std-chip">${code}${desc}</span>`);
+                let codeEl = '';
+                if (s.code) {
+                    if (MATERIALS_BASE_URL) {
+                        const href = `${MATERIALS_BASE_URL}/${encodeURIComponent(s.code)}`;
+                        codeEl = `<a href="${href}" target="_blank" rel="noopener" class="std-folder-link"><strong>${esc(s.code)}</strong></a> `;
+                    } else {
+                        codeEl = `<strong>${esc(s.code)}</strong> `;
+                    }
+                }
+                chips.push(`<span class="std-chip">${codeEl}${desc}</span>`);
             });
         }
         if (data.other) chips.push(`<span class="std-chip other-chip">Other: ${esc(data.other)}</span>`);

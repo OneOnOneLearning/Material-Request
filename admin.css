@@ -601,6 +601,8 @@ body {
     line-height: 1.5;
 }
 .std-chip strong { font-weight: 600; }
+.std-folder-link { color: #93c5fd; text-decoration: none; }
+.std-folder-link:hover { text-decoration: underline; }
 .std-chip.grade-chip { color: var(--t2); }
 .std-chip.other-chip { color: var(--t2); }
 
