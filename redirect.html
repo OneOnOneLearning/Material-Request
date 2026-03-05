@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>Signing in…</title></head>
+<body>
+<script src="msal-browser.min.js"></script>
+<script>
+    const cfg = {
+        auth: {
+            clientId: 'edbed6c4-b7eb-47ea-b509-5332757d06d4',
+            authority: 'https://login.microsoftonline.com/24ab4d38-cbff-431e-b383-3bd64b05be87',
+            redirectUri: window.location.href.split('?')[0].split('#')[0]
+        },
+        cache: { cacheLocation: 'sessionStorage' }
+    };
+    new msal.PublicClientApplication(cfg).initialize()
+        .then(instance => instance.handleRedirectPromise())
+        .catch(() => {});
+</script>
+</body>
+</html>

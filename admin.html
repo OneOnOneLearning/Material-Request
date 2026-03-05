@@ -8,8 +8,19 @@
 </head>
 <body>
 
+<!-- ── Sign-in Gate ───────────────────────────────────────────────────── -->
+<div id="gate" class="gate-overlay">
+    <div class="gate-card glass-strong">
+        <img src="logo.png" alt="One on One Learning" class="gate-logo">
+        <h2>Admin Access</h2>
+        <p class="gate-subtitle">Sign in with your Microsoft account to continue</p>
+        <button id="gate-signin-btn" class="btn-primary">Sign in with Microsoft</button>
+        <p id="gate-error" class="gate-error hidden">Sign in failed. Please try again.</p>
+    </div>
+</div>
+
 <!-- ── App Shell ─────────────────────────────────────────────────────── -->
-<div id="app">
+<div id="app" class="hidden">
 
     <!-- Header -->
     <header class="app-header glass">

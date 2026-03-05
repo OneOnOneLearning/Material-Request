@@ -10,7 +10,7 @@ const MSAL_CONFIG = {
     auth: {
         clientId:    'edbed6c4-b7eb-47ea-b509-5332757d06d4',
         authority:   'https://login.microsoftonline.com/24ab4d38-cbff-431e-b383-3bd64b05be87',
-        redirectUri: window.location.href.split('?')[0].split('#')[0]
+        redirectUri: window.location.href.replace(/[^/]*$/, 'redirect.html')
     },
     cache: { cacheLocation: 'sessionStorage' }
 };
@@ -69,21 +69,31 @@ function initMsal() {
     msalInstance = new msal.PublicClientApplication(MSAL_CONFIG);
 
     msalInstance.initialize().then(() => {
-        // Handle redirect response (if using redirect flow)
         msalInstance.handleRedirectPromise().then(response => {
             if (response) onSignedIn(response.account);
         });
 
-        // If already signed in from a previous session
+        // If already signed in from a previous session, skip the gate
         const existing = msalInstance.getAllAccounts();
         if (existing.length > 0) onSignedIn(existing[0]);
     });
 
-    $('btn-login').addEventListener('click', () => {
+    const doLogin = () => {
+        $('gate-signin-btn').disabled = true;
+        $('gate-signin-btn').textContent = 'Signing in…';
+        $('gate-error').classList.add('hidden');
         msalInstance.loginPopup({ scopes: SP_SCOPES })
             .then(res => onSignedIn(res.account))
-            .catch(err => console.error('Login failed:', err));
-    });
+            .catch(err => {
+                console.error('Login failed:', err);
+                $('gate-error').classList.remove('hidden');
+                $('gate-signin-btn').disabled = false;
+                $('gate-signin-btn').textContent = 'Sign in with Microsoft';
+            });
+    };
+
+    $('gate-signin-btn').addEventListener('click', doLogin);
+    $('btn-login').addEventListener('click', doLogin);
 
     $('btn-logout').addEventListener('click', () => {
         msalInstance.logoutPopup().then(() => {
@@ -95,6 +105,13 @@ function initMsal() {
             renderList();
             $('detail-empty').classList.remove('hidden');
             $('detail-view').classList.add('hidden');
+            // Show the gate again
+            $('app').classList.add('hidden');
+            const gate = $('gate');
+            gate.style.opacity = '1';
+            gate.classList.remove('hidden');
+            $('gate-signin-btn').disabled = false;
+            $('gate-signin-btn').textContent = 'Sign in with Microsoft';
         });
     });
 }
@@ -103,11 +120,20 @@ function onSignedIn(account) {
     const name     = account.name || account.username;
     const initials = name.split(' ').slice(0, 2).map(n => n[0]).join('').toUpperCase();
 
-    $('user-initials').textContent    = initials;
+    $('user-initials').textContent     = initials;
     $('user-display-name').textContent = name.split(' ')[0];
     $('user-chip').classList.remove('hidden');
     $('btn-login').classList.add('hidden');
     $('btn-logout').classList.remove('hidden');
+
+    // Fade out gate and reveal app
+    const gate = $('gate');
+    if (gate && !gate.classList.contains('hidden')) {
+        gate.style.transition = 'opacity 0.3s ease';
+        gate.style.opacity    = '0';
+        setTimeout(() => gate.classList.add('hidden'), 300);
+    }
+    $('app').classList.remove('hidden');
 
     loadRequests(account);
 }
