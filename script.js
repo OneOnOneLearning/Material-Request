@@ -717,7 +717,12 @@ function collectFormData() {
         if (!s.math.requestGrade && s.math.standards.length === 0 && !s.math.other) return null;
         let lines = [`<strong>${s.name}</strong> (${s.math.requestGrade || '—'})`];
         if (s.math.standards.length > 0) {
-            lines.push(`Materials: ${s.math.standards.map(st => st.code).join(', ')}`);
+            const isStandards = s.math.standards.some(st => st.description);
+            if (isStandards) {
+                lines.push(s.math.standards.map(st => `• ${st.code} — ${st.description}`).join('<br>'));
+            } else {
+                lines.push(s.math.standards.map(st => st.code).join(', '));
+            }
         }
         if (s.math.other) lines.push(`Other: ${s.math.other}`);
         return lines.join('<br>');
@@ -729,7 +734,12 @@ function collectFormData() {
         if (!s.ela.requestGrade && s.ela.standards.length === 0 && !s.ela.other) return null;
         let lines = [`<strong>${s.name}</strong> (${s.ela.requestGrade || '—'})`];
         if (s.ela.standards.length > 0) {
-            lines.push(`Materials: ${s.ela.standards.map(st => st.code).join(', ')}`);
+            const isStandards = s.ela.standards.some(st => st.description);
+            if (isStandards) {
+                lines.push(s.ela.standards.map(st => `• ${st.code} — ${st.description}`).join('<br>'));
+            } else {
+                lines.push(s.ela.standards.map(st => st.code).join(', '));
+            }
         }
         if (s.ela.other) lines.push(`Other: ${s.ela.other}`);
         return lines.join('<br>');
