@@ -327,7 +327,25 @@ body {
 .sidebar-search input { font-size: 0.875rem; }
 
 /* Filter tabs */
-.filter-row { display: flex; gap: 0.375rem; flex-wrap: wrap; }
+.filter-row { display: flex; gap: 0.375rem; flex-wrap: wrap; align-items: center; }
+
+.btn-refresh {
+    margin-left:   auto;
+    padding:       0.3rem 0.55rem;
+    font-size:     0.95rem;
+    line-height:   1;
+    border:        1px solid rgba(255, 255, 255, 0.16);
+    border-radius: var(--radius-sm);
+    background:    transparent;
+    color:         var(--t2);
+    cursor:        pointer;
+    font-family:   inherit;
+    transition:    all 0.18s var(--ease);
+}
+.btn-refresh:hover    { color: var(--t1); border-color: rgba(255,255,255,0.35); }
+.btn-refresh:disabled { opacity: 0.4; cursor: default; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.btn-refresh.spinning { display: inline-block; animation: spin 0.7s linear infinite; }
 
 .filter-btn {
     padding:       0.3rem 0.75rem;

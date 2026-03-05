@@ -468,6 +468,18 @@ $('pc-filter').addEventListener('change', e => {
     renderList();
 });
 
+$('btn-refresh').addEventListener('click', () => {
+    const account = msalInstance?.getAllAccounts()[0];
+    if (!account) return;
+    const btn = $('btn-refresh');
+    btn.classList.add('spinning');
+    btn.disabled = true;
+    loadRequests(account).finally(() => {
+        btn.classList.remove('spinning');
+        btn.disabled = false;
+    });
+});
+
 $('search').addEventListener('input', e => {
     searchQuery = e.target.value;
     renderList();

@@ -707,37 +707,34 @@ function collectFormData() {
     // Get overall request notes
     const requestNotes = document.getElementById('request-notes').value;
 
-    // Build readable summaries for SharePoint list view (bullet points)
-    const studentsList = students.map(s =>
-        `${s.name} (${getGradeLabel(s.currentGrade)})`
-    );
-    const studentsSummary = studentsList.length > 0 ? '• ' + studentsList.join('\n• ') : '';
+    // Build readable summaries for SharePoint list view
+    const studentsSummary = students.length > 0
+        ? students.map(s => `• <strong>${s.name}</strong> (${s.currentGrade || '—'})`).join('<br>')
+        : '';
 
-    // Build detailed Math summary (structured format for cleaner display)
+    // Build detailed Math summary (HTML for email rendering)
     const mathList = students.map(s => {
         if (!s.math.requestGrade && s.math.standards.length === 0 && !s.math.other) return null;
-        let lines = [`📚 ${s.name}`];
-        if (s.math.requestGrade) lines.push(`   Grade: ${s.math.requestGrade}`);
+        let lines = [`<strong>${s.name}</strong> (${s.math.requestGrade || '—'})`];
         if (s.math.standards.length > 0) {
-            lines.push(`   Standards: ${s.math.standards.map(st => st.code).join(', ')}`);
+            lines.push(`Materials: ${s.math.standards.map(st => st.code).join(', ')}`);
         }
-        if (s.math.other) lines.push(`   Other: ${s.math.other}`);
-        return lines.join('\n');
+        if (s.math.other) lines.push(`Other: ${s.math.other}`);
+        return lines.join('<br>');
     }).filter(Boolean);
-    const mathSummary = mathList.join('\n\n');
+    const mathSummary = mathList.join('<br><br>');
 
-    // Build detailed ELA summary (structured format for cleaner display)
+    // Build detailed ELA summary (HTML for email rendering)
     const elaList = students.map(s => {
         if (!s.ela.requestGrade && s.ela.standards.length === 0 && !s.ela.other) return null;
-        let lines = [`📖 ${s.name}`];
-        if (s.ela.requestGrade) lines.push(`   Grade: ${s.ela.requestGrade}`);
+        let lines = [`<strong>${s.name}</strong> (${s.ela.requestGrade || '—'})`];
         if (s.ela.standards.length > 0) {
-            lines.push(`   Standards: ${s.ela.standards.map(st => st.code).join(', ')}`);
+            lines.push(`Materials: ${s.ela.standards.map(st => st.code).join(', ')}`);
         }
-        if (s.ela.other) lines.push(`   Other: ${s.ela.other}`);
-        return lines.join('\n');
+        if (s.ela.other) lines.push(`Other: ${s.ela.other}`);
+        return lines.join('<br>');
     }).filter(Boolean);
-    const elaSummary = elaList.join('\n\n');
+    const elaSummary = elaList.join('<br><br>');
 
     const formData = {
         requestId: generateRequestId(),
