@@ -721,7 +721,7 @@ function collectFormData() {
             if (isStandards) {
                 lines.push(s.math.standards.map(st => `• ${st.code} — ${st.description}`).join('<br>'));
             } else {
-                lines.push(s.math.standards.map(st => st.code).join(', '));
+                lines.push(s.math.standards.map(st => `• ${st.code}`).join('<br>'));
             }
         }
         if (s.math.other) lines.push(`Other: ${s.math.other}`);
@@ -738,7 +738,7 @@ function collectFormData() {
             if (isStandards) {
                 lines.push(s.ela.standards.map(st => `• ${st.code} — ${st.description}`).join('<br>'));
             } else {
-                lines.push(s.ela.standards.map(st => st.code).join(', '));
+                lines.push(s.ela.standards.map(st => `• ${st.code}`).join('<br>'));
             }
         }
         if (s.ela.other) lines.push(`Other: ${s.ela.other}`);
