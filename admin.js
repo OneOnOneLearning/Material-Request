@@ -6,8 +6,6 @@
 // ── CONFIG  ─────────────────────────────────────────────────────────
 // Fill these in before deploying. See README for Azure setup steps.
 
-const ADMIN_PASSWORD = 'Learning123';
-
 const MSAL_CONFIG = {
     auth: {
         clientId:    'edbed6c4-b7eb-47ea-b509-5332757d06d4',
@@ -60,27 +58,6 @@ let selectedId   = null;
 
 // ── Element refs ─────────────────────────────────────────────────────
 const $ = id => document.getElementById(id);
-
-// ── Password Gate ────────────────────────────────────────────────────
-$('gate-btn').addEventListener('click', checkPassword);
-$('gate-input').addEventListener('keydown', e => { if (e.key === 'Enter') checkPassword(); });
-
-function checkPassword() {
-    if ($('gate-input').value === ADMIN_PASSWORD) {
-        const gate = $('gate');
-        gate.style.transition = 'opacity 0.3s ease';
-        gate.style.opacity    = '0';
-        setTimeout(() => gate.classList.add('hidden'), 300);
-        $('app').classList.remove('hidden');
-        initMsal();
-    } else {
-        $('gate-error').classList.remove('hidden');
-        $('gate-input').value = '';
-        $('gate-input').classList.remove('shake');
-        void $('gate-input').offsetWidth; // force reflow to restart animation
-        $('gate-input').classList.add('shake');
-    }
-}
 
 // ── MSAL Init ────────────────────────────────────────────────────────
 function initMsal() {
@@ -523,9 +500,11 @@ function showSetupWarning() {
     $('list-empty').innerHTML =
         `<p style="color:var(--s-prog);font-size:0.8rem;text-align:center;line-height:1.6;padding:1rem">
             ⚠️ Setup needed:<br>
-            Fill in <code>ADMIN_PASSWORD</code>,<br>
-            <code>MSAL_CONFIG</code>, and <code>SP_SITE</code><br>
+            Fill in <code>MSAL_CONFIG</code> and <code>SP_SITE</code><br>
             at the top of <code>admin.js</code>
         </p>`;
     $('list-empty').classList.remove('hidden');
 }
+
+// ── Auto-start ───────────────────────────────────────────────────────
+initMsal();

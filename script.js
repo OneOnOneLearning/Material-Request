@@ -560,7 +560,7 @@ function renderItemsInto(itemsContainer, noteElement, items, isStandards, card, 
                            id="${uniqueId}"
                            name="${subject}Standards"
                            value="${item.name}"
-                           data-desc="${item.name}">
+                           data-desc="">
                     <label for="${uniqueId}">
                         ${item.name}
                     </label>

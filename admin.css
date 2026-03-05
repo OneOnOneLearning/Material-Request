@@ -593,12 +593,20 @@ body {
 
 .subject-detail { flex: 1; }
 
-.std-chips { display: flex; flex-wrap: wrap; gap: 0.35rem; align-items: flex-start; }
+.std-chips { display: flex; flex-wrap: wrap; gap: 0; align-items: center; }
 
 .std-chip {
     font-size:   0.85rem;
     color:       var(--t1);
     line-height: 1.5;
+    padding:     0 0.2rem;
+}
+.std-chip:first-child { padding-left: 0; }
+.std-chip + .std-chip::before {
+    content:       '·';
+    padding-right: 0.2rem;
+    color:         var(--t3);
+    font-weight:   300;
 }
 .std-chip strong { font-weight: 600; }
 .std-folder-link { color: #93c5fd; text-decoration: none; }
