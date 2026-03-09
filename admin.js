@@ -564,19 +564,23 @@ function showSetupWarning() {
 async function triggerCompletionNotification(req) {
     if (!COMPLETION_NOTIFICATION_URL) return;
     try {
+        const pcEntry = (typeof PROGRAM_COORDINATORS !== 'undefined')
+            ? PROGRAM_COORDINATORS.find(p => p.name === req.coordinator)
+            : null;
         await fetch(COMPLETION_NOTIFICATION_URL, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                requestId:          req.requestId,
-                tutorName:          req.tutorName,
-                tutorEmail:         req.tutorEmail,
-                programCoordinator: req.coordinator,
-                school:             req.school,
-                state:              req.state,
-                mathSummary:        req.mathSummary,
-                elaSummary:         req.elaSummary,
-                completedDate:      new Date().toISOString()
+                requestId:               req.requestId,
+                tutorName:               req.tutorName,
+                tutorEmail:              req.tutorEmail,
+                programCoordinator:      req.coordinator,
+                programCoordinatorEmail: pcEntry ? pcEntry.email : '',
+                school:                  req.school,
+                state:                   req.state,
+                mathSummary:             req.mathSummary,
+                elaSummary:              req.elaSummary,
+                completedDate:           new Date().toISOString()
             })
         });
     } catch (err) {
