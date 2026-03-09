@@ -584,6 +584,9 @@ function esc(str) {
 function showListLoading() {
     $('list-empty').classList.add('hidden');
     $('request-list').innerHTML = '<div class="spinner"></div>';
+    $('count-new').textContent      = '—';
+    $('count-progress').textContent = '—';
+    $('count-done').textContent     = '—';
 }
 
 function showSetupWarning() {
