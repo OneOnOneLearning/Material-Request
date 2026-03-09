@@ -32,7 +32,6 @@ const SP_SITE = 'https://netorgft11829358.sharepoint.com/sites/MaterialRequests'
 //   3. Add a new entry at the TOP of SCHOOL_YEARS below
 const SCHOOL_YEARS = [
     { label: '2025–2026', listName: 'Material Requests 2025-2026' },
-    { label: '2024–2025', listName: 'Material Requests 2024-2025' },
 ];
 
 let activeListName = SCHOOL_YEARS[0].listName;
