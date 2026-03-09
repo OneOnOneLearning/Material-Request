@@ -50,7 +50,7 @@ const MATERIALS_BASE_URL = null; // set to the folder URL string when ready
 
 // ── Completion notification flow URL ─────────────────────────────────────
 // TODO: Replace with the URL of your "Request Completed" Power Automate flow
-const COMPLETION_NOTIFICATION_URL = null;
+const COMPLETION_NOTIFICATION_URL = 'https://default24ab4d38cbff431eb3833bd64b05be.87.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/7613d5c81487491f98847d93503a06ed/triggers/manual/paths/invoke?api-version=1';
 
 // ── State ────────────────────────────────────────────────────────────
 let msalInstance = null;
