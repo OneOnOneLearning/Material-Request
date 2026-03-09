@@ -25,13 +25,14 @@ const SP_SITE = 'https://netorgft11829358.sharepoint.com/sites/MaterialRequests'
 // Each listName must match the exact SharePoint list name for that year.
 //
 // End-of-year steps:
-//   1. In SharePoint, rename "Material Requests" → "Material Requests YYYY-YYYY"
-//   2. Create a new blank "Material Requests YYYY-YYYY" list for the new year
-//      (duplicate the columns from the old list)
-//   3. Add a new entry at the top of SCHOOL_YEARS below
+//   1. In SharePoint, rename the current list to "Material Requests YYYY-YYYY"
+//      (display name only — the internal URL name won't change, so PA flows are safe)
+//   2. Create a new blank list named "Material Requests YYYY-YYYY" for the new year
+//      (copy the columns from the old list)
+//   3. Add a new entry at the TOP of SCHOOL_YEARS below
 const SCHOOL_YEARS = [
+    { label: '2025–2026', listName: 'Material Requests 2025-2026' },
     { label: '2024–2025', listName: 'Material Requests 2024-2025' },
-    // { label: '2025–2026', listName: 'Material Requests 2025-2026' },  ← example
 ];
 
 let activeListName = SCHOOL_YEARS[0].listName;
