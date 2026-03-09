@@ -57,10 +57,25 @@ const COLS = {
 const SP_SCOPES = ['https://netorgft11829358.sharepoint.com/.default'];
 
 // ── Materials folder base URL ─────────────────────────────────────────
-// TODO: Replace with the real SharePoint folder URL once materials are uploaded.
-// Standard folders should be named exactly after their code (e.g. "K.CC.1").
+// Optional: if set, any skill/standard NOT found in SKILL_LINKS below will
+// automatically link to MATERIALS_BASE_URL/<encoded-skill-or-code>.
 // Example: 'https://netorgft11829358.sharepoint.com/sites/YourSite/Shared%20Documents/Materials'
-const MATERIALS_BASE_URL = null; // set to the folder URL string when ready
+const MATERIALS_BASE_URL = null;
+
+// ── Per-skill / per-standard links ────────────────────────────────────
+// Map each skill name or standard code to the exact SharePoint folder or
+// file URL your team should open when that skill is requested.
+// Keys must match exactly what appears on the chip (skill name or standard code).
+//
+// Examples:
+//   'Counting 0, 1, and 2' : 'https://...sharepoint.com/.../Counting%200%2C%201%2C%20and%202',
+//   'K.CC.1–K.CC.3'        : 'https://...sharepoint.com/.../K.CC.1',
+//
+const SKILL_LINKS = {
+    // ── Add your mappings below ──────────────────────────────────────
+    // 'Skill or Standard Name': 'https://your-sharepoint-link',
+
+};
 
 // ── Completion notification flow URL ─────────────────────────────────────
 // TODO: Replace with the URL of your "Request Completed" Power Automate flow
@@ -398,8 +413,10 @@ function renderStudents(req) {
                 const desc = s.description ? esc(s.description) : '';
                 let codeEl = '';
                 if (s.code) {
-                    if (MATERIALS_BASE_URL) {
-                        const href = `${MATERIALS_BASE_URL}/${encodeURIComponent(s.code)}`;
+                    const directLink = SKILL_LINKS[s.code];
+                    const fallback   = MATERIALS_BASE_URL ? `${MATERIALS_BASE_URL}/${encodeURIComponent(s.code)}` : null;
+                    const href       = directLink || fallback;
+                    if (href) {
                         codeEl = `<a href="${href}" target="_blank" rel="noopener" class="std-folder-link"><strong>${esc(s.code)}</strong></a> `;
                     } else {
                         codeEl = `<strong>${esc(s.code)}</strong> `;
