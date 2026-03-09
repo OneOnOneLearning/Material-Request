@@ -357,6 +357,8 @@ function hideSubjectSection(card, subject) {
     gradeSelect.value = '';
     otherInput.value = '';
     standardsContainer.innerHTML = `<p class="empty-state">Select ${subject === 'math' ? 'a math' : 'an ELA'} grade to see available standards</p>`;
+    const labelEl = card.querySelector(`.${subject}-standards-label`);
+    if (labelEl) labelEl.textContent = 'Select Standards (max 4)';
 
     // Hide section and show button
     section.style.display = 'none';
@@ -518,11 +520,16 @@ function switchStandardsType(button) {
  * @param {string} framework - Framework name (e.g. "FL Standards")
  */
 function renderItemsInto(itemsContainer, noteElement, items, isStandards, card, subject, framework) {
+    const labelEl = card.querySelector(`.${subject}-standards-label`);
+
     if (items.length === 0) {
         itemsContainer.innerHTML = `<p class="empty-state">No ${isStandards ? 'standards' : 'skills'} found for this grade level</p>`;
         noteElement.textContent = `Select up to 4 ${isStandards ? 'standards' : 'skills'}`;
+        if (labelEl) labelEl.textContent = `Select ${isStandards ? 'Standards' : 'Skills'} (max 4)`;
         return;
     }
+
+    if (labelEl) labelEl.textContent = `Select ${isStandards ? 'Standards' : 'Skills'} (max 4)`;
 
     const studentIndex = card.dataset.studentIndex;
 

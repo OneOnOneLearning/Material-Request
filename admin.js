@@ -48,6 +48,10 @@ const SP_SCOPES = ['https://netorgft11829358.sharepoint.com/.default'];
 // Example: 'https://netorgft11829358.sharepoint.com/sites/YourSite/Shared%20Documents/Materials'
 const MATERIALS_BASE_URL = null; // set to the folder URL string when ready
 
+// ── Completion notification flow URL ─────────────────────────────────────
+// TODO: Replace with the URL of your "Request Completed" Power Automate flow
+const COMPLETION_NOTIFICATION_URL = null;
+
 // ── State ────────────────────────────────────────────────────────────
 let msalInstance = null;
 let allRequests  = [];
@@ -230,9 +234,19 @@ function renderAll() {
 }
 
 function updateCounts() {
-    $('count-new').textContent      = allRequests.filter(r => r.status === 'New').length;
-    $('count-progress').textContent = allRequests.filter(r => r.status === 'In Progress').length;
-    $('count-done').textContent     = allRequests.filter(r => r.status === 'Completed').length;
+    const q = searchQuery.toLowerCase();
+    const base = allRequests.filter(r => {
+        const matchPC     = activePCFilter === 'all' || r.coordinator === activePCFilter;
+        const matchSearch = !q
+            || r.tutorName.toLowerCase().includes(q)
+            || r.school.toLowerCase().includes(q)
+            || r.requestId.toLowerCase().includes(q)
+            || r.coordinator.toLowerCase().includes(q);
+        return matchPC && matchSearch;
+    });
+    $('count-new').textContent      = base.filter(r => r.status === 'New').length;
+    $('count-progress').textContent = base.filter(r => r.status === 'In Progress').length;
+    $('count-done').textContent     = base.filter(r => r.status === 'Completed').length;
 }
 
 function getFiltered() {
@@ -254,6 +268,7 @@ function badge(status) {
 }
 
 function renderList() {
+    updateCounts();
     const listEl  = $('request-list');
     const emptyEl = $('list-empty');
     const items   = getFiltered();
@@ -390,7 +405,7 @@ function renderStudents(req) {
     };
 
     section.innerHTML = `
-        <p class="students-section-title">Students (${students.length})</p>
+        <p class="students-section-title">Student/Group Information (${students.length})</p>
         ${students.map(s => {
             const mathBlock = subjectBlock('Math', s.math, 'math');
             const elaBlock  = subjectBlock('ELA',  s.ela,  'ela');
@@ -425,6 +440,7 @@ $('btn-save-status').addEventListener('click', async () => {
         if (req) {
             req.status = newStatus;
             req.completedDate = newStatus === 'Completed' ? new Date().toISOString() : null;
+            if (newStatus === 'Completed') triggerCompletionNotification(req);
         }
         updateCounts();
         renderList();
@@ -542,6 +558,30 @@ function showSetupWarning() {
             at the top of <code>admin.js</code>
         </p>`;
     $('list-empty').classList.remove('hidden');
+}
+
+// ── Completion Notification ──────────────────────────────────────────
+async function triggerCompletionNotification(req) {
+    if (!COMPLETION_NOTIFICATION_URL) return;
+    try {
+        await fetch(COMPLETION_NOTIFICATION_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                requestId:          req.requestId,
+                tutorName:          req.tutorName,
+                tutorEmail:         req.tutorEmail,
+                programCoordinator: req.coordinator,
+                school:             req.school,
+                state:              req.state,
+                mathSummary:        req.mathSummary,
+                elaSummary:         req.elaSummary,
+                completedDate:      new Date().toISOString()
+            })
+        });
+    } catch (err) {
+        console.error('Completion notification failed:', err);
+    }
 }
 
 // ── Auto-start ───────────────────────────────────────────────────────
