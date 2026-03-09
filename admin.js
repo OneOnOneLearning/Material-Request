@@ -15,12 +15,26 @@ const MSAL_CONFIG = {
     cache: { cacheLocation: 'sessionStorage' }
 };
 
-// SharePoint list configuration.
+// SharePoint site configuration.
 // SP_SITE: your SharePoint site URL (no trailing slash)
-// LIST_NAME: the exact display name of your SharePoint list
 // COLS: internal column names — check list settings if any are wrong
-const SP_SITE   = 'https://netorgft11829358.sharepoint.com/sites/MaterialRequests';
-const LIST_NAME = 'Material Requests';
+const SP_SITE = 'https://netorgft11829358.sharepoint.com/sites/MaterialRequests';
+
+// ── School Year Config ────────────────────────────────────────────────
+// Add a new entry at the TOP of this array at the start of each school year.
+// Each listName must match the exact SharePoint list name for that year.
+//
+// End-of-year steps:
+//   1. In SharePoint, rename "Material Requests" → "Material Requests YYYY-YYYY"
+//   2. Create a new blank "Material Requests YYYY-YYYY" list for the new year
+//      (duplicate the columns from the old list)
+//   3. Add a new entry at the top of SCHOOL_YEARS below
+const SCHOOL_YEARS = [
+    { label: '2024–2025', listName: 'Material Requests 2024-2025' },
+    // { label: '2025–2026', listName: 'Material Requests 2025-2026' },  ← example
+];
+
+let activeListName = SCHOOL_YEARS[0].listName;
 
 const COLS = {
     id:           'ID',
@@ -139,6 +153,7 @@ function onSignedIn(account) {
     }
     $('app').classList.remove('hidden');
 
+    populateYearSelector();
     loadRequests(account);
 }
 
@@ -158,7 +173,7 @@ async function loadRequests(account) {
 
     try {
         const token   = await getToken(account);
-        const url     = `${SP_SITE}/_api/web/lists/getbytitle('${LIST_NAME}')/items`
+        const url     = `${SP_SITE}/_api/web/lists/getbytitle('${activeListName}')/items`
                       + `?$orderby=Created desc&$top=500`;
 
         const res  = await fetch(url, {
@@ -205,8 +220,8 @@ function normalizeItem(raw) {
 async function updateStatus(itemId, newStatus) {
     const account  = msalInstance.getAllAccounts()[0];
     const token    = await getToken(account);
-    const url      = `${SP_SITE}/_api/web/lists/getbytitle('${LIST_NAME}')/items(${itemId})`;
-    const listType = `SP.Data.${LIST_NAME.replace(/\s/g, '_x0020_')}ListItem`;
+    const url      = `${SP_SITE}/_api/web/lists/getbytitle('${activeListName}')/items(${itemId})`;
+    const listType = `SP.Data.${activeListName.replace(/\s/g, '_x0020_')}ListItem`;
 
     const res = await fetch(url, {
         method:  'POST',
@@ -461,6 +476,28 @@ $('btn-save-status').addEventListener('click', async () => {
             btn.disabled         = false;
         }, 2000);
     }
+});
+
+// ── School Year Selector ─────────────────────────────────────────────
+function populateYearSelector() {
+    const sel = $('year-selector');
+    sel.innerHTML = '';
+    SCHOOL_YEARS.forEach(yr => {
+        const opt = document.createElement('option');
+        opt.value = yr.listName;
+        opt.textContent = yr.label;
+        sel.appendChild(opt);
+    });
+    sel.value = activeListName;
+}
+
+$('year-selector').addEventListener('change', e => {
+    activeListName = e.target.value;
+    selectedId = null;
+    $('detail-empty').classList.remove('hidden');
+    $('detail-view').classList.add('hidden');
+    const account = msalInstance?.getAllAccounts()[0];
+    if (account) loadRequests(account);
 });
 
 // ── Search & Filter ──────────────────────────────────────────────────
