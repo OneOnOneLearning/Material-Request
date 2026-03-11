@@ -358,7 +358,7 @@ function hideSubjectSection(card, subject) {
     otherInput.value = '';
     standardsContainer.innerHTML = `<p class="empty-state">Select ${subject === 'math' ? 'a math' : 'an ELA'} grade to see available standards</p>`;
     const labelEl = card.querySelector(`.${subject}-standards-label`);
-    if (labelEl) labelEl.textContent = 'Select Standards/Benchmarks (max 4)';
+    if (labelEl) labelEl.textContent = 'Select Materials (max 4)';
 
     // Hide section and show button
     section.style.display = 'none';
