@@ -139,8 +139,9 @@ const STANDARDS = {
                 ]
             },
             ela: {
-                type: "standards",
-                items: [
+                type: "both",
+                skills: [],
+                standards: [
                     // Foundational Skills
                     { code: "ELA.K.F.1.1", desc: "Demonstrate knowledge of the basic concepts of print." },
                     { code: "ELA.K.F.1.2", desc: "Demonstrate phonological awareness." },
@@ -216,8 +217,9 @@ const STANDARDS = {
                 ]
             },
             ela: {
-                type: "standards",
-                items: [
+                type: "both",
+                skills: [],
+                standards: [
                     // Foundational Skills
                     { code: "ELA.1.F.1.1", desc: "Locate the title, table of contents, names of author(s) and illustrator(s), and glossary of books." },
                     { code: "ELA.1.F.1.2", desc: "Demonstrate phonological awareness." },
@@ -297,8 +299,9 @@ const STANDARDS = {
                 ]
             },
             ela: {
-                type: "standards",
-                items: [
+                type: "both",
+                skills: [],
+                standards: [
                     // Foundational Skills
                     { code: "ELA.2.F.1.3", desc: "Use knowledge of grade-appropriate phonics and word-analysis skills to decode words." },
                     { code: "ELA.2.F.1.4", desc: "Read grade-level texts with accuracy, automaticity, and appropriate prosody or expression." },
@@ -383,8 +386,9 @@ const STANDARDS = {
                 ]
             },
             ela: {
-                type: "standards",
-                items: [
+                type: "both",
+                skills: [],
+                standards: [
                     // Foundational Skills
                     { code: "ELA.3.F.1.3", desc: "Use knowledge of grade-level phonics and word-analysis skills to decode words." },
                     { code: "ELA.3.F.1.4", desc: "Read grade-level texts with accuracy, automaticity, and appropriate prosody or expression." },
@@ -474,8 +478,9 @@ const STANDARDS = {
                 ]
             },
             ela: {
-                type: "standards",
-                items: [
+                type: "both",
+                skills: [],
+                standards: [
                     // Foundational Skills
                     { code: "ELA.4.F.1.3", desc: "Use knowledge of grade-level phonics and word-analysis skills to decode words." },
                     { code: "ELA.4.F.1.4", desc: "Read grade-level texts with accuracy, automaticity, and appropriate prosody or expression." },
@@ -562,8 +567,9 @@ const STANDARDS = {
                 ]
             },
             ela: {
-                type: "standards",
-                items: [
+                type: "both",
+                skills: [],
+                standards: [
                     // Foundational Skills
                     { code: "ELA.5.F.1.3", desc: "Use knowledge of grade-appropriate phonics and word-analysis skills to decode words." },
                     { code: "ELA.5.F.1.4", desc: "Read grade-level texts with accuracy, automaticity, and appropriate prosody or expression." },
@@ -652,8 +658,9 @@ const STANDARDS = {
                 ]
             },
             ela: {
-                type: "standards",
-                items: [
+                type: "both",
+                skills: [],
+                standards: [
                     // Literary Analysis
                     { code: "ELA.6.R.1.1", desc: "Analyze how the interaction between characters contributes to the development of a plot in a literary text." },
                     { code: "ELA.6.R.1.2", desc: "Analyze the development of stated or implied theme(s) throughout a literary text." },
@@ -733,8 +740,9 @@ const STANDARDS = {
                 ]
             },
             ela: {
-                type: "standards",
-                items: [
+                type: "both",
+                skills: [],
+                standards: [
                     // Literary Analysis
                     { code: "ELA.7.R.1.1", desc: "Analyze the impact of setting on character development and plot in a literary text." },
                     { code: "ELA.7.R.1.2", desc: "Compare two or more themes and their development throughout a literary text." },
@@ -802,8 +810,9 @@ const STANDARDS = {
                 ]
             },
             ela: {
-                type: "standards",
-                items: [
+                type: "both",
+                skills: [],
+                standards: [
                     // Literary Analysis
                     { code: "ELA.8.R.1.1", desc: "Analyze the interaction between character development, setting, and plot in a literary text." },
                     { code: "ELA.8.R.1.2", desc: "Analyze two or more themes and their development throughout a literary text." },
