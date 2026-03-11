@@ -138,7 +138,42 @@ const STANDARDS = {
                     { code: "MA.K.DP.1.1", desc: "Collect and sort objects into categories and compare the categories by counting the objects in each category. Report the results verbally, with a written numeral or with drawings." }
                 ]
             },
-            ela: { type: "both", skills: [], standards: [] }
+            ela: {
+                type: "standards",
+                items: [
+                    // Foundational Skills
+                    { code: "ELA.K.F.1.1", desc: "Demonstrate knowledge of the basic concepts of print." },
+                    { code: "ELA.K.F.1.2", desc: "Demonstrate phonological awareness." },
+                    { code: "ELA.K.F.1.3", desc: "Use knowledge of grade-appropriate phonics and word-analysis skills to decode words accurately." },
+                    { code: "ELA.K.F.1.4", desc: "Recognize and read with automaticity grade-level high frequency words." },
+                    // Literary Analysis
+                    { code: "ELA.K.R.1.1", desc: "Describe the main character(s), setting, and important events in a story." },
+                    { code: "ELA.K.R.1.3", desc: "Explain the roles of author and illustrator of a story." },
+                    { code: "ELA.K.R.1.4", desc: "Identify rhyme in a poem." },
+                    // Reading Informational
+                    { code: "ELA.K.R.2.1", desc: "Use titles, headings, and illustrations to predict and confirm the topic of texts." },
+                    { code: "ELA.K.R.2.2", desc: "Identify the topic of and multiple details in a text." },
+                    { code: "ELA.K.R.2.4", desc: "Explain the difference between opinions and facts about a topic." },
+                    // Reading Across Genres
+                    { code: "ELA.K.R.3.1", desc: "Identify and explain descriptive words in text(s)." },
+                    { code: "ELA.K.R.3.2", desc: "Retell a text orally to enhance comprehension." },
+                    { code: "ELA.K.R.3.3", desc: "Compare and contrast characters' experiences in stories." },
+                    // Communication
+                    { code: "ELA.K.C.1.1", desc: "Print many upper- and lowercase letters." },
+                    { code: "ELA.K.C.1.2", desc: "Using a combination of drawing, dictating, and/or writing, create narratives with the events in chronological order." },
+                    { code: "ELA.K.C.1.3", desc: "Using a combination of drawing, dictating, and/or writing, express opinions about a topic or text with at least one supporting reason." },
+                    { code: "ELA.K.C.1.4", desc: "Using a combination of drawing, dictating, and/or writing, provide factual information about a topic." },
+                    { code: "ELA.K.C.1.5", desc: "With guidance and support from adults, improve drawing and writing, as needed, by planning, revising, and editing." },
+                    { code: "ELA.K.C.2.1", desc: "Present information orally using complete sentences." },
+                    { code: "ELA.K.C.3.1", desc: "Follow the rules of standard English grammar, punctuation, capitalization, and spelling appropriate to grade level." },
+                    { code: "ELA.K.C.4.1", desc: "Recall information to answer a question about a single topic." },
+                    { code: "ELA.K.C.5.1", desc: "Use a multimedia element to enhance oral or written tasks." },
+                    // Vocabulary
+                    { code: "ELA.K.V.1.1", desc: "Use grade-level academic vocabulary appropriately in speaking and writing." },
+                    { code: "ELA.K.V.1.2", desc: "Ask and answer questions about unfamiliar words in grade-level content." },
+                    { code: "ELA.K.V.1.3", desc: "Identify and sort common words into basic categories, relating vocabulary to background knowledge." }
+                ]
+            }
         },
         // 1st Grade
         1: {
@@ -180,7 +215,45 @@ const STANDARDS = {
                     { code: "MA.1.DP.1.2", desc: "Interpret data represented with tally marks or pictographs by calculating the total number of data points and comparing the totals of different categories." }
                 ]
             },
-            ela: { type: "both", skills: [], standards: [] }
+            ela: {
+                type: "standards",
+                items: [
+                    // Foundational Skills
+                    { code: "ELA.1.F.1.1", desc: "Locate the title, table of contents, names of author(s) and illustrator(s), and glossary of books." },
+                    { code: "ELA.1.F.1.2", desc: "Demonstrate phonological awareness." },
+                    { code: "ELA.1.F.1.3", desc: "Use knowledge of grade-appropriate phonics and word-analysis skills to decode words accurately." },
+                    { code: "ELA.1.F.1.4", desc: "Read grade-level texts with accuracy, automaticity, and appropriate prosody or expression." },
+                    // Literary Analysis
+                    { code: "ELA.1.R.1.1", desc: "Identify and describe the main story elements in a story." },
+                    { code: "ELA.1.R.1.2", desc: "Identify and explain the moral of a story." },
+                    { code: "ELA.1.R.1.3", desc: "Explain who is telling the story using context clues." },
+                    { code: "ELA.1.R.1.4", desc: "Identify stanzas and line breaks in poems." },
+                    // Reading Informational
+                    { code: "ELA.1.R.2.1", desc: "Use text features including titles, headings, captions, graphs, maps, glossaries, and/or illustrations to demonstrate understanding of texts." },
+                    { code: "ELA.1.R.2.2", desc: "Identify the topic of and relevant details in a text." },
+                    { code: "ELA.1.R.2.3", desc: "Explain similarities and differences between information provided in visuals and words in an informational text." },
+                    { code: "ELA.1.R.2.4", desc: "Identify an author's opinion(s) about the topic." },
+                    // Reading Across Genres
+                    { code: "ELA.1.R.3.1", desc: "Identify and explain descriptive words and phrases in text(s)." },
+                    { code: "ELA.1.R.3.2", desc: "Retell a text in oral or written form to enhance comprehension." },
+                    { code: "ELA.1.R.3.3", desc: "Compare and contrast two texts on the same topic." },
+                    // Communication
+                    { code: "ELA.1.C.1.1", desc: "Print all upper- and lowercase letters." },
+                    { code: "ELA.1.C.1.2", desc: "Write narratives that retell two or more appropriately sequenced events, including relevant details and a sense of closure." },
+                    { code: "ELA.1.C.1.3", desc: "Write opinions about a topic or text with at least one supporting reason from a source and a sense of closure." },
+                    { code: "ELA.1.C.1.4", desc: "Write expository texts about a topic, using a source, providing facts and a sense of closure." },
+                    { code: "ELA.1.C.1.5", desc: "With guidance and support from adults, improve writing, as needed, by planning, revising, and editing." },
+                    { code: "ELA.1.C.2.1", desc: "Present information orally using complete sentences and appropriate volume." },
+                    { code: "ELA.1.C.3.1", desc: "Follow the rules of standard English grammar, punctuation, capitalization, and spelling appropriate to grade level." },
+                    { code: "ELA.1.C.4.1", desc: "Participate in research to gather information to answer a question about a single topic." },
+                    { code: "ELA.1.C.5.1", desc: "Use a multimedia element to enhance oral or written tasks." },
+                    { code: "ELA.1.C.5.2", desc: "Identify and use digital tools to produce and publish writing individually or with peers and with support from adults." },
+                    // Vocabulary
+                    { code: "ELA.1.V.1.1", desc: "Use grade-level academic vocabulary appropriately in speaking and writing." },
+                    { code: "ELA.1.V.1.2", desc: "Identify and use frequently occurring base words and their common inflections in grade-level content." },
+                    { code: "ELA.1.V.1.3", desc: "Identify and use picture clues, context clues, word relationships, reference materials, and/or background knowledge to determine the meaning of unknown words." }
+                ]
+            }
         },
         // 2nd Grade
         2: {
@@ -223,7 +296,43 @@ const STANDARDS = {
                     { code: "MA.2.DP.1.2", desc: "Interpret data represented with tally marks, tables, pictographs or bar graphs including solving addition and subtraction problems." }
                 ]
             },
-            ela: { type: "both", skills: [], standards: [] }
+            ela: {
+                type: "standards",
+                items: [
+                    // Foundational Skills
+                    { code: "ELA.2.F.1.3", desc: "Use knowledge of grade-appropriate phonics and word-analysis skills to decode words." },
+                    { code: "ELA.2.F.1.4", desc: "Read grade-level texts with accuracy, automaticity, and appropriate prosody or expression." },
+                    // Literary Analysis
+                    { code: "ELA.2.R.1.1", desc: "Identify plot structure and describe main story elements in a literary text." },
+                    { code: "ELA.2.R.1.2", desc: "Identify and explain a theme of a literary text." },
+                    { code: "ELA.2.R.1.3", desc: "Identify different characters' perspectives in a literary text." },
+                    { code: "ELA.2.R.1.4", desc: "Identify rhyme schemes in poems." },
+                    // Reading Informational
+                    { code: "ELA.2.R.2.1", desc: "Explain how text features—including titles, headings, captions, graphs, maps, glossaries, and/or illustrations—contribute to the meaning of texts." },
+                    { code: "ELA.2.R.2.2", desc: "Identify the central idea and relevant details in a text." },
+                    { code: "ELA.2.R.2.3", desc: "Explain an author's purpose in an informational text." },
+                    { code: "ELA.2.R.2.4", desc: "Explain an author's opinion(s) and supporting evidence." },
+                    // Reading Across Genres
+                    { code: "ELA.2.R.3.1", desc: "Identify and explain similes, idioms, and alliteration in text(s)." },
+                    { code: "ELA.2.R.3.2", desc: "Retell a text to enhance comprehension." },
+                    { code: "ELA.2.R.3.3", desc: "Compare and contrast important details presented by two texts on the same topic or theme." },
+                    // Communication
+                    { code: "ELA.2.C.1.1", desc: "Demonstrate legible printing skills." },
+                    { code: "ELA.2.C.1.2", desc: "Write personal or fictional narratives using a logical sequence of events, transitions, and an ending." },
+                    { code: "ELA.2.C.1.3", desc: "Write opinions about a topic or text with reasons supported by details from a source, use transitions, and provide a conclusion." },
+                    { code: "ELA.2.C.1.4", desc: "Write expository texts about a topic, using a source, providing an introduction, facts, transitions, and a conclusion." },
+                    { code: "ELA.2.C.1.5", desc: "Improve writing as needed by planning, revising, and editing with guidance and support from adults and feedback from peers." },
+                    { code: "ELA.2.C.2.1", desc: "Present information orally using complete sentences, appropriate volume, and clear pronunciation." },
+                    { code: "ELA.2.C.3.1", desc: "Follow the rules of standard English grammar, punctuation, capitalization, and spelling appropriate to grade level." },
+                    { code: "ELA.2.C.4.1", desc: "Participate in research to gather information to answer a question about a single topic using multiple sources." },
+                    { code: "ELA.2.C.5.1", desc: "Use one or more multimedia element(s) to enhance oral or written tasks." },
+                    { code: "ELA.2.C.5.2", desc: "Use digital tools to produce and publish writing individually or with peers and with support from adults." },
+                    // Vocabulary
+                    { code: "ELA.2.V.1.1", desc: "Use grade-level academic vocabulary appropriately in speaking and writing." },
+                    { code: "ELA.2.V.1.2", desc: "Identify and use base words and affixes to determine the meaning of unfamiliar words in grade-level content." },
+                    { code: "ELA.2.V.1.3", desc: "Identify and use context clues, word relationships, reference materials, and/or background knowledge to determine the meaning of unknown words." }
+                ]
+            }
         },
         // 3rd Grade
         3: {
@@ -273,7 +382,43 @@ const STANDARDS = {
                     { code: "MA.3.DP.1.2", desc: "Interpret data with whole-number values represented with tables, scaled pictographs, circle graphs, scaled bar graphs or line plots by solving one- and two-step problems." }
                 ]
             },
-            ela: { type: "both", skills: [], standards: [] }
+            ela: {
+                type: "standards",
+                items: [
+                    // Foundational Skills
+                    { code: "ELA.3.F.1.3", desc: "Use knowledge of grade-level phonics and word-analysis skills to decode words." },
+                    { code: "ELA.3.F.1.4", desc: "Read grade-level texts with accuracy, automaticity, and appropriate prosody or expression." },
+                    // Literary Analysis
+                    { code: "ELA.3.R.1.1", desc: "Explain how one or more characters develop throughout the plot in a literary text." },
+                    { code: "ELA.3.R.1.2", desc: "Explain a theme and how it develops, using details, in a literary text." },
+                    { code: "ELA.3.R.1.3", desc: "Explain different characters' perspectives in a literary text." },
+                    { code: "ELA.3.R.1.4", desc: "Identify types of poems: free verse, rhymed verse, haiku, and limerick." },
+                    // Reading Informational
+                    { code: "ELA.3.R.2.1", desc: "Explain how text features contribute to meaning and identify the text structures of chronology, comparison, and cause/effect in texts." },
+                    { code: "ELA.3.R.2.2", desc: "Identify the central idea and explain how relevant details support that idea in a text." },
+                    { code: "ELA.3.R.2.3", desc: "Explain the development of an author's purpose in an informational text." },
+                    { code: "ELA.3.R.2.4", desc: "Identify an author's claim and explain how an author uses evidence to support the claim." },
+                    // Reading Across Genres
+                    { code: "ELA.3.R.3.1", desc: "Identify and explain metaphors, personification, and hyperbole in text(s)." },
+                    { code: "ELA.3.R.3.2", desc: "Summarize a text to enhance comprehension." },
+                    { code: "ELA.3.R.3.3", desc: "Compare and contrast how two authors present information on the same topic or theme." },
+                    // Communication
+                    { code: "ELA.3.C.1.1", desc: "Write in cursive all upper- and lowercase letters." },
+                    { code: "ELA.3.C.1.2", desc: "Write personal or fictional narratives using a logical sequence of events, appropriate descriptions, dialogue, a variety of transitional words or phrases, and an ending." },
+                    { code: "ELA.3.C.1.3", desc: "Write opinions about a topic or text, include reasons supported by details from one or more sources, use transitions, and provide a conclusion." },
+                    { code: "ELA.3.C.1.4", desc: "Write expository texts about a topic, using one or more sources, providing an introduction, facts and details, some elaboration, transitions, and a conclusion." },
+                    { code: "ELA.3.C.1.5", desc: "Improve writing as needed by planning, revising, and editing with guidance and support from adults and feedback from peers." },
+                    { code: "ELA.3.C.2.1", desc: "Present information orally, in a logical sequence, using nonverbal cues, appropriate volume, and clear pronunciation." },
+                    { code: "ELA.3.C.3.1", desc: "Follow the rules of standard English grammar, punctuation, capitalization, and spelling appropriate to grade level." },
+                    { code: "ELA.3.C.4.1", desc: "Conduct research to answer a question, organizing information about the topic from multiple sources." },
+                    { code: "ELA.3.C.5.1", desc: "Use two or more multimedia elements to enhance oral or written tasks." },
+                    { code: "ELA.3.C.5.2", desc: "Use digital writing tools individually or collaboratively to plan, draft, and revise writing." },
+                    // Vocabulary
+                    { code: "ELA.3.V.1.1", desc: "Use grade-level academic vocabulary appropriately in speaking and writing." },
+                    { code: "ELA.3.V.1.2", desc: "Identify and apply knowledge of common Greek and Latin roots, base words, and affixes to determine the meaning of unfamiliar words in grade-level content." },
+                    { code: "ELA.3.V.1.3", desc: "Use context clues, figurative language, word relationships, reference materials, and/or background knowledge to determine the meaning of multiple-meaning and unknown words and phrases, appropriate to grade level." }
+                ]
+            }
         },
         // 4th Grade
         4: {
@@ -328,7 +473,43 @@ const STANDARDS = {
                     { code: "MA.4.DP.1.3", desc: "Solve real-world problems involving numerical data." }
                 ]
             },
-            ela: { type: "both", skills: [], standards: [] }
+            ela: {
+                type: "standards",
+                items: [
+                    // Foundational Skills
+                    { code: "ELA.4.F.1.3", desc: "Use knowledge of grade-level phonics and word-analysis skills to decode words." },
+                    { code: "ELA.4.F.1.4", desc: "Read grade-level texts with accuracy, automaticity, and appropriate prosody or expression." },
+                    // Literary Analysis
+                    { code: "ELA.4.R.1.1", desc: "Explain how setting, events, conflict, and character development contribute to the plot in a literary text." },
+                    { code: "ELA.4.R.1.2", desc: "Explain a stated or implied theme and how it develops, using details, in a literary text." },
+                    { code: "ELA.4.R.1.3", desc: "Identify the narrator's point of view and explain the difference between a narrator's point of view and character perspective in a literary text." },
+                    { code: "ELA.4.R.1.4", desc: "Explain how rhyme and structure create meaning in a poem." },
+                    // Reading Informational
+                    { code: "ELA.4.R.2.1", desc: "Explain how text features contribute to the meaning and identify the text structures of problem/solution, sequence, and description in texts." },
+                    { code: "ELA.4.R.2.2", desc: "Explain how relevant details support the central idea, implied or explicit." },
+                    { code: "ELA.4.R.2.3", desc: "Explain an author's perspective toward a topic in an informational text." },
+                    { code: "ELA.4.R.2.4", desc: "Explain an author's claim and the reasons and evidence used to support the claim." },
+                    // Reading Across Genres
+                    { code: "ELA.4.R.3.1", desc: "Explain how figurative language contributes to meaning in text(s)." },
+                    { code: "ELA.4.R.3.2", desc: "Summarize a text to enhance comprehension." },
+                    { code: "ELA.4.R.3.3", desc: "Compare and contrast accounts of the same event using primary and/or secondary sources." },
+                    // Communication
+                    { code: "ELA.4.C.1.1", desc: "Demonstrate legible cursive writing skills." },
+                    { code: "ELA.4.C.1.2", desc: "Write personal or fictional narratives using a logical sequence of events and demonstrating an effective use of techniques such as descriptions and transitional words and phrases." },
+                    { code: "ELA.4.C.1.3", desc: "Write to make a claim supporting a perspective with logical reasons, using evidence from multiple sources, elaboration, and an organizational structure with transitions." },
+                    { code: "ELA.4.C.1.4", desc: "Write expository texts about a topic, using multiple sources, elaboration, and an organizational structure with transitions." },
+                    { code: "ELA.4.C.1.5", desc: "Improve writing by planning, revising, and editing, with guidance and support from adults and feedback from peers." },
+                    { code: "ELA.4.C.2.1", desc: "Present information orally, in a logical sequence, using nonverbal cues, appropriate volume, and clear pronunciation." },
+                    { code: "ELA.4.C.3.1", desc: "Follow the rules of standard English grammar, punctuation, capitalization, and spelling appropriate to grade level." },
+                    { code: "ELA.4.C.4.1", desc: "Conduct research to answer a question, organizing information about the topic and using multiple valid sources." },
+                    { code: "ELA.4.C.5.1", desc: "Arrange multimedia elements to create emphasis in oral or written tasks." },
+                    { code: "ELA.4.C.5.2", desc: "Use digital writing tools individually or collaboratively to plan, draft, and revise writing." },
+                    // Vocabulary
+                    { code: "ELA.4.V.1.1", desc: "Use grade-level academic vocabulary appropriately in speaking and writing." },
+                    { code: "ELA.4.V.1.2", desc: "Apply knowledge of common Greek and Latin roots, base words, and affixes to determine the meaning of unfamiliar words in grade-level content." },
+                    { code: "ELA.4.V.1.3", desc: "Use context clues, figurative language, word relationships, reference materials, and/or background knowledge to determine the meaning of multiple-meaning and unknown words and phrases, appropriate to grade level." }
+                ]
+            }
         },
         // 5th Grade
         5: {
@@ -380,7 +561,43 @@ const STANDARDS = {
                     { code: "MA.5.DP.1.2", desc: "Interpret numerical data, with whole-number values, represented with tables or line plots by determining the mean, mode, median or range." }
                 ]
             },
-            ela: { type: "both", skills: [], standards: [] }
+            ela: {
+                type: "standards",
+                items: [
+                    // Foundational Skills
+                    { code: "ELA.5.F.1.3", desc: "Use knowledge of grade-appropriate phonics and word-analysis skills to decode words." },
+                    { code: "ELA.5.F.1.4", desc: "Read grade-level texts with accuracy, automaticity, and appropriate prosody or expression." },
+                    // Literary Analysis
+                    { code: "ELA.5.R.1.1", desc: "Analyze how setting, events, conflict, and characterization contribute to the plot in a literary text." },
+                    { code: "ELA.5.R.1.2", desc: "Explain the development of stated or implied theme(s) throughout a literary text." },
+                    { code: "ELA.5.R.1.3", desc: "Describe how an author develops a character's perspective in a literary text." },
+                    { code: "ELA.5.R.1.4", desc: "Explain how figurative language and other poetic elements work together in a poem." },
+                    // Reading Informational
+                    { code: "ELA.5.R.2.1", desc: "Explain how text structures and/or features contribute to the overall meaning of texts." },
+                    { code: "ELA.5.R.2.2", desc: "Explain how relevant details support the central idea(s), implied or explicit." },
+                    { code: "ELA.5.R.2.3", desc: "Analyze an author's purpose and/or perspective in an informational text." },
+                    { code: "ELA.5.R.2.4", desc: "Track the development of an argument, identifying the specific claim(s), evidence, and reasoning." },
+                    // Reading Across Genres
+                    { code: "ELA.5.R.3.1", desc: "Analyze how figurative language contributes to meaning in text(s)." },
+                    { code: "ELA.5.R.3.2", desc: "Summarize a text to enhance comprehension." },
+                    { code: "ELA.5.R.3.3", desc: "Compare and contrast primary and secondary sources related to the same topic." },
+                    // Communication
+                    { code: "ELA.5.C.1.1", desc: "Demonstrate fluent and legible cursive writing skills." },
+                    { code: "ELA.5.C.1.2", desc: "Write personal or fictional narratives using a logical sequence of events and demonstrating an effective use of techniques such as dialogue, description, and transitional words and phrases." },
+                    { code: "ELA.5.C.1.3", desc: "Write to make a claim supporting a perspective with logical reasons, relevant evidence from sources, elaboration, and an organizational structure with varied transitions." },
+                    { code: "ELA.5.C.1.4", desc: "Write expository texts about a topic using multiple sources and including an organizational structure, relevant elaboration, and varied transitions." },
+                    { code: "ELA.5.C.1.5", desc: "Improve writing by planning, revising, and editing, with guidance and support from adults and feedback from peers." },
+                    { code: "ELA.5.C.2.1", desc: "Present information orally, in a logical sequence, using nonverbal cues, appropriate volume, clear pronunciation, and appropriate pacing." },
+                    { code: "ELA.5.C.3.1", desc: "Follow the rules of standard English grammar, punctuation, capitalization, and spelling appropriate to grade level." },
+                    { code: "ELA.5.C.4.1", desc: "Conduct research to answer a question, organizing information about the topic and using multiple reliable and valid sources." },
+                    { code: "ELA.5.C.5.1", desc: "Arrange multimedia elements to create emphasis and/or clarity in oral or written tasks." },
+                    { code: "ELA.5.C.5.2", desc: "Use digital writing tools individually or collaboratively to plan, draft, and revise writing." },
+                    // Vocabulary
+                    { code: "ELA.5.V.1.1", desc: "Use grade-level academic vocabulary appropriately in speaking and writing." },
+                    { code: "ELA.5.V.1.2", desc: "Apply knowledge of Greek and Latin roots and affixes, recognizing the connection between affixes and parts of speech, to determine the meaning of unfamiliar words in grade-level content." },
+                    { code: "ELA.5.V.1.3", desc: "Use context clues, figurative language, word relationships, reference materials, and/or background knowledge to determine the meaning of multiple-meaning and unknown words and phrases, appropriate to grade level." }
+                ]
+            }
         },
         // 6th Grade
         6: {
@@ -434,7 +651,40 @@ const STANDARDS = {
                     { code: "MA.6.DP.1.6", desc: "Given a real-world scenario, determine and describe how changes in data values impact measures of center and variation." }
                 ]
             },
-            ela: { type: "both", skills: [], standards: [] }
+            ela: {
+                type: "standards",
+                items: [
+                    // Literary Analysis
+                    { code: "ELA.6.R.1.1", desc: "Analyze how the interaction between characters contributes to the development of a plot in a literary text." },
+                    { code: "ELA.6.R.1.2", desc: "Analyze the development of stated or implied theme(s) throughout a literary text." },
+                    { code: "ELA.6.R.1.3", desc: "Explain the influence of multiple narrators and/or shifts in point of view in a literary text." },
+                    { code: "ELA.6.R.1.4", desc: "Describe the impact of various poetic forms on meaning and style." },
+                    // Reading Informational
+                    { code: "ELA.6.R.2.1", desc: "Explain how individual text sections and/or features convey meaning in texts." },
+                    { code: "ELA.6.R.2.2", desc: "Analyze the central idea(s), implied or explicit, and its development throughout a text." },
+                    { code: "ELA.6.R.2.3", desc: "Analyze authors' purpose(s) in multiple accounts of the same event or topic." },
+                    { code: "ELA.6.R.2.4", desc: "Track the development of an argument, identifying the types of reasoning used." },
+                    // Reading Across Genres
+                    { code: "ELA.6.R.3.1", desc: "Explain how figurative language contributes to tone and meaning in text(s)." },
+                    { code: "ELA.6.R.3.2", desc: "Paraphrase content from grade-level texts." },
+                    { code: "ELA.6.R.3.3", desc: "Compare and contrast how authors from different time periods address the same or related topics." },
+                    { code: "ELA.6.R.3.4", desc: "Identify rhetorical appeals in a text." },
+                    // Communication
+                    { code: "ELA.6.C.1.2", desc: "Write personal or fictional narratives using narrative techniques, precise words and phrases, and figurative language." },
+                    { code: "ELA.6.C.1.3", desc: "Write and support a claim using logical reasoning, relevant evidence from sources, elaboration, and a logical organizational structure with varied transitions." },
+                    { code: "ELA.6.C.1.4", desc: "Write expository texts to explain and/or analyze information from multiple sources, using a logical organizational structure, relevant elaboration, and varied transitions." },
+                    { code: "ELA.6.C.1.5", desc: "Improve writing by planning, revising, and editing, considering feedback from adults and peers." },
+                    { code: "ELA.6.C.2.1", desc: "Present information orally, in a logical sequence, using nonverbal cues, appropriate volume, clear pronunciation, and appropriate pacing." },
+                    { code: "ELA.6.C.3.1", desc: "Follow the rules of standard English grammar, punctuation, capitalization, and spelling appropriate to grade level." },
+                    { code: "ELA.6.C.4.1", desc: "Conduct research to answer a question, drawing on multiple reliable and valid sources and refocusing the inquiry when appropriate." },
+                    { code: "ELA.6.C.5.1", desc: "Integrate diverse digital media to enhance audience engagement in oral or written tasks." },
+                    { code: "ELA.6.C.5.2", desc: "Use digital tools to produce writing." },
+                    // Vocabulary
+                    { code: "ELA.6.V.1.1", desc: "Integrate academic vocabulary appropriate to grade level in speaking and writing." },
+                    { code: "ELA.6.V.1.2", desc: "Apply knowledge of Greek and Latin roots and affixes to determine meanings of words and phrases in grade-level content." },
+                    { code: "ELA.6.V.1.3", desc: "Apply knowledge of context clues, figurative language, word relationships, reference materials, and/or background knowledge to determine the connotative and denotative meaning of words and phrases, appropriate to grade level." }
+                ]
+            }
         },
         // 7th Grade
         7: {
@@ -482,7 +732,40 @@ const STANDARDS = {
                     { code: "MA.7.DP.2.4", desc: "Use a simulation of a simple experiment to find experimental probabilities and compare them to theoretical probabilities." }
                 ]
             },
-            ela: { type: "both", skills: [], standards: [] }
+            ela: {
+                type: "standards",
+                items: [
+                    // Literary Analysis
+                    { code: "ELA.7.R.1.1", desc: "Analyze the impact of setting on character development and plot in a literary text." },
+                    { code: "ELA.7.R.1.2", desc: "Compare two or more themes and their development throughout a literary text." },
+                    { code: "ELA.7.R.1.3", desc: "Explain the influence of narrator(s), including unreliable narrator(s), and/or shifts in point of view in a literary text." },
+                    { code: "ELA.7.R.1.4", desc: "Analyze the impact of various poetic forms on meaning and style." },
+                    // Reading Informational
+                    { code: "ELA.7.R.2.1", desc: "Explain how individual text sections and/or features convey a purpose in texts." },
+                    { code: "ELA.7.R.2.2", desc: "Compare two or more central ideas and their development throughout a text." },
+                    { code: "ELA.7.R.2.3", desc: "Explain how an author establishes and achieves purpose(s) through diction and syntax." },
+                    { code: "ELA.7.R.2.4", desc: "Track the development of an argument, analyzing the types of reasoning used and their effectiveness." },
+                    // Reading Across Genres
+                    { code: "ELA.7.R.3.1", desc: "Analyze how figurative language contributes to tone and meaning and explain examples of allusions in text(s)." },
+                    { code: "ELA.7.R.3.2", desc: "Paraphrase content from grade-level texts." },
+                    { code: "ELA.7.R.3.3", desc: "Compare and contrast how authors with differing perspectives address the same or related topics or themes." },
+                    { code: "ELA.7.R.3.4", desc: "Explain the meaning and/or significance of rhetorical devices in a text." },
+                    // Communication
+                    { code: "ELA.7.C.1.2", desc: "Write personal or fictional narratives using narrative techniques, a recognizable point of view, precise words and phrases, and figurative language." },
+                    { code: "ELA.7.C.1.3", desc: "Write and support a claim using logical reasoning, relevant evidence from sources, elaboration, a logical organizational structure with varied transitions, and acknowledging at least one counterclaim." },
+                    { code: "ELA.7.C.1.4", desc: "Write expository texts to explain and analyze information from multiple sources, using relevant supporting details and a logical organizational pattern." },
+                    { code: "ELA.7.C.1.5", desc: "Improve writing by planning, revising, and editing, considering feedback from adults and peers." },
+                    { code: "ELA.7.C.2.1", desc: "Present information orally, in a logical sequence, emphasizing key points that support the central idea." },
+                    { code: "ELA.7.C.3.1", desc: "Follow the rules of standard English grammar, punctuation, capitalization, and spelling appropriate to grade level." },
+                    { code: "ELA.7.C.4.1", desc: "Conduct research to answer a question, drawing on multiple reliable and valid sources and generating additional questions for further research." },
+                    { code: "ELA.7.C.5.1", desc: "Integrate diverse digital media to build cohesion in oral or written tasks." },
+                    { code: "ELA.7.C.5.2", desc: "Use digital tools to produce and share writing." },
+                    // Vocabulary
+                    { code: "ELA.7.V.1.1", desc: "Integrate academic vocabulary appropriate to grade level in speaking and writing." },
+                    { code: "ELA.7.V.1.2", desc: "Apply knowledge of Greek and Latin roots and affixes to determine meanings of words and phrases in grade-level content." },
+                    { code: "ELA.7.V.1.3", desc: "Apply knowledge of context clues, figurative language, word relationships, reference materials, and/or background knowledge to determine the connotative and denotative meaning of words and phrases, appropriate to grade level." }
+                ]
+            }
         },
         // 8th Grade
         8: {
@@ -518,7 +801,40 @@ const STANDARDS = {
                     { code: "MA.8.F.1.2", desc: "Given a function defined by a graph or an equation, determine whether the function is a linear function. Given an input-output table, determine whether it could represent a linear function." }
                 ]
             },
-            ela: { type: "both", skills: [], standards: [] }
+            ela: {
+                type: "standards",
+                items: [
+                    // Literary Analysis
+                    { code: "ELA.8.R.1.1", desc: "Analyze the interaction between character development, setting, and plot in a literary text." },
+                    { code: "ELA.8.R.1.2", desc: "Analyze two or more themes and their development throughout a literary text." },
+                    { code: "ELA.8.R.1.3", desc: "Analyze how an author develops and individualizes the perspectives of different characters." },
+                    { code: "ELA.8.R.1.4", desc: "Analyze structure, sound, imagery, and figurative language in poetry." },
+                    // Reading Informational
+                    { code: "ELA.8.R.2.1", desc: "Analyze how individual text sections and/or features convey a purpose and/or meaning in texts." },
+                    { code: "ELA.8.R.2.2", desc: "Analyze two or more central ideas and their development throughout a text." },
+                    { code: "ELA.8.R.2.3", desc: "Explain how an author establishes and achieves purpose(s) through rhetorical appeals and/or figurative language." },
+                    { code: "ELA.8.R.2.4", desc: "Track the development of an argument, analyzing the types of reasoning used and their effectiveness and identifying ways in which the argument could be improved." },
+                    // Reading Across Genres
+                    { code: "ELA.8.R.3.1", desc: "Analyze how figurative language contributes to meaning and explain examples of symbolism in text(s)." },
+                    { code: "ELA.8.R.3.2", desc: "Paraphrase content from grade-level texts." },
+                    { code: "ELA.8.R.3.3", desc: "Compare and contrast the use or discussion of archetypes in texts." },
+                    { code: "ELA.8.R.3.4", desc: "Explain how an author uses rhetorical devices to support or advance an appeal." },
+                    // Communication
+                    { code: "ELA.8.C.1.2", desc: "Write personal or fictional narratives using narrative techniques, varied transitions, and a clearly established point of view." },
+                    { code: "ELA.8.C.1.3", desc: "Write to argue a position, supporting at least one claim and rebutting at least one counterclaim with logical reasoning, credible evidence from sources, elaboration, and using a logical organizational structure." },
+                    { code: "ELA.8.C.1.4", desc: "Write expository texts to explain and analyze information from multiple sources, using relevant supporting details, logical organization, and varied purposeful transitions." },
+                    { code: "ELA.8.C.1.5", desc: "Improve writing by planning, editing, considering feedback from adults and peers, and revising for clarity and cohesiveness." },
+                    { code: "ELA.8.C.2.1", desc: "Present information orally, in a logical sequence, supporting the central idea with credible evidence." },
+                    { code: "ELA.8.C.3.1", desc: "Follow the rules of standard English grammar, punctuation, capitalization, and spelling appropriate to grade level." },
+                    { code: "ELA.8.C.4.1", desc: "Conduct research to answer a question, drawing on multiple reliable and valid sources and generating additional questions for further research." },
+                    { code: "ELA.8.C.5.1", desc: "Integrate diverse digital media to emphasize the relevance of a topic or idea in oral or written tasks." },
+                    { code: "ELA.8.C.5.2", desc: "Use a variety of digital tools to collaborate with others to produce writing." },
+                    // Vocabulary
+                    { code: "ELA.8.V.1.1", desc: "Integrate academic vocabulary appropriate to grade level in speaking and writing." },
+                    { code: "ELA.8.V.1.2", desc: "Apply knowledge of Greek and Latin roots and affixes to determine meanings of words and phrases in grade-level content." },
+                    { code: "ELA.8.V.1.3", desc: "Apply knowledge of context clues, figurative language, word relationships, reference materials, and/or background knowledge to determine the connotative and denotative meaning of words and phrases, appropriate to grade level." }
+                ]
+            }
         },
         // 9th Grade
         9: {
