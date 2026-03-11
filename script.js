@@ -358,7 +358,7 @@ function hideSubjectSection(card, subject) {
     otherInput.value = '';
     standardsContainer.innerHTML = `<p class="empty-state">Select ${subject === 'math' ? 'a math' : 'an ELA'} grade to see available standards</p>`;
     const labelEl = card.querySelector(`.${subject}-standards-label`);
-    if (labelEl) labelEl.textContent = 'Select Standards (max 4)';
+    if (labelEl) labelEl.textContent = 'Select Standards/Benchmarks (max 4)';
 
     // Hide section and show button
     section.style.display = 'none';
@@ -457,7 +457,7 @@ function handleGradeChange(card, subject, grade) {
         container.innerHTML = `
             <div class="type-toggle-group">
                 <button type="button" class="type-toggle-btn active" data-type="skills" onclick="switchStandardsType(this)">Skills</button>
-                <button type="button" class="type-toggle-btn" data-type="standards" onclick="switchStandardsType(this)">Standards</button>
+                <button type="button" class="type-toggle-btn" data-type="standards" onclick="switchStandardsType(this)">Standards/Benchmarks</button>
             </div>
             <div class="items-list"></div>
         `;
@@ -472,8 +472,8 @@ function handleGradeChange(card, subject, grade) {
         const isStandards = data.type === "standards";
 
         if (items.length === 0) {
-            container.innerHTML = `<p class="empty-state">No ${isStandards ? 'standards' : 'skills'} found for this grade level</p>`;
-            noteElement.textContent = `Select up to 4 ${isStandards ? 'standards' : 'skills'}`;
+            container.innerHTML = `<p class="empty-state">No ${isStandards ? 'standards/benchmarks' : 'skills'} found for this grade level</p>`;
+            noteElement.textContent = `Select up to 4 ${isStandards ? 'standards/benchmarks' : 'skills'}`;
             return;
         }
 
@@ -523,13 +523,13 @@ function renderItemsInto(itemsContainer, noteElement, items, isStandards, card, 
     const labelEl = card.querySelector(`.${subject}-standards-label`);
 
     if (items.length === 0) {
-        itemsContainer.innerHTML = `<p class="empty-state">No ${isStandards ? 'standards' : 'skills'} found for this grade level</p>`;
-        noteElement.textContent = `Select up to 4 ${isStandards ? 'standards' : 'skills'}`;
-        if (labelEl) labelEl.textContent = `Select ${isStandards ? 'Standards' : 'Skills'} (max 4)`;
+        itemsContainer.innerHTML = `<p class="empty-state">No ${isStandards ? 'standards/benchmarks' : 'skills'} found for this grade level</p>`;
+        noteElement.textContent = `Select up to 4 ${isStandards ? 'standards/benchmarks' : 'skills'}`;
+        if (labelEl) labelEl.textContent = `Select ${isStandards ? 'Standards/Benchmarks' : 'Skills'} (max 4)`;
         return;
     }
 
-    if (labelEl) labelEl.textContent = `Select ${isStandards ? 'Standards' : 'Skills'} (max 4)`;
+    if (labelEl) labelEl.textContent = `Select ${isStandards ? 'Standards/Benchmarks' : 'Skills'} (max 4)`;
 
     const studentIndex = card.dataset.studentIndex;
 
