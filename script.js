@@ -708,17 +708,23 @@ function generateRequestId() {
 }
 
 /**
- * Format date in local timezone
- * @returns {string} Formatted local date/time string
+ * Format current time in Miami/Eastern time (EST/EDT)
+ * @returns {string} MM/DD/YYYY HH:MM in America/New_York
  */
 function getLocalDateTime() {
     const now = new Date();
-    const month = String(now.getMonth() + 1).padStart(2, '0');
-    const day = String(now.getDate()).padStart(2, '0');
-    const year = now.getFullYear();
-    const hours = String(now.getHours()).padStart(2, '0');
-    const minutes = String(now.getMinutes()).padStart(2, '0');
-    return `${month}/${day}/${year} ${hours}:${minutes}`;
+    const parts = new Intl.DateTimeFormat('en-US', {
+        timeZone: 'America/New_York',
+        month:    '2-digit',
+        day:      '2-digit',
+        year:     'numeric',
+        hour:     '2-digit',
+        minute:   '2-digit',
+        hour12:   false
+    }).formatToParts(now);
+
+    const get = type => parts.find(p => p.type === type).value;
+    return `${get('month')}/${get('day')}/${get('year')} ${get('hour')}:${get('minute')}`;
 }
 
 /**
