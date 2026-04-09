@@ -402,7 +402,7 @@ function renderStudents(req) {
     const gradeLabel = g => !g ? '' : (g === 'K' ? 'Kindergarten' : `Grade ${g}`);
 
     const subjectBlock = (subj, data, cls) => {
-        if (!data || !data.requestType) return '';
+        if (!data || (!data.requestType && !data.notFound)) return '';
 
         const chips = [];
 
@@ -601,7 +601,8 @@ function formatDate(str) {
     // Handle our custom "MM/DD/YYYY HH:MM" format from the form
     const m = str.match(/^(\d{2})\/(\d{2})\/(\d{4})/);
     if (m) {
-        const d = new Date(`${m[3]}-${m[1]}-${m[2]}`);
+        // Use local constructor (year, month-1, day) — avoids UTC-midnight off-by-one
+        const d = new Date(parseInt(m[3]), parseInt(m[1]) - 1, parseInt(m[2]));
         return isNaN(d) ? str : d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
     }
     // Fallback: try ISO or SharePoint format

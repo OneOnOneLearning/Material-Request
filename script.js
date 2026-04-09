@@ -314,9 +314,16 @@ function addStudent() {
         hideSubjectSection(card, 'ela');
     });
 
+    // Make radio names unique per card so browser doesn't group them across cards
+    ['math', 'ela'].forEach(subject => {
+        card.querySelectorAll(`input[name="${subject}RequestType"]`).forEach(radio => {
+            radio.name = `${subject}RequestType-${studentCount}`;
+        });
+    });
+
     // Request type radio listeners
     ['math', 'ela'].forEach(subject => {
-        const radios = card.querySelectorAll(`input[name="${subject}RequestType"]`);
+        const radios = card.querySelectorAll(`.${subject}-section input.request-type-radio`);
         radios.forEach(radio => {
             radio.addEventListener('change', () => handleRequestTypeChange(card, subject, radio.value));
         });
@@ -457,7 +464,7 @@ function handleStateChange() {
     const cards = studentsContainer.querySelectorAll('.student-card');
     cards.forEach(card => {
         ['math', 'ela'].forEach(subject => {
-            const activeRadio = card.querySelector(`input[name="${subject}RequestType"]:checked`);
+            const activeRadio = card.querySelector(`.${subject}-section input.request-type-radio:checked`);
             if (activeRadio && activeRadio.value === 'state-standard') {
                 const gradeSelect = card.querySelector(`select[name="${subject}Grade"]`);
                 if (gradeSelect && gradeSelect.value) {
@@ -827,7 +834,7 @@ function collectSubjectData(card, subject) {
         return { requestType: null };
     }
 
-    const activeRadio = section.querySelector(`input[name="${subject}RequestType"]:checked`);
+    const activeRadio = section.querySelector('input.request-type-radio:checked');
     const requestType = activeRadio ? activeRadio.value : null;
     const notFoundCb = section.querySelector(`input[name="${subject}NotFound"]`);
     const notFound = notFoundCb ? notFoundCb.checked : false;
