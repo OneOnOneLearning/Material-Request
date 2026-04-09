@@ -615,7 +615,8 @@ textarea {
 }
 
 .request-type-option {
-    display: flex;
+    display: inline-flex;
+    flex-direction: row;
     align-items: center;
     gap: 0.4rem;
     padding: 0.35rem 0.75rem;
@@ -625,6 +626,7 @@ textarea {
     transition: var(--transition);
     background: rgba(255,255,255,0.6);
     white-space: nowrap;
+    line-height: 1;
 }
 
 .request-type-option:hover {
@@ -639,6 +641,7 @@ textarea {
     height: 14px;
     cursor: pointer;
     margin: 0;
+    vertical-align: middle;
 }
 
 .request-type-option:has(input:checked) {
@@ -648,13 +651,15 @@ textarea {
 }
 
 .request-type-option-content {
-    display: flex;
+    display: inline;
+    line-height: 1;
 }
 
 .request-type-option-title {
     font-size: 0.85rem;
     font-weight: 500;
     color: var(--text-primary);
+    vertical-align: middle;
 }
 
 .request-type-option-desc {
