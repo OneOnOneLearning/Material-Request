@@ -402,30 +402,49 @@ function renderStudents(req) {
     const gradeLabel = g => !g ? '' : (g === 'K' ? 'Kindergarten' : `Grade ${g}`);
 
     const subjectBlock = (subj, data, cls) => {
-        if (!data) return '';
-        const hasContent = data.requestGrade || (data.standards?.length > 0) || data.other;
-        if (!hasContent) return '';
+        if (!data || !data.requestType) return '';
 
         const chips = [];
-        if (data.requestGrade) chips.push(`<span class="std-chip grade-chip">${gradeLabel(data.requestGrade)} materials</span>`);
-        if (data.standards?.length > 0) {
-            data.standards.forEach(s => {
+
+        if (data.requestType === 'code-page') {
+            chips.push(`<span class="std-chip type-chip">Code + Page</span>`);
+            (data.codePairs || []).forEach(p => {
+                if (!p.code && !p.page) return;
+                const directLink = SKILL_LINKS[p.code];
+                const fallback   = MATERIALS_BASE_URL ? `${MATERIALS_BASE_URL}/${encodeURIComponent(p.code)}` : null;
+                const href       = directLink || fallback;
+                const codeEl     = href
+                    ? `<a href="${href}" target="_blank" rel="noopener" class="std-folder-link"><strong>${esc(p.code)}</strong></a>`
+                    : `<strong>${esc(p.code)}</strong>`;
+                chips.push(`<span class="std-chip">${codeEl}${p.page ? ` — p.&nbsp;${esc(p.page)}` : ''}</span>`);
+            });
+
+        } else if (data.requestType === 'state-standard') {
+            if (data.requestGrade) chips.push(`<span class="std-chip grade-chip">${gradeLabel(data.requestGrade)} materials</span>`);
+            (data.standards || []).forEach(s => {
                 const desc = s.description ? esc(s.description) : '';
                 let codeEl = '';
                 if (s.code) {
                     const directLink = SKILL_LINKS[s.code];
                     const fallback   = MATERIALS_BASE_URL ? `${MATERIALS_BASE_URL}/${encodeURIComponent(s.code)}` : null;
                     const href       = directLink || fallback;
-                    if (href) {
-                        codeEl = `<a href="${href}" target="_blank" rel="noopener" class="std-folder-link"><strong>${esc(s.code)}</strong></a> `;
-                    } else {
-                        codeEl = `<strong>${esc(s.code)}</strong> `;
-                    }
+                    codeEl = href
+                        ? `<a href="${href}" target="_blank" rel="noopener" class="std-folder-link"><strong>${esc(s.code)}</strong></a> `
+                        : `<strong>${esc(s.code)}</strong> `;
                 }
                 chips.push(`<span class="std-chip">${codeEl}${desc}</span>`);
             });
+
+        } else if (data.requestType === 'booster') {
+            chips.push(`<span class="std-chip type-chip">Booster Package</span>`);
+            if (data.boosterBand) chips.push(`<span class="std-chip grade-chip">Grades ${esc(data.boosterBand)}</span>`);
         }
-        if (data.other) chips.push(`<span class="std-chip other-chip">Other: ${esc(data.other)}</span>`);
+
+        if (data.notFound && data.notFoundNote) {
+            chips.push(`<span class="std-chip not-found-chip">Not found: ${esc(data.notFoundNote)}</span>`);
+        }
+
+        if (chips.length === 0) return '';
 
         return `
             <div class="subject-row">
