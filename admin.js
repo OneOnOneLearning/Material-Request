@@ -236,20 +236,17 @@ async function updateStatus(itemId, newStatus) {
     const account  = msalInstance.getAllAccounts()[0];
     const token    = await getToken(account);
     const url      = `${SP_SITE}/_api/web/lists/getbytitle('${activeListName}')/items(${itemId})`;
-    const listType = `SP.Data.${activeListName.replace(/\s/g, '_x0020_')}ListItem`;
 
     const res = await fetch(url, {
-        method:  'POST',
+        method:  'PATCH',
         headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json;odata=verbose',
+            Authorization:  `Bearer ${token}`,
+            'Content-Type': 'application/json;odata=nometadata',
             Accept:         'application/json;odata=nometadata',
-            'X-HTTP-Method': 'MERGE',
-            'IF-MATCH':      '*'
+            'IF-MATCH':     '*'
         },
         body: JSON.stringify({
-            __metadata: { type: listType },
-            [COLS.status]: newStatus,
+            [COLS.status]:        newStatus,
             [COLS.completedDate]: newStatus === 'Completed' ? new Date().toISOString() : null
         })
     });
