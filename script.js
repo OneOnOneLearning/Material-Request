@@ -278,7 +278,7 @@ function addStudent() {
     const gradeSelects = card.querySelectorAll('select[name="currentGrade"], select[name="mathGrade"], select[name="elaGrade"]');
     gradeSelects.forEach(select => populateGrades(select));
 
-    // Add event listeners for grade changes
+    // Add event listeners for grade changes (state-standard pane only)
     const mathGradeSelect = card.querySelector('select[name="mathGrade"]');
     const elaGradeSelect = card.querySelector('select[name="elaGrade"]');
 
@@ -312,6 +312,21 @@ function addStudent() {
 
     removeElaBtn.addEventListener('click', () => {
         hideSubjectSection(card, 'ela');
+    });
+
+    // Request type radio listeners
+    ['math', 'ela'].forEach(subject => {
+        const radios = card.querySelectorAll(`input[name="${subject}RequestType"]`);
+        radios.forEach(radio => {
+            radio.addEventListener('change', () => handleRequestTypeChange(card, subject, radio.value));
+        });
+
+        // Not-found checkbox
+        const notFoundCb = card.querySelector(`input[name="${subject}NotFound"]`);
+        const notFoundExtra = notFoundCb.closest('.not-found-group').querySelector('.not-found-extra');
+        notFoundCb.addEventListener('change', () => {
+            notFoundExtra.style.display = notFoundCb.checked ? 'block' : 'none';
+        });
     });
 
     // Add remove student button handler
@@ -349,16 +364,42 @@ function showSubjectSection(card, subject) {
 function hideSubjectSection(card, subject) {
     const section = card.querySelector(`.${subject}-section`);
     const addBtn = card.querySelector(`.add-material-btn.${subject}-btn`);
-    const gradeSelect = card.querySelector(`select[name="${subject}Grade"]`);
-    const otherInput = card.querySelector(`input[name="${subject}Other"]`);
-    const standardsContainer = card.querySelector(`.${subject}-standards`);
 
-    // Reset the section
-    gradeSelect.value = '';
-    otherInput.value = '';
-    standardsContainer.innerHTML = `<p class="empty-state">Select ${subject === 'math' ? 'a math' : 'an ELA'} grade to see available standards</p>`;
-    const labelEl = card.querySelector(`.${subject}-standards-label`);
+    // Reset radio buttons
+    const radios = section.querySelectorAll(`input[name="${subject}RequestType"]`);
+    radios.forEach(r => r.checked = false);
+
+    // Hide all panes
+    section.querySelectorAll('.request-type-pane').forEach(p => p.style.display = 'none');
+
+    // Reset grade select
+    const gradeSelect = section.querySelector(`select[name="${subject}Grade"]`);
+    if (gradeSelect) gradeSelect.value = '';
+
+    // Reset standards container
+    const standardsContainer = section.querySelector(`.${subject}-standards`);
+    if (standardsContainer) {
+        standardsContainer.innerHTML = `<p class="empty-state">Select ${subject === 'math' ? 'a math' : 'an ELA'} grade to see available standards/benchmarks</p>`;
+    }
+    const labelEl = section.querySelector(`.${subject}-standards-label`);
     if (labelEl) labelEl.textContent = 'Select Materials (max 4)';
+
+    // Reset booster band
+    const boosterSelect = section.querySelector(`select[name="${subject}BoosterBand"]`);
+    if (boosterSelect) boosterSelect.value = '';
+
+    // Reset code/page pairs
+    section.querySelectorAll(`input[name="${subject}Code[]"], input[name="${subject}Page[]"]`).forEach(i => i.value = '');
+
+    // Reset not-found
+    const notFoundCb = section.querySelector(`input[name="${subject}NotFound"]`);
+    if (notFoundCb) {
+        notFoundCb.checked = false;
+        const extra = notFoundCb.closest('.not-found-group').querySelector('.not-found-extra');
+        if (extra) extra.style.display = 'none';
+    }
+    const notFoundNote = section.querySelector(`textarea[name="${subject}NotFoundNote"]`);
+    if (notFoundNote) notFoundNote.value = '';
 
     // Hide section and show button
     section.style.display = 'none';
@@ -410,17 +451,38 @@ function updateRemoveButtons() {
 }
 
 /**
- * Handle state change - refresh standards for all students
+ * Handle state change - refresh standards for all students using state-standard pane
  */
 function handleStateChange() {
     const cards = studentsContainer.querySelectorAll('.student-card');
     cards.forEach(card => {
-        const mathGrade = card.querySelector('select[name="mathGrade"]').value;
-        const elaGrade = card.querySelector('select[name="elaGrade"]').value;
-
-        if (mathGrade) handleGradeChange(card, 'math', mathGrade);
-        if (elaGrade) handleGradeChange(card, 'ela', elaGrade);
+        ['math', 'ela'].forEach(subject => {
+            const activeRadio = card.querySelector(`input[name="${subject}RequestType"]:checked`);
+            if (activeRadio && activeRadio.value === 'state-standard') {
+                const gradeSelect = card.querySelector(`select[name="${subject}Grade"]`);
+                if (gradeSelect && gradeSelect.value) {
+                    handleGradeChange(card, subject, gradeSelect.value);
+                }
+            }
+        });
     });
+}
+
+/**
+ * Handle request type radio change - show the appropriate pane
+ * @param {HTMLElement} card - The student card
+ * @param {string} subject - 'math' or 'ela'
+ * @param {string} type - 'code-page' | 'state-standard' | 'booster'
+ */
+function handleRequestTypeChange(card, subject, type) {
+    // Hide all panes for this subject
+    const section = card.querySelector(`.${subject}-section`);
+    section.querySelectorAll('.request-type-pane').forEach(p => p.style.display = 'none');
+
+    // Show the selected pane
+    const paneClass = `${subject}-pane-${type}`;
+    const pane = section.querySelector(`.${paneClass}`);
+    if (pane) pane.style.display = 'block';
 }
 
 /**
@@ -451,34 +513,25 @@ function handleGradeChange(card, subject, grade) {
     const data = getStandardsData(state, subject, grade);
     const framework = getStandardsFramework(state);
 
+    // State Standard pane always shows standards only (no skills toggle)
+    container.classList.remove('has-type-toggle');
+
+    let items = [];
     if (data.type === "both") {
-        // Grade has both skills and standards — show toggle
-        container.classList.add('has-type-toggle');
-        container.innerHTML = `
-            <div class="type-toggle-group">
-                <button type="button" class="type-toggle-btn active" data-type="skills" onclick="switchStandardsType(this)">Skills</button>
-                <button type="button" class="type-toggle-btn" data-type="standards" onclick="switchStandardsType(this)">Standards/Benchmarks</button>
-            </div>
-            <div class="items-list"></div>
-        `;
-        // Store data on the element so switchStandardsType can access it
-        container._bothData = { skills: data.skills || [], standards: data.standards || [], framework };
-        // Default to skills
-        const itemsList = container.querySelector('.items-list');
-        renderItemsInto(itemsList, noteElement, data.skills || [], false, card, subject, framework);
+        items = data.standards || [];
+    } else if (data.type === "standards") {
+        items = data.items || [];
     } else {
-        container.classList.remove('has-type-toggle');
-        const items = data.items || [];
-        const isStandards = data.type === "standards";
-
-        if (items.length === 0) {
-            container.innerHTML = `<p class="empty-state">No ${isStandards ? 'standards/benchmarks' : 'skills'} found for this grade level</p>`;
-            noteElement.textContent = `Select up to 4 ${isStandards ? 'standards/benchmarks' : 'skills'}`;
-            return;
-        }
-
-        renderItemsInto(container, noteElement, items, isStandards, card, subject, framework);
+        items = [];
     }
+
+    if (items.length === 0) {
+        container.innerHTML = `<p class="empty-state">No standards/benchmarks found for this grade level</p>`;
+        noteElement.textContent = `Select up to 4 standards/benchmarks`;
+        return;
+    }
+
+    renderItemsInto(container, noteElement, items, true, card, subject, framework);
 }
 
 /**
@@ -697,16 +750,8 @@ function collectFormData() {
             index: index + 1,
             name: card.querySelector('input[name="studentName"]').value,
             currentGrade: card.querySelector('select[name="currentGrade"]').value,
-            math: {
-                requestGrade: card.querySelector('select[name="mathGrade"]').value,
-                standards: getSelectedStandards(card, 'math'),
-                other: card.querySelector('input[name="mathOther"]').value
-            },
-            ela: {
-                requestGrade: card.querySelector('select[name="elaGrade"]').value,
-                standards: getSelectedStandards(card, 'ela'),
-                other: card.querySelector('input[name="elaOther"]').value
-            }
+            math: collectSubjectData(card, 'math'),
+            ela: collectSubjectData(card, 'ela')
         };
         students.push(studentData);
     });
@@ -720,37 +765,11 @@ function collectFormData() {
         : '';
 
     // Build detailed Math summary (HTML for email rendering)
-    const mathList = students.map(s => {
-        if (!s.math.requestGrade && s.math.standards.length === 0 && !s.math.other) return null;
-        let lines = [`<strong>${s.name}</strong> (${s.math.requestGrade || '—'})`];
-        if (s.math.standards.length > 0) {
-            const isStandards = s.math.standards.some(st => st.description);
-            if (isStandards) {
-                lines.push(s.math.standards.map(st => `• ${st.code} — ${st.description}`).join('<br>'));
-            } else {
-                lines.push(s.math.standards.map(st => `• ${st.code}`).join('<br>'));
-            }
-        }
-        if (s.math.other) lines.push(`Other: ${s.math.other}`);
-        return lines.join('<br>');
-    }).filter(Boolean);
+    const mathList = students.map(s => buildSubjectSummaryLine(s.name, s.math)).filter(Boolean);
     const mathSummary = mathList.join('<br><br>');
 
     // Build detailed ELA summary (HTML for email rendering)
-    const elaList = students.map(s => {
-        if (!s.ela.requestGrade && s.ela.standards.length === 0 && !s.ela.other) return null;
-        let lines = [`<strong>${s.name}</strong> (${s.ela.requestGrade || '—'})`];
-        if (s.ela.standards.length > 0) {
-            const isStandards = s.ela.standards.some(st => st.description);
-            if (isStandards) {
-                lines.push(s.ela.standards.map(st => `• ${st.code} — ${st.description}`).join('<br>'));
-            } else {
-                lines.push(s.ela.standards.map(st => `• ${st.code}`).join('<br>'));
-            }
-        }
-        if (s.ela.other) lines.push(`Other: ${s.ela.other}`);
-        return lines.join('<br>');
-    }).filter(Boolean);
+    const elaList = students.map(s => buildSubjectSummaryLine(s.name, s.ela)).filter(Boolean);
     const elaSummary = elaList.join('<br><br>');
 
     const formData = {
@@ -794,6 +813,87 @@ function getSelectedStandards(card, subject) {
         code: cb.value,
         description: cb.dataset.desc
     }));
+}
+
+/**
+ * Collect subject data from a student card based on the active request type
+ * @param {HTMLElement} card
+ * @param {string} subject - 'math' or 'ela'
+ * @returns {Object}
+ */
+function collectSubjectData(card, subject) {
+    const section = card.querySelector(`.${subject}-section`);
+    if (!section || section.style.display === 'none') {
+        return { requestType: null };
+    }
+
+    const activeRadio = section.querySelector(`input[name="${subject}RequestType"]:checked`);
+    const requestType = activeRadio ? activeRadio.value : null;
+    const notFoundCb = section.querySelector(`input[name="${subject}NotFound"]`);
+    const notFound = notFoundCb ? notFoundCb.checked : false;
+    const notFoundNote = notFound
+        ? (section.querySelector(`textarea[name="${subject}NotFoundNote"]`) || {}).value || ''
+        : '';
+
+    if (requestType === 'code-page') {
+        const codes = Array.from(section.querySelectorAll(`input[name="${subject}Code[]"]`)).map(i => i.value.trim());
+        const pages = Array.from(section.querySelectorAll(`input[name="${subject}Page[]"]`)).map(i => i.value.trim());
+        const pairs = codes.map((code, i) => ({ code, page: pages[i] || '' })).filter(p => p.code || p.page);
+        return { requestType, codePairs: pairs, notFound, notFoundNote };
+    }
+
+    if (requestType === 'state-standard') {
+        const grade = (section.querySelector(`select[name="${subject}Grade"]`) || {}).value || '';
+        const standards = getSelectedStandards(card, subject);
+        return { requestType, requestGrade: grade, standards, notFound, notFoundNote };
+    }
+
+    if (requestType === 'booster') {
+        const band = (section.querySelector(`select[name="${subject}BoosterBand"]`) || {}).value || '';
+        return { requestType, boosterBand: band, notFound, notFoundNote };
+    }
+
+    return { requestType: null, notFound, notFoundNote };
+}
+
+/**
+ * Build a readable summary line for one student's subject data
+ * @param {string} studentName
+ * @param {Object} subjectData - from collectSubjectData
+ * @returns {string|null}
+ */
+function buildSubjectSummaryLine(studentName, subjectData) {
+    if (!subjectData || !subjectData.requestType) return null;
+
+    const lines = [`<strong>${studentName}</strong>`];
+
+    if (subjectData.requestType === 'code-page') {
+        lines.push('Request Type: Code + Page Number');
+        if (subjectData.codePairs && subjectData.codePairs.length > 0) {
+            subjectData.codePairs.forEach(p => {
+                lines.push(`• ${p.code} — p. ${p.page}`);
+            });
+        }
+    } else if (subjectData.requestType === 'state-standard') {
+        lines.push(`Request Type: State Standard (${subjectData.requestGrade || '—'})`);
+        if (subjectData.standards && subjectData.standards.length > 0) {
+            subjectData.standards.forEach(st => {
+                if (st.description) {
+                    lines.push(`• ${st.code} — ${st.description}`);
+                } else {
+                    lines.push(`• ${st.code}`);
+                }
+            });
+        }
+    } else if (subjectData.requestType === 'booster') {
+        lines.push(`Request Type: Booster Skill Package (${subjectData.boosterBand || '—'})`);
+    }
+
+    if (subjectData.notFound && subjectData.notFoundNote) {
+        lines.push(`Not found: ${subjectData.notFoundNote}`);
+    }
+
+    return lines.join('<br>');
 }
 
 // Power Automate Flow URL

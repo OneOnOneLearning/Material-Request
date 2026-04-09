@@ -138,27 +138,110 @@
                     <button type="button" class="remove-subject-btn" data-subject="math">Remove</button>
                 </div>
 
-                <div class="form-row">
+                <!-- Request Type Radio Group -->
+                <div class="form-group request-type-group">
+                    <label class="request-type-label">I want to request worksheets based on:</label>
+                    <div class="request-type-options">
+                        <label class="request-type-option">
+                            <input type="radio" name="mathRequestType" value="code-page" class="request-type-radio">
+                            <span class="request-type-option-content">
+                                <span class="request-type-option-title">Request Code + Page Number</span>
+                                <span class="request-type-option-desc">I have a specific resource code and page</span>
+                            </span>
+                        </label>
+                        <label class="request-type-option">
+                            <input type="radio" name="mathRequestType" value="state-standard" class="request-type-radio">
+                            <span class="request-type-option-content">
+                                <span class="request-type-option-title">State Standard</span>
+                                <span class="request-type-option-desc">Match materials to a specific standard/benchmark</span>
+                            </span>
+                        </label>
+                        <label class="request-type-option">
+                            <input type="radio" name="mathRequestType" value="booster" class="request-type-radio">
+                            <span class="request-type-option-content">
+                                <span class="request-type-option-title">Booster Skill Package</span>
+                                <span class="request-type-option-desc">Pre-packaged skill bundle by grade band</span>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Pane: Request Code + Page Number -->
+                <div class="request-type-pane math-pane-code-page" style="display:none;">
+                    <div class="dcl-link-row">
+                        <span>Find resource codes in the </span>
+                        <a href="https://netorgft11829358.sharepoint.com/:x:/r/sites/LIC/Shared%20Documents/Material%20Request/OOOL_DIGITAL%20CURRICULUM%20LIBRARY_FINAL2026.xlsx?d=wc8a1e94bf22941a59582bddca0e84422&csf=1&web=1&e=ET2vkT" target="_blank" class="dcl-link">Digital Curriculum Library</a>
+                    </div>
+                    <div class="code-page-pairs">
+                        <div class="code-page-pair">
+                            <input type="text" name="mathCode[]" placeholder="Resource Code (e.g. MA-K-01)">
+                            <input type="text" name="mathPage[]" placeholder="Page #">
+                        </div>
+                        <div class="code-page-pair">
+                            <input type="text" name="mathCode[]" placeholder="Resource Code (e.g. MA-K-01)">
+                            <input type="text" name="mathPage[]" placeholder="Page #">
+                        </div>
+                        <div class="code-page-pair">
+                            <input type="text" name="mathCode[]" placeholder="Resource Code (e.g. MA-K-01)">
+                            <input type="text" name="mathPage[]" placeholder="Page #">
+                        </div>
+                        <div class="code-page-pair">
+                            <input type="text" name="mathCode[]" placeholder="Resource Code (e.g. MA-K-01)">
+                            <input type="text" name="mathPage[]" placeholder="Page #">
+                        </div>
+                        <div class="code-page-pair">
+                            <input type="text" name="mathCode[]" placeholder="Resource Code (e.g. MA-K-01)">
+                            <input type="text" name="mathPage[]" placeholder="Page #">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pane: State Standard -->
+                <div class="request-type-pane math-pane-state-standard" style="display:none;">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Math Request Grade</label>
+                            <select name="mathGrade">
+                                <option value="">Select grade for materials</option>
+                                <!-- Grades populated by JavaScript -->
+                            </select>
+                        </div>
+                    </div>
                     <div class="form-group">
-                        <label>Math Request Grade</label>
-                        <select name="mathGrade">
-                            <option value="">Select grade for materials</option>
-                            <!-- Grades populated by JavaScript -->
-                        </select>
+                        <label class="math-standards-label">Select Materials (max 4)</label>
+                        <div class="standards-container math-standards">
+                            <p class="empty-state">Select a math grade to see available standards/benchmarks</p>
+                        </div>
+                        <p class="standards-note math-standards-note">Select up to 4 standards/benchmarks</p>
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label class="math-standards-label">Select Materials (max 4)</label>
-                    <div class="standards-container math-standards">
-                        <p class="empty-state">Select a math grade to see available standards/benchmarks</p>
+                <!-- Pane: Booster Skill Package -->
+                <div class="request-type-pane math-pane-booster" style="display:none;">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Grade Band</label>
+                            <select name="mathBoosterBand">
+                                <option value="">Select a grade band</option>
+                                <option value="K-2">K–2</option>
+                                <option value="3-5">3–5</option>
+                                <option value="6-8">6–8</option>
+                                <option value="HS">High School</option>
+                            </select>
+                        </div>
                     </div>
-                    <p class="standards-note math-standards-note">Select up to 4 standards/benchmarks</p>
+                    <p class="empty-state booster-coming-soon">Booster packages coming soon. Select a grade band and a curriculum team member will reach out.</p>
                 </div>
 
-                <div class="form-group other-request">
-                    <label>Other Math Request</label>
-                    <input type="text" name="mathOther" placeholder="Any additional math materials needed...">
+                <!-- Not Found Checkbox -->
+                <div class="form-group not-found-group">
+                    <label class="not-found-checkbox-label">
+                        <input type="checkbox" name="mathNotFound" class="not-found-checkbox">
+                        <span>I wasn't able to find what I needed</span>
+                    </label>
+                    <div class="not-found-extra" style="display:none;">
+                        <textarea name="mathNotFoundNote" rows="2" placeholder="Describe what you're looking for and we'll help find it..."></textarea>
+                    </div>
                 </div>
             </div>
 
@@ -169,27 +252,110 @@
                     <button type="button" class="remove-subject-btn" data-subject="ela">Remove</button>
                 </div>
 
-                <div class="form-row">
+                <!-- Request Type Radio Group -->
+                <div class="form-group request-type-group">
+                    <label class="request-type-label">I want to request worksheets based on:</label>
+                    <div class="request-type-options">
+                        <label class="request-type-option">
+                            <input type="radio" name="elaRequestType" value="code-page" class="request-type-radio">
+                            <span class="request-type-option-content">
+                                <span class="request-type-option-title">Request Code + Page Number</span>
+                                <span class="request-type-option-desc">I have a specific resource code and page</span>
+                            </span>
+                        </label>
+                        <label class="request-type-option">
+                            <input type="radio" name="elaRequestType" value="state-standard" class="request-type-radio">
+                            <span class="request-type-option-content">
+                                <span class="request-type-option-title">State Standard</span>
+                                <span class="request-type-option-desc">Match materials to a specific standard/benchmark</span>
+                            </span>
+                        </label>
+                        <label class="request-type-option">
+                            <input type="radio" name="elaRequestType" value="booster" class="request-type-radio">
+                            <span class="request-type-option-content">
+                                <span class="request-type-option-title">Booster Skill Package</span>
+                                <span class="request-type-option-desc">Pre-packaged skill bundle by grade band</span>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Pane: Request Code + Page Number -->
+                <div class="request-type-pane ela-pane-code-page" style="display:none;">
+                    <div class="dcl-link-row">
+                        <span>Find resource codes in the </span>
+                        <a href="https://netorgft11829358.sharepoint.com/:x:/r/sites/LIC/Shared%20Documents/Material%20Request/OOOL_DIGITAL%20CURRICULUM%20LIBRARY_FINAL2026.xlsx?d=wc8a1e94bf22941a59582bddca0e84422&csf=1&web=1&e=ET2vkT" target="_blank" class="dcl-link">Digital Curriculum Library</a>
+                    </div>
+                    <div class="code-page-pairs">
+                        <div class="code-page-pair">
+                            <input type="text" name="elaCode[]" placeholder="Resource Code (e.g. ELA-K-01)">
+                            <input type="text" name="elaPage[]" placeholder="Page #">
+                        </div>
+                        <div class="code-page-pair">
+                            <input type="text" name="elaCode[]" placeholder="Resource Code (e.g. ELA-K-01)">
+                            <input type="text" name="elaPage[]" placeholder="Page #">
+                        </div>
+                        <div class="code-page-pair">
+                            <input type="text" name="elaCode[]" placeholder="Resource Code (e.g. ELA-K-01)">
+                            <input type="text" name="elaPage[]" placeholder="Page #">
+                        </div>
+                        <div class="code-page-pair">
+                            <input type="text" name="elaCode[]" placeholder="Resource Code (e.g. ELA-K-01)">
+                            <input type="text" name="elaPage[]" placeholder="Page #">
+                        </div>
+                        <div class="code-page-pair">
+                            <input type="text" name="elaCode[]" placeholder="Resource Code (e.g. ELA-K-01)">
+                            <input type="text" name="elaPage[]" placeholder="Page #">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pane: State Standard -->
+                <div class="request-type-pane ela-pane-state-standard" style="display:none;">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>ELA Request Grade</label>
+                            <select name="elaGrade">
+                                <option value="">Select grade for materials</option>
+                                <!-- Grades populated by JavaScript -->
+                            </select>
+                        </div>
+                    </div>
                     <div class="form-group">
-                        <label>ELA Request Grade</label>
-                        <select name="elaGrade">
-                            <option value="">Select grade for materials</option>
-                            <!-- Grades populated by JavaScript -->
-                        </select>
+                        <label class="ela-standards-label">Select Materials (max 4)</label>
+                        <div class="standards-container ela-standards">
+                            <p class="empty-state">Select an ELA grade to see available standards/benchmarks</p>
+                        </div>
+                        <p class="standards-note ela-standards-note">Select up to 4 standards/benchmarks</p>
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label class="ela-standards-label">Select Materials (max 4)</label>
-                    <div class="standards-container ela-standards">
-                        <p class="empty-state">Select an ELA grade to see available standards/benchmarks</p>
+                <!-- Pane: Booster Skill Package -->
+                <div class="request-type-pane ela-pane-booster" style="display:none;">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Grade Band</label>
+                            <select name="elaBoosterBand">
+                                <option value="">Select a grade band</option>
+                                <option value="K-2">K–2</option>
+                                <option value="3-5">3–5</option>
+                                <option value="6-8">6–8</option>
+                                <option value="HS">High School</option>
+                            </select>
+                        </div>
                     </div>
-                    <p class="standards-note ela-standards-note">Select up to 4 standards/benchmarks</p>
+                    <p class="empty-state booster-coming-soon">Booster packages coming soon. Select a grade band and a curriculum team member will reach out.</p>
                 </div>
 
-                <div class="form-group other-request">
-                    <label>Other ELA Request</label>
-                    <input type="text" name="elaOther" placeholder="Any additional ELA materials needed...">
+                <!-- Not Found Checkbox -->
+                <div class="form-group not-found-group">
+                    <label class="not-found-checkbox-label">
+                        <input type="checkbox" name="elaNotFound" class="not-found-checkbox">
+                        <span>I wasn't able to find what I needed</span>
+                    </label>
+                    <div class="not-found-extra" style="display:none;">
+                        <textarea name="elaNotFoundNote" rows="2" placeholder="Describe what you're looking for and we'll help find it..."></textarea>
+                    </div>
                 </div>
             </div>
 

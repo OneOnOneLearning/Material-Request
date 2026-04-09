@@ -877,7 +877,18 @@ const STANDARDS = {
 // US STATES LIST
 // =========================================================================
 const US_STATES = [
-    { code: "FL", name: "Florida" }
+    { code: "AZ", name: "Arizona" },
+    { code: "AR", name: "Arkansas" },
+    { code: "CA", name: "California" },
+    { code: "FL", name: "Florida" },
+    { code: "IL", name: "Illinois" },
+    { code: "LA", name: "Louisiana" },
+    { code: "MA", name: "Massachusetts" },
+    { code: "NV", name: "Nevada" },
+    { code: "PA", name: "Pennsylvania" },
+    { code: "TX", name: "Texas" },
+    { code: "WA", name: "Washington" },
+    { code: "WI", name: "Wisconsin" }
 ];
 
 
