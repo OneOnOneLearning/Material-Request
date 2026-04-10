@@ -11,13 +11,13 @@
 
 const PROGRAM_COORDINATORS = [
     { name: "Amber Barnes", email: "amber@oneononelearning.com" },
-    { name: "Ayesha Turner", email: "ayesha@oneononelearning.com" },
     { name: "Christine Simo", email: "christine@oneononelearning.com" },
     { name: "Cristina Morejon", email: "cristina@oneononelearning.com" },
     { name: "Eli Coenen", email: "eli@oneononelearning.com" },
     { name: "Ester Solano", email: "ester@oneononelearning.com" },
-    { name: "Gabby Pinder", email: "gabby@oneononelearning.com" },
+    { name: "Gabbrielle Pinder", email: "gabby@oneononelearning.com" },
     { name: "Gayle Thurston", email: "gayle@oneononelearning.com" },
+    { name: "Giselle Lujan", email: "giselle@oneononelearning.com" },    
     { name: "Gretchen Ruiz", email: "gretchen@oneononelearning.com" },
     { name: "James Justice", email: "james@oneononelearning.com" },
     { name: "Katia Almeida", email: "katia@oneononelearning.com" },
