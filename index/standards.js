@@ -881,6 +881,7 @@ const US_STATES = [
     { code: "AR", name: "Arkansas" },
     { code: "CA", name: "California" },
     { code: "FL", name: "Florida" },
+    { code: "HI", name: "Hawaii" },    
     { code: "IL", name: "Illinois" },
     { code: "LA", name: "Louisiana" },
     { code: "MA", name: "Massachusetts" },
