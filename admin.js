@@ -404,7 +404,7 @@ function renderStudents(req) {
         const chips = [];
 
         if (data.requestType === 'code-page') {
-            chips.push(`<span class="std-chip type-chip">Code + Page</span>`);
+            chips.push(`<span class="std-chip type-chip">Resource Code + Page</span>`);
             (data.codePairs || []).forEach(p => {
                 if (!p.code && !p.page) return;
                 const directLink = SKILL_LINKS[p.code];
