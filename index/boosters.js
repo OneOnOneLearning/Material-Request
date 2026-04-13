@@ -79,11 +79,11 @@ const BOOSTER_PACKETS = {
     ela: {
         'K-2': [
             { name: 'Identify and Name Letters' },
-            { name: 'Consonant Digraphs',           info: 'sh, ch, th, ph, ck, and more' },
-            { name: 'Consonant Blends',             info: 'fl, cr, st, str, -nch, and more' },
+            { name: 'Consonant Digraphs (sh, ch, th, ph, ck, …)' },
+            { name: 'Consonant Blends (fl, cr, st, str, -nch, …)' },
             { name: 'Silent E' },
             { name: 'Short and Long Vowels' },
-            { name: 'Vowel Digraphs/Teams',         info: 'ai, ea, oa, and more' },
+            { name: 'Vowel Digraphs/Teams (ai, ea, oa, …)' },
             { name: 'Word Families' },
             { name: 'Beginning, Middle, and Ending Sounds' },
             { name: 'Rhyming' },
