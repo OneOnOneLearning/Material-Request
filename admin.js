@@ -435,6 +435,9 @@ function renderStudents(req) {
         } else if (data.requestType === 'booster') {
             chips.push(`<span class="std-chip type-chip">Booster Package</span>`);
             if (data.boosterBand) chips.push(`<span class="std-chip grade-chip">Grades ${esc(data.boosterBand)}</span>`);
+            (data.boosterPackets || []).forEach(p => {
+                chips.push(`<span class="std-chip">${esc(p.name)}</span>`);
+            });
         }
 
         if (data.notFound && data.notFoundNote) {

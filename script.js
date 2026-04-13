@@ -328,6 +328,12 @@ function addStudent() {
             radio.addEventListener('change', () => handleRequestTypeChange(card, subject, radio.value));
         });
 
+        // Booster band selector
+        const boosterBandSelect = card.querySelector(`select[name="${subject}BoosterBand"]`);
+        boosterBandSelect.addEventListener('change', (e) => {
+            renderBoosterPackets(card, subject, e.target.value);
+        });
+
         // Not-found checkbox
         const notFoundCb = card.querySelector(`input[name="${subject}NotFound"]`);
         const notFoundExtra = notFoundCb.closest('.not-found-group').querySelector('.not-found-extra');
@@ -391,9 +397,11 @@ function hideSubjectSection(card, subject) {
     const labelEl = section.querySelector(`.${subject}-standards-label`);
     if (labelEl) labelEl.textContent = 'Select Materials (max 4)';
 
-    // Reset booster band
+    // Reset booster band and packet list
     const boosterSelect = section.querySelector(`select[name="${subject}BoosterBand"]`);
     if (boosterSelect) boosterSelect.value = '';
+    const boosterContainer = section.querySelector(`.${subject}-booster-packets`);
+    if (boosterContainer) boosterContainer.innerHTML = '<p class="empty-state">Select a grade band to see available packets</p>';
 
     // Reset code/page pairs
     section.querySelectorAll(`input[name="${subject}Code[]"], input[name="${subject}Page[]"]`).forEach(i => i.value = '');
@@ -648,6 +656,79 @@ function renderItemsInto(itemsContainer, noteElement, items, isStandards, card, 
  * Toggle the description visibility for a standard
  * @param {HTMLElement} button - The info toggle button
  */
+/**
+ * Render booster packets for a given subject and grade band
+ * @param {HTMLElement} card
+ * @param {string} subject - 'math' | 'ela'
+ * @param {string} band    - 'K-2' | '3-5' | '6-8' | 'HS' | ''
+ */
+function renderBoosterPackets(card, subject, band) {
+    const container  = card.querySelector(`.${subject}-booster-packets`);
+    const noteEl     = card.querySelector(`.${subject}-booster-note`);
+    const labelEl    = card.querySelector('.booster-packets-label');
+
+    if (!band) {
+        container.innerHTML = '<p class="empty-state">Select a grade band to see available packets</p>';
+        if (noteEl)  noteEl.textContent  = 'Select up to 4 packets';
+        return;
+    }
+
+    const packets = (BOOSTER_PACKETS[subject] || {})[band] || [];
+    if (packets.length === 0) {
+        container.innerHTML = '<p class="empty-state">No packets available for this grade band yet</p>';
+        if (noteEl) noteEl.textContent = 'Select up to 4 packets';
+        return;
+    }
+
+    const studentIndex = card.dataset.studentIndex;
+
+    container.innerHTML = packets.map((pkt, i) => {
+        const uid = `booster-${subject}-${studentIndex}-${i}`;
+        if (pkt.info) {
+            return `
+                <div class="standard-item">
+                    <div class="standard-row">
+                        <input type="checkbox" id="${uid}" name="${subject}BoosterPacket" value="${pkt.name}" data-info="${pkt.info}">
+                        <label for="${uid}"><strong>${pkt.name}</strong></label>
+                        <button type="button" class="info-toggle" onclick="toggleDescription(this)" title="Show details">
+                            <span class="info-icon">i</span>
+                        </button>
+                    </div>
+                    <div class="standard-description" style="display:none;">${pkt.info}</div>
+                </div>`;
+        } else {
+            return `
+                <div class="standard-item skill-item">
+                    <input type="checkbox" id="${uid}" name="${subject}BoosterPacket" value="${pkt.name}" data-info="">
+                    <label for="${uid}">${pkt.name}</label>
+                </div>`;
+        }
+    }).join('');
+
+    if (noteEl) noteEl.textContent = 'Select up to 4 packets';
+
+    // Enforce max selection
+    const checkboxes = container.querySelectorAll('input[type="checkbox"]');
+    checkboxes.forEach(cb => {
+        cb.addEventListener('change', () => enforceMaxStandards(container, noteEl, false));
+    });
+}
+
+/**
+ * Get selected booster packets from a subject section
+ * @param {HTMLElement} section
+ * @param {string} subject
+ * @returns {Array} [{name, info}]
+ */
+function getSelectedBoosterPackets(section, subject) {
+    const container = section.querySelector(`.${subject}-booster-packets`);
+    if (!container) return [];
+    return Array.from(container.querySelectorAll('input[type="checkbox"]:checked')).map(cb => ({
+        name: cb.value,
+        info: cb.dataset.info || ''
+    }));
+}
+
 function toggleDescription(button) {
     const item = button.closest('.standard-item');
     const desc = item.querySelector('.standard-description');
@@ -862,8 +943,9 @@ function collectSubjectData(card, subject) {
     }
 
     if (requestType === 'booster') {
-        const band = (section.querySelector(`select[name="${subject}BoosterBand"]`) || {}).value || '';
-        return { requestType, boosterBand: band, notFound, notFoundNote };
+        const band    = (section.querySelector(`select[name="${subject}BoosterBand"]`) || {}).value || '';
+        const packets = getSelectedBoosterPackets(section, subject);
+        return { requestType, boosterBand: band, boosterPackets: packets, notFound, notFoundNote };
     }
 
     return { requestType: null, notFound, notFoundNote };
@@ -900,6 +982,7 @@ function buildSubjectSummaryLine(studentName, subjectData) {
         }
     } else if (subjectData.requestType === 'booster') {
         lines.push(`Request Type: Booster Skill Package (${subjectData.boosterBand || '—'})`);
+        (subjectData.boosterPackets || []).forEach(p => lines.push(`• ${p.name}`));
     }
 
     if (subjectData.notFound && subjectData.notFoundNote) {
