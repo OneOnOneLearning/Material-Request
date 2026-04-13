@@ -8,6 +8,7 @@
 // Constants
 const MAX_STUDENTS = 4;
 const MAX_STANDARDS_PER_SUBJECT = 4;
+const MAX_BOOSTER_PACKETS = 3;
 
 // DOM Elements
 const requestForm = document.getElementById('request-form');
@@ -705,12 +706,12 @@ function renderBoosterPackets(card, subject, band) {
         }
     }).join('');
 
-    if (noteEl) noteEl.textContent = 'Select up to 4 packets';
+    if (noteEl) noteEl.textContent = `Select up to ${MAX_BOOSTER_PACKETS} packets`;
 
     // Enforce max selection
     const checkboxes = container.querySelectorAll('input[type="checkbox"]');
     checkboxes.forEach(cb => {
-        cb.addEventListener('change', () => enforceMaxStandards(container, noteEl, false));
+        cb.addEventListener('change', () => enforceMaxStandards(container, noteEl, false, MAX_BOOSTER_PACKETS));
     });
 }
 
@@ -753,14 +754,14 @@ function toggleDescription(button) {
  * @param {HTMLElement} noteElement - The note element to update
  * @param {boolean} isStandards - Whether these are standards (vs skills)
  */
-function enforceMaxStandards(container, noteElement, isStandards = true) {
-    const checkboxes = container.querySelectorAll('input[type="checkbox"]');
+function enforceMaxStandards(container, noteElement, isStandards = true, max = MAX_STANDARDS_PER_SUBJECT) {
+    const checkboxes  = container.querySelectorAll('input[type="checkbox"]');
     const checkedCount = container.querySelectorAll('input[type="checkbox"]:checked').length;
-    const itemType = isStandards ? 'standards' : 'skills';
+    const itemType = isStandards ? 'standards' : 'packets';
 
     checkboxes.forEach(cb => {
         const item = cb.closest('.standard-item');
-        if (checkedCount >= MAX_STANDARDS_PER_SUBJECT && !cb.checked) {
+        if (checkedCount >= max && !cb.checked) {
             item.classList.add('disabled');
             cb.disabled = true;
         } else {
@@ -770,11 +771,15 @@ function enforceMaxStandards(container, noteElement, isStandards = true) {
     });
 
     // Update note
-    if (checkedCount >= MAX_STANDARDS_PER_SUBJECT) {
-        noteElement.innerHTML = `<span class="max-reached">Maximum ${MAX_STANDARDS_PER_SUBJECT} ${itemType} selected</span>`;
+    if (checkedCount >= max) {
+        noteElement.innerHTML = `<span class="max-reached">Maximum ${max} ${itemType} selected</span>`;
     } else {
         const framework = getStandardsFramework(stateSelect.value);
-        noteElement.textContent = `${checkedCount}/${MAX_STANDARDS_PER_SUBJECT} standards selected (${framework})`;
+        if (isStandards) {
+            noteElement.textContent = `${checkedCount}/${max} standards selected (${framework})`;
+        } else {
+            noteElement.textContent = `${checkedCount}/${max} packets selected`;
+        }
     }
 }
 
