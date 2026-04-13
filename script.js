@@ -690,7 +690,7 @@ function renderBoosterPackets(card, subject, band) {
                 <div class="standard-item">
                     <div class="standard-row">
                         <input type="checkbox" id="${uid}" name="${subject}BoosterPacket" value="${pkt.name}" data-info="${pkt.info}">
-                        <label for="${uid}"><strong>${pkt.name}</strong></label>
+                        <label for="${uid}">${pkt.name}</label>
                         <button type="button" class="info-toggle" onclick="toggleDescription(this)" title="Show details">
                             <span class="info-icon">i</span>
                         </button>
