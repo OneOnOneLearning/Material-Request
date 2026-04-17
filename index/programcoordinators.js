@@ -10,22 +10,22 @@
  */
 
 const PROGRAM_COORDINATORS = [
-    { name: "Amber Barnes", email: "amber@oneononelearning.com" },
-    { name: "Christine Simo", email: "christine@oneononelearning.com" },
-    { name: "Cristina Morejon", email: "cristina@oneononelearning.com" },
-    { name: "Eli Coenen", email: "eli@oneononelearning.com" },
-    { name: "Ester Solano", email: "ester@oneononelearning.com" },
-    { name: "Gabbrielle Pinder", email: "gabby@oneononelearning.com" },
-    { name: "Gayle Thurston", email: "gayle@oneononelearning.com" },
-    { name: "Giselle Lujan", email: "giselle@oneononelearning.com" },    
-    { name: "Gretchen Ruiz", email: "gretchen@oneononelearning.com" },
-    { name: "James Justice", email: "james@oneononelearning.com" },
+    { name: "Amber Barnes", email: "abarnes@oneononelearning.com" },
+    { name: "Christine Simo", email: "csimo@oneononelearning.com" },
+    { name: "Cristina Morejon", email: "cmorejon@oneononelearning.com" },
+    { name: "Eli Coenen", email: "ecoenen@oneononelearning.com" },
+    { name: "Ester Solano", email: "esolano@oneononelearning.com" },
+    { name: "Gabbrielle Pinder", email: "gpinder@oneononelearning.com" },
+    { name: "Gayle Thurston", email: "gthurston@oneononelearning.com" },
+    { name: "Giselle Lujan", email: "glujan@oneononelearning.com" },    
+    { name: "Gretchen Ruiz", email: "gruizvazquez@oneononelearning.com" },
+    { name: "James Justice", email: "jjustice@oneononelearning.com" },
     { name: "Katia Almeida", email: "msuarez@oneononelearning.com" },
-    { name: "Kelly Pippin", email: "kelly@oneononelearning.com" },
-    { name: "Margiet Zuniga", email: "margiet@oneononelearning.com" },
-    { name: "Susan Nguyen", email: "susan@oneononelearning.com" },
-    { name: "Tauheedah Barnes", email: "tauheedah@oneononelearning.com" },
-    { name: "Yesenia Miranda", email: "yesenia@oneononelearning.com" },
+    { name: "Kelly Pippin", email: "kpippin@oneononelearning.com" },
+    { name: "Margiet Zuniga", email: "mhernandez@oneononelearning.com" },
+    { name: "Susan Nguyen", email: "snguyen@oneononelearning.com" },
+    { name: "Tauheedah Barnes", email: "tbarnes@oneononelearning.com" },
+    { name: "Yesenia Miranda", email: "ymiranda@oneononelearning.com" },
 ];
 
 // Export for use in other files (if using modules)
