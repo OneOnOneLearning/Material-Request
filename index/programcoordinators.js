@@ -20,7 +20,7 @@ const PROGRAM_COORDINATORS = [
     { name: "Giselle Lujan", email: "glujan@oneononelearning.com" },    
     { name: "Gretchen Ruiz", email: "gruizvazquez@oneononelearning.com" },
     { name: "James Justice", email: "jjustice@oneononelearning.com" },
-    { name: "Katia Almeida", email: "msuarez@oneononelearning.com" },
+    { name: "Katia Almeida", email: "kalmeida@oneononelearning.com" },
     { name: "Kelly Pippin", email: "kpippin@oneononelearning.com" },
     { name: "Margiet Zuniga", email: "mhernandez@oneononelearning.com" },
     { name: "Susan Nguyen", email: "snguyen@oneononelearning.com" },
