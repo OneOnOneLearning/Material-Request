@@ -1,640 +1,396 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>One on One Learning — Tutor Needs Dashboard</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"/>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
-<script src="https://alcdn.msauth.net/browser/2.38.0/js/msal-browser.min.js"></script>
-<style>
-:root{--bg:#f4f6f9;--surface:rgba(255,255,255,0.55);--surface-hover:rgba(255,255,255,0.75);--border:rgba(255,255,255,0.6);--shadow:0 8px 32px rgba(0,0,0,0.06),0 1px 3px rgba(0,0,0,0.04);--shadow-lg:0 16px 48px rgba(0,0,0,0.08),0 2px 6px rgba(0,0,0,0.04);--text:#1a1f36;--text-dim:#6b7280;--text-light:#9ca3af;--red:#c8232c;--red-dim:rgba(200,35,44,0.08);--green:#2d8a4e;--green-dim:rgba(45,138,78,0.08);--navy:#1a1f36;--blue:#3b6eb5;--blue-dim:rgba(59,110,181,0.08);--amber:#d4930d;--amber-dim:rgba(212,147,13,0.08);--radius:20px;--radius-sm:12px;--blur:blur(20px) saturate(1.5)}
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Inter',-apple-system,sans-serif;color:var(--text);min-height:100vh;overflow-x:hidden;background:linear-gradient(160deg,#f0f2f6 0%,#e8edf5 30%,#f5f0ee 60%,#f2f4f7 100%);background-attachment:fixed}
-body::before,body::after{content:'';position:fixed;border-radius:50%;filter:blur(80px);opacity:.3;z-index:0;pointer-events:none}
-body::before{width:500px;height:500px;top:-100px;right:-100px;background:radial-gradient(circle,rgba(200,35,44,.15),transparent 70%)}
-body::after{width:600px;height:600px;bottom:-150px;left:-150px;background:radial-gradient(circle,rgba(45,138,78,.12),transparent 70%)}
-.pw{position:relative;z-index:1;max-width:1900px;margin:0 auto;padding:0 36px}
-.glass{background:var(--surface);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);border:1px solid var(--border);box-shadow:var(--shadow);border-radius:var(--radius)}
-.lo{position:fixed;inset:0;background:rgba(244,246,249,.95);backdrop-filter:blur(10px);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:100;transition:opacity .5s}
-.lo.h{opacity:0;pointer-events:none}
-.sp{width:36px;height:36px;border:3px solid #e5e7eb;border-top-color:var(--red);border-radius:50%;animation:spin .7s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
-.lo p{margin-top:14px;color:var(--text-dim);font-size:.88rem}
-
-/* Header */
-.hd{padding:32px 0 0;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px}
-.hd-l{display:flex;align-items:center;gap:20px}
-.logo{height:48px;width:auto;object-fit:contain}
-.hd-t h1{font-family:'Playfair Display',serif;font-size:1.75rem;font-weight:500;color:var(--navy);letter-spacing:-.01em;line-height:1.2}
-.hd-t p{color:var(--text-dim);font-size:.84rem;margin-top:2px}
-.hd-r{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-.bdg{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:100px;font-size:.75rem;font-weight:500;letter-spacing:.02em}
-.bdg-live{background:var(--green-dim);color:var(--green)}
-.bdg-live::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
-.bdg-d{background:rgba(0,0,0,.04);color:var(--text-dim)}
-.rbtn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:100px;border:1px solid rgba(0,0,0,.08);background:var(--surface);backdrop-filter:var(--blur);color:var(--text-dim);font-family:inherit;font-size:.8rem;font-weight:500;cursor:pointer;transition:all .2s}
-.rbtn:hover{background:var(--surface-hover);color:var(--red);border-color:rgba(200,35,44,.2)}
-.rbtn svg{width:13px;height:13px}
-.rbtn.spinning svg{animation:spin .6s linear infinite}
-
-/* Cards */
-.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;padding-top:28px}
-@media(max-width:1000px){.cards{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:540px){.cards{grid-template-columns:1fr}}
-.card{padding:24px 28px;position:relative;overflow:hidden;transition:transform .25s,box-shadow .25s}
-.card:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg)}
-.ci{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:14px}
-.card:nth-child(1) .ci{background:var(--red-dim);color:var(--red)}
-.card:nth-child(2) .ci{background:var(--amber-dim);color:var(--amber)}
-.card:nth-child(3) .ci{background:var(--green-dim);color:var(--green)}
-.card:nth-child(4) .ci{background:var(--blue-dim);color:var(--blue)}
-.cl{font-size:.72rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:.06em;font-weight:600}
-.cv{font-family:'Playfair Display',serif;font-size:2.8rem;font-weight:500;margin-top:6px;line-height:1;color:var(--navy)}
-.cs{font-size:.78rem;color:var(--text-dim);margin-top:4px}
-
-/* Charts */
-.charts{display:grid;grid-template-columns:1.4fr .6fr;gap:16px;padding-top:20px}
-@media(max-width:900px){.charts{grid-template-columns:1fr}}
-.cb{padding:28px}
-.cb h3{font-size:.8rem;font-weight:600;color:var(--text-dim);text-transform:uppercase;letter-spacing:.05em;margin-bottom:20px}
-.cc{position:relative;height:300px}
-.fill-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;pointer-events:none}
-.fill-center .fill-pct{font-family:'Playfair Display',serif;font-size:2.8rem;font-weight:500;color:var(--navy);line-height:1}
-.fill-center .fill-label{font-size:.78rem;color:var(--text-dim);margin-top:2px}
-
-/* Table */
-.ts{padding:20px 0 48px}
-.tc{padding:0;overflow:hidden}
-.tt{display:flex;justify-content:space-between;align-items:center;padding:22px 28px 18px;flex-wrap:wrap;gap:12px}
-.tt h2{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:500;color:var(--navy)}
-.fl{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-.fs,.fi{background:rgba(0,0,0,.03);border:1px solid rgba(0,0,0,.06);border-radius:100px;color:var(--text);font-family:inherit;font-size:.82rem;padding:8px 16px;outline:none;transition:all .2s;-webkit-appearance:none}
-.fs{padding-right:30px;cursor:pointer}
-.fs:focus,.fi:focus{border-color:var(--red);background:rgba(200,35,44,.03)}
-.fi{width:200px}
-.fi::placeholder{color:var(--text-light)}
-.view-toggle{display:flex;gap:0;border:1px solid rgba(0,0,0,.08);border-radius:100px;overflow:hidden}
-.vt-btn{padding:8px 16px;border:none;background:transparent;font-family:inherit;font-size:.8rem;font-weight:500;color:var(--text-dim);cursor:pointer;transition:all .2s}
-.vt-btn.active{background:var(--navy);color:#fff}
-.tw{overflow-x:auto;max-height:650px;overflow-y:auto}
-table{width:100%;border-collapse:collapse;font-size:.82rem}
-thead{background:#edeef1;position:sticky;top:0;z-index:2}
-th{text-align:left;padding:12px 14px;font-weight:600;font-size:.68rem;text-transform:uppercase;letter-spacing:.05em;color:var(--text-dim);white-space:nowrap;cursor:pointer;user-select:none;border-bottom:1px solid rgba(0,0,0,.05)}
-th:hover{color:var(--red)}
-th .sa{margin-left:2px;opacity:.3;font-size:.6rem}
-th.sorted .sa{opacity:1;color:var(--red)}
-td{padding:10px 14px;border-bottom:1px solid rgba(0,0,0,.04);color:var(--text);vertical-align:top}
-tr:last-child td{border-bottom:none}
-tbody tr{transition:background .15s}
-tbody tr:hover{background:rgba(200,35,44,.02)}
-tr.urgent-row{background:rgba(200,35,44,.03)}
-tr.urgent-row:hover{background:rgba(200,35,44,.06)}
-.pt{display:inline-block;padding:4px 12px;border-radius:100px;font-size:.74rem;font-weight:600;letter-spacing:.02em;text-decoration:none;transition:opacity .2s}
-a.pt:hover{opacity:.7}
-.pc-cell{font-size:.78rem;color:var(--text-dim)}
-.nh{color:var(--red);font-weight:700}
-.nm{color:var(--amber);font-weight:700}
-.nl{color:var(--green);font-weight:700}
-.mb{display:inline-block;padding:3px 10px;border-radius:100px;font-size:.72rem;font-weight:600}
-.m-ip{background:var(--blue-dim);color:var(--blue)}
-.m-v{background:var(--green-dim);color:var(--green)}
-.urgent-tag{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:100px;font-size:.7rem;font-weight:600;background:var(--red-dim);color:var(--red)}
-.sched{display:inline-flex;gap:3px;flex-wrap:wrap}
-.sd{font-size:.68rem;text-align:center;padding:3px 5px;border-radius:5px;line-height:1.2;min-width:38px}
-.sd-label{font-weight:600;color:var(--text-dim);font-size:.6rem;text-transform:uppercase}
-.sd-time{color:var(--text);font-size:.66rem;margin-top:1px}
-.sd-yes{background:var(--green-dim);color:var(--green)}
-.sd-no{display:none}
-.cert-y{color:var(--green);font-weight:600;font-size:.76rem}
-.cert-n{color:var(--text-light);font-size:.76rem}
-.notes-cell{max-width:200px;white-space:normal;font-size:.78rem;line-height:1.4;color:var(--text-dim)}
-.expand-btn{background:none;border:none;color:var(--blue);cursor:pointer;font-size:.76rem;font-weight:500;padding:2px 0;font-family:inherit}
-.expand-btn:hover{text-decoration:underline}
-.detail-row td{padding:14px 20px;background:rgba(59,110,181,.02)}
-.detail-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px;font-size:.82rem}
-.detail-grid .dg-label{font-size:.67rem;text-transform:uppercase;color:var(--text-dim);font-weight:600;letter-spacing:.04em;margin-bottom:2px}
-.detail-grid .dg-val{color:var(--text)}
-.es{text-align:center;padding:60px 24px;color:var(--text-dim)}
-.es h3{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--text);margin-bottom:6px}
-.rc{font-size:.78rem;color:var(--text-light);padding:12px 28px 18px;text-align:right}
-.eb{margin-top:16px;padding:14px 18px;background:var(--red-dim);border:1px solid rgba(200,35,44,.12);border-radius:var(--radius-sm);color:var(--red);font-size:.84rem;display:none}
-.eb.show{display:flex;align-items:center;gap:10px}
-.ft{text-align:center;padding:16px 0 40px;color:var(--text-light);font-size:.72rem;letter-spacing:.03em}
-::-webkit-scrollbar{width:5px;height:5px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:rgba(0,0,0,.12);border-radius:3px}
-.fi-a{animation:fadeIn .6s ease forwards;opacity:0}
-@keyframes fadeIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
-@media(max-width:640px){.pw{padding:0 16px}.hd-t h1{font-size:1.3rem}.logo{height:38px}}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Material Request Form</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<div id="loginScreen" style="position:fixed;inset:0;background:linear-gradient(160deg,#f0f2f6 0%,#e8edf5 30%,#f5f0ee 60%,#f2f4f7 100%);z-index:200;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:'Inter',sans-serif">
-<img src="https://cdn.prod.website-files.com/6511d86dcc6ffe4be8b3e3c0/67a51d3a089fcce7d3a59514_2a1058a3dbdbabadadb72530baf47dea_oneononelearning.svg" style="height:60px;margin-bottom:24px" onerror="this.style.display='none'">
-<h2 style="color:#1a1f36;margin-bottom:8px">Tutor Needs Dashboard</h2>
-<p style="color:#6b7280;margin-bottom:32px;font-size:.9rem">Sign in with your One on One Learning account</p>
-<button onclick="signIn()" style="display:inline-flex;align-items:center;gap:10px;padding:12px 28px;border-radius:8px;border:1px solid #d1d5db;background:white;color:#1a1f36;font-family:inherit;font-size:.95rem;font-weight:500;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.1);transition:all .2s">
-<svg width="20" height="20" viewBox="0 0 23 23"><path fill="#f35325" d="M1 1h10v10H1z"/><path fill="#81bc06" d="M12 1h10v10H12z"/><path fill="#05a6f0" d="M1 12h10v10H1z"/><path fill="#ffba08" d="M12 12h10v10H12z"/></svg>
-Sign in with Microsoft</button>
-<p id="loginError" style="color:#c8232c;margin-top:16px;font-size:.85rem;display:none"></p>
-</div>
-<div class="lo" id="lo" style="display:none"><div class="sp"></div><p>Loading dashboard...</p></div>
-<div class="pw" id="dashboardContent" style="display:none">
-<div class="hd fi-a">
-<div class="hd-l">
-<img class="logo" src="https://cdn.prod.website-files.com/6511d86dcc6ffe4be8b3e3c0/67a51d3a089fcce7d3a59514_2a1058a3dbdbabadadb72530baf47dea_oneononelearning.svg" alt="OOOL" onerror="this.style.display='none'">
-<div class="hd-t"><h1>Tutor Needs Dashboard</h1></div>
-</div>
-<div class="hd-r">
-<span id="userInfo" style="font-size:.8rem;color:var(--text-dim);margin-right:8px"></span>
-<button onclick="signOut()" style="padding:5px 12px;border-radius:100px;border:1px solid rgba(0,0,0,.08);background:var(--surface);font-size:.75rem;color:var(--text-dim);cursor:pointer;font-family:inherit">Sign Out</button>
-<span class="bdg bdg-live" id="statusBadge">Auto-Updated</span>
-<span class="bdg bdg-d" id="lastUpdated">—</span>
+    <div class="container">
+        <header>
+            <img src="logo.png" alt="Company Logo" class="logo">
+            <h1>Material Request Form</h1>
+            <p class="subtitle">If you have any questions about this form or the request process, please email us at <a href="mailto:curriculum@oneononelearning.com">curriculum@oneononelearning.com</a></p>
+        </header>
 
-</div>
-</div>
-<div class="eb" id="errorBanner"><span id="errorMsg"></span></div>
-<div class="cards fi-a" style="animation-delay:.1s" id="summaryCards"></div>
-<div class="charts fi-a" style="animation-delay:.2s">
-<div class="cb glass"><h3>Tutors Needed by Program</h3><div class="cc"><canvas id="chartProgram"></canvas></div></div>
-<div class="cb glass"><h3>Overall Fill Rate</h3><div class="cc"><canvas id="chartFill"></canvas><div class="fill-center" id="fillCenter"></div></div></div>
-</div>
-<div class="ts fi-a" style="animation-delay:.3s">
-<div class="tc glass">
-<div class="tt">
-<div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
-<h2>All Open Positions</h2>
-<div class="view-toggle">
-<button class="vt-btn active" onclick="setView('full',this)">Full Detail</button>
-<button class="vt-btn" onclick="setView('compact',this)">Compact</button>
-</div>
-</div>
-<div class="fl">
-<input class="fi" type="text" id="searchInput" placeholder="Search...">
-<select class="fs" id="filterProgram"><option value="">All Programs</option></select>
-<select class="fs" id="filterPC"><option value="">All PCs</option></select>
-<select class="fs" id="filterRDP"><option value="">All RDPs</option></select>
-<select class="fs" id="filterUrgent"><option value="">All Priorities</option><option value="asap">ASAP Only</option></select>
-<label style="display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:100px;border:1px solid rgba(0,0,0,.08);background:var(--surface);backdrop-filter:var(--blur);font-size:.82rem;color:var(--text-dim);cursor:pointer;white-space:nowrap;user-select:none"><input type="checkbox" id="hideFilled" checked style="accent-color:var(--red);cursor:pointer"> Hide Filled</label>
-</div>
-</div>
-<div class="tw"><table><thead><tr id="tableHead"></tr></thead><tbody id="tableBody"></tbody></table></div>
-<div class="rc" id="rowCount"></div>
-</div></div>
-<div class="fi-a" style="animation-delay:.35s;padding-top:20px">
-<div class="glass" style="padding:24px;border-radius:var(--radius)">
-<div style="display:flex;justify-content:space-between;align-items:center;cursor:pointer" onclick="document.getElementById('pendingBody').style.display=document.getElementById('pendingBody').style.display==='none'?'':'none';this.querySelector('.pc-arrow').textContent=document.getElementById('pendingBody').style.display==='none'?'▶':'▼'">
-<h3>Pending Contacts <span id="pendingCount" style="background:var(--amber-dim);color:var(--amber);padding:2px 10px;border-radius:100px;font-size:.8rem;margin-left:8px">0</span></h3>
-<span class="pc-arrow" style="color:var(--text-dim);font-size:.8rem">▼</span>
-</div>
-<div id="pendingBody" style="margin-top:16px">
-<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:.85rem">
-<thead><tr style="border-bottom:2px solid rgba(0,0,0,.06)"><th style="text-align:left;padding:8px 12px;color:var(--text-dim);font-weight:500">Program</th><th style="text-align:center;padding:8px 12px;color:var(--text-dim);font-weight:500">Pending</th></tr></thead>
-<tbody id="pendingTableBody"></tbody>
-</table></div>
-<p id="pendingEmpty" style="color:var(--text-light);font-size:.85rem;text-align:center;padding:20px;display:none">No pending contacts</p>
-</div>
-</div>
-</div>
-<div class="fi-a" style="animation-delay:.4s;padding-top:20px">
-<div class="glass" style="padding:24px;border-radius:var(--radius)">
-<h3 style="margin-bottom:16px">Needs Map</h3>
-<div id="needsMap" style="height:500px;border-radius:var(--radius-sm);overflow:hidden"></div>
-<div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px;font-size:.78rem;color:var(--text-dim)">
-<span id="mapStatus">Loading map...</span>
-<span><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#3b6eb5;margin-right:4px"></span>1 needed
-<span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#d4930d;margin:0 4px 0 12px"></span>2 needed
-<span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#c8232c;margin:0 4px 0 12px"></span>3+ needed</span>
-</div>
-</div>
-</div>
-<div class="ft">One on One Learning &middot; Tutor Needs Dashboard &middot; Data refreshed daily via Power Automate</div>
-</div>
-<script>
-let msalInstance=null,currentUser=null,userRole=null,userRdp=null;
+        <main>
+            <form id="request-form" class="request-form">
+                <!-- Tutor Information Section -->
+                <section id="tutor-section" class="form-section">
+                    <h2 class="section-title">Tutor Information</h2>
 
-const adminEmails=['msuarez@oneononelearning.com','igrande@oneononelearning.com','rmatos@oneononelearning.com','jfuentes@oneononelearning.com','nreaser@oneononelearning.com','mmonnar@oneononelearning.com','arau@oneononelearning.com'];
-const rdpEmails={'kberry@oneononelearning.com':'Karin','jlove@oneononelearning.com':'Jennifer','mhill@oneononelearning.com':'Malorie','llandera@oneononelearning.com':'Malorie'};
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="tutor-name">Your Name <span class="required">*</span></label>
+                            <input type="text" id="tutor-name" name="tutorName" required placeholder="Enter your full name">
+                        </div>
 
-async function initAuth(){
-  try{
-    if(typeof msal==='undefined'){console.log('MSAL not loaded');return;}
-    msalInstance=new msal.PublicClientApplication({auth:{clientId:'f3d0a7b8-0eee-456f-9758-da7bc1296a94',authority:'https://login.microsoftonline.com/24ab4d38-cbff-431e-b383-3bd64b05be87',redirectUri:window.location.origin+window.location.pathname},cache:{cacheLocation:'sessionStorage'}});
-    const resp=await msalInstance.handleRedirectPromise();
-    if(resp){handleLoginSuccess(resp.account);return;}
-    const accounts=msalInstance.getAllAccounts();
-    if(accounts.length>0){handleLoginSuccess(accounts[0]);return;}
-  }catch(e){console.log('Auth init:',e)}
-}
+                        <div class="form-group">
+                            <label for="tutor-email">Email Address <span class="required">*</span></label>
+                            <input type="email" id="tutor-email" name="tutorEmail" required placeholder="your.email@example.com">
+                        </div>
+                    </div>
 
-function handleLoginSuccess(account){
-  currentUser=account;
-  const email=(account.username||'').toLowerCase();
-  if(adminEmails.includes(email)){userRole='admin';userRdp=null;}
-  else if(rdpEmails[email]){userRole='rdp';userRdp=rdpEmails[email];}
-  else{userRole='viewer';userRdp=null;}
-  document.getElementById('loginScreen').style.display='none';
-  document.getElementById('dashboardContent').style.display='';
-  document.getElementById('lo').style.display='flex';
-  const name=account.name||email;
-  document.getElementById('userInfo').textContent=userRole==='admin'?name+' (Admin)':userRole==='rdp'?name+' (RDP: '+userRdp+')':name;
-  loadData();
-}
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="program-coordinator">Program Coordinator <span class="required">*</span></label>
+                            <select id="program-coordinator" name="programCoordinator" required>
+                                <option value="">Select a Program Coordinator</option>
+                                <!-- Coordinators populated by JavaScript -->
+                            </select>
+                            <div id="other-pc-container" class="other-input-container" style="display: none;">
+                                <input type="text" id="other-pc-name" name="otherPCName" placeholder="Enter Program Coordinator name">
+                            </div>
+                        </div>
 
-async function signIn(){
-  if(!msalInstance){await initAuth();}
-  try{await msalInstance.loginRedirect({scopes:['openid','profile','email']});}
-  catch(e){document.getElementById('loginError').style.display='block';document.getElementById('loginError').textContent='Sign in failed: '+e.message;}
-}
+                        <div class="form-group">
+                            <label for="school">School <span class="required">*</span></label>
+                            <input type="text" id="school" name="school" required placeholder="School name">
+                        </div>
+                    </div>
 
-function signOut(){if(msalInstance)msalInstance.logoutRedirect({postLogoutRedirectUri:window.location.origin+window.location.pathname});}
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="state">State <span class="required">*</span></label>
+                            <select id="state" name="state" required>
+                                <option value="">Select a state</option>
+                                <!-- States populated by JavaScript -->
+                            </select>
+                        </div>
+                    </div>
 
-window.addEventListener('DOMContentLoaded',()=>{initAuth();});
-const DATA_URL='data.json',PCS_URL='pcs.json',RDP_URL='rdps.json',GEOCACHE_URL='geocache.json',ASAP_URL='asap-flags.json',PENDING_URL='pending.json';
-const GH_REPO='OneOnOneLearning/Needs-Dashboard';
-function getGHToken(){return atob('Z2hw'+'X0dN'+'Wlll'+'TXhM'+'Qzd3'+'WmIw'+'NTM2'+'WU1w'+'VFFt'+'RlFX'+'RGxs'+'ZDFB'+'QjlH'+'Mg==')}
-let data=[],pcMap={},rdpMap={},asapFlags={},pauseFlags={},pendingData=[],sortCol=null,sortAsc=true,viewMode='full',expandedRows=new Set();
-const progColors={},pal=['#c8232c','#2d8a4e','#3b6eb5','#d4930d','#8b5cf6','#0891b2','#dc2626','#059669','#7c3aed','#ca8a04','#2563eb','#e11d48','#16a34a','#9333ea','#ea580c','#0284c7'];
+                    <div class="section-actions">
+                        <button type="button" id="continue-to-students" class="btn btn-primary" disabled>Continue to Student Information</button>
+                    </div>
+                </section>
 
-function xlDate(v){if(!v||v==='')return'';const s=String(v).trim();if(s.toLowerCase()==='asap')return'ASAP';if(/^\d{4,5}$/.test(s)){const d=new Date((parseInt(s)-25569)*86400000);return d.toLocaleDateString('en-US',{month:'numeric',day:'numeric',year:'numeric'})}return s}
-function getRowKey(d){return(d.program+'|'+d.school+'|'+d.location).replace(/\s+/g,' ').trim()}
-function isUrgent(d){return !!asapFlags[getRowKey(d)]}
-function isPaused(d){return !!pauseFlags[getRowKey(d)]}
-function setView(m,b){viewMode=m;document.querySelectorAll('.vt-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');expandedRows.clear();renderTable()}
+                <!-- Students Section -->
+                <section id="students-section" class="form-section">
+                    <h2 class="section-title">Student/Group Information</h2>
+                    <p class="subtitle" style="margin-bottom: 1rem;">Add 1-4 students or groups and select their requested materials</p>
 
-async function loadData(){
-  document.getElementById('errorBanner').classList.remove('show');
-  try{const pr=await fetch(PCS_URL+'?t='+Date.now());if(pr.ok)pcMap=await pr.json()}catch(e){pcMap=samplePCs()}
-  try{const rr=await fetch(RDP_URL+'?t='+Date.now());if(rr.ok)rdpMap=await rr.json()}catch(e){rdpMap={}}
-  try{const gr=await fetch(GEOCACHE_URL+'?t='+Date.now());if(gr.ok){const gc=await gr.json();Object.assign(geoCache,gc)}}catch(e){}
-  try{
-    const pr=await fetch(`https://api.github.com/repos/${GH_REPO}/contents/pause-flags.json`,{headers:{'Accept':'application/vnd.github.v3+json','User-Agent':'OOOLDashboard'}});
-    if(pr.ok){const pj=await pr.json();if(pj.content){pauseFlags=JSON.parse(atob(pj.content.replace(/\n/g,'')));}}
-  }catch(e){pauseFlags={}}
-  try{const pd=await fetch(PENDING_URL+'?t='+Date.now());if(pd.ok)pendingData=await pd.json()}catch(e){pendingData=[]}
-  try{
-    const ar=await fetch(`https://api.github.com/repos/${GH_REPO}/contents/asap-flags.json`,{headers:{'Accept':'application/vnd.github.v3+json','User-Agent':'OOOLDashboard'}});
-    if(ar.ok){const aj=await ar.json();if(aj.content){asapFlags=JSON.parse(atob(aj.content.replace(/\n/g,'')));}}
-  }catch(e){asapFlags={}}
-  try{
-    const r=await fetch(DATA_URL+'?t='+Date.now());if(!r.ok)throw new Error('HTTP '+r.status);
-    let raw=await r.text();raw=raw.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F]/g,'').replace(/\t/g,' ');
-    raw=raw.replace(/"(needed|projected)"\s*:\s*([^,}"\]]*)/g,(m,key,val)=>{const t=val.trim();const n=Number(t);return`"${key}":${(t===''||isNaN(n))?0:n}`});
-    const j=JSON.parse(raw);
-    if(Array.isArray(j))data=j;else if(j.records){data=j.records;if(j.updated)document.getElementById('lastUpdated').textContent=j.updated}
-    else throw new Error('Bad format');
-    data=data.map(d=>({
-      program:d.program||d.Program||'',location:d.location||d.Location||'',school:d.school||d.School||'',
-      dateRequested:xlDate(d.dateRequested||d['Date need Requested']||''),
-      projected:parseInt(d.projected||d['Projected Tutors needed\nto start']||0),
-      needed:parseInt(d.needed||d['Current # of tutors needed']||0),
-      subject:d.subject||d['Grades/Subject']||'',mode:d.mode||d['In Person/Virtual']||'',
-      mon:d.mon||d.Mon||'',tues:d.tues||d.Tues||'',wed:d.wed||d.Wed||'',
-      thurs:d.thurs||d.Thurs||'',friday:d.friday||d.Friday||'',weekends:d.weekends||d.Weekends||'',
-      startDate:xlDate(d.startDate||d['Start Date']||''),payRate:d.payRate||d['Pay Rate']||'',
-      certified:d.certified||d['Certified?']||'',nonNeg:d.nonNeg||d['Non-Negotiables']||'',
-      notes:d.notes||d['Notes/Experience']||'',fileUrl:d.fileUrl||''
-    }));
-    data.forEach(d=>{d.pc=pcMap[d.program]||'';d.rdp=rdpMap[d.program]||''});
-    if(!document.getElementById('lastUpdated').textContent||document.getElementById('lastUpdated').textContent==='—')
-      document.getElementById('lastUpdated').textContent=new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
-    buildAll();
-  }catch(e){if(data.length===0){loadSample();buildAll();document.getElementById('errorBanner').classList.add('show');document.getElementById('errorMsg').innerHTML='Showing <strong>sample data</strong> — connect Power Automate for live data.'}}
-  finally{document.getElementById('lo').classList.add('h')}
-}
+                    <div id="students-container" class="students-container">
+                        <!-- Student cards will be added here dynamically -->
+                    </div>
 
-function samplePCs(){return{"Arizona":"Christine","Arkansas":"Yesenia","LACOE":"Susan","LAUSD NP":"Ester","LAUSD Public":"Ester","LBUSD":"Karin","Pasadena":"Karin","Pomona":"Karin","Corona-Norco":"Karin","Riverside NP":"Amber","San Bernardino NP/ Fontana":"Amber","San Bernardino- Foster Youth / Probation":"Amber","Clark County":"Christine","Texas":"Yesenia","Sarasota":"James","Sumter County":"James","Broward County":"Malorie","Hillsborough":"Yesenia","Lake County":"Gretchen","Seminole":"Malorie","Lee County":"Eli","Leon County":"Yesenia","Marion County":"Yesenia","Miami Dade NP":"Margiet","Miami Public":"Cristy","Miami Dade Charter":"Katia","Miami Dade High Dosage":"Katia and Giselle","Osceola NP":"Gretchen","Orange County":"Saranda","Osceola Public":"Kelly","Pasco County":"James","West Palm":"Gabby","Louisiana":"Yesenia","Boston":"Eli","VA- Henrico":"Yesenia","Milwaukee":"Eli","Lake County Counselor":"Gayle","Miami IDEA Counselor":"Malorie"}}
-function loadSample(){
-  pcMap=samplePCs();
-  data=[
-    {program:"LACOE",location:"Lynwood, CA",school:"Challenger Memorial Youth Center",dateRequested:"10/8/2025",projected:2,needed:2,subject:"ELA & Math",mode:"In Person",mon:"8:00-2:30",tues:"8:00-2:30",wed:"8:00-2:30",thurs:"8:00-2:30",friday:"",weekends:"",startDate:"ASAP",payRate:"$22/hr",certified:"Yes",nonNeg:"CA sub permit",notes:"Prefer bilingual",fileUrl:""},
-    {program:"LACOE",location:"Downey, CA",school:"Dorothy Kirby Center",dateRequested:"10/8/2025",projected:3,needed:1,subject:"ELA & Math",mode:"In Person",mon:"9:00-3:00",tues:"9:00-3:00",wed:"9:00-3:00",thurs:"9:00-3:00",friday:"9:00-3:00",weekends:"",startDate:"ASAP",payRate:"$22/hr",certified:"No",nonNeg:"",notes:"At-risk youth exp preferred",fileUrl:""},
-    {program:"LACOE",location:"Sylmar, CA",school:"Barry J. Nidorf",dateRequested:"11/1/2025",projected:4,needed:3,subject:"Math",mode:"In Person",mon:"8:30-1:30",tues:"",wed:"8:30-1:30",thurs:"",friday:"8:30-1:30",weekends:"",startDate:"11/15/2025",payRate:"$22/hr",certified:"Yes",nonNeg:"Livescan",notes:"Juvenile facility clearance",fileUrl:""},
-    {program:"LAUSD",location:"Los Angeles, CA",school:"Fremont HS",dateRequested:"9/15/2025",projected:5,needed:3,subject:"Algebra I & II",mode:"In Person",mon:"x",tues:"x",wed:"x",thurs:"x",friday:"",weekends:"",startDate:"ASAP",payRate:"$20/hr",certified:"Yes",nonNeg:"LAUSD cleared",notes:"",fileUrl:""},
-    {program:"LAUSD",location:"Los Angeles, CA",school:"Jefferson MS",dateRequested:"9/20/2025",projected:3,needed:2,subject:"ELA 7th & 8th",mode:"In Person",mon:"x",tues:"",wed:"x",thurs:"",friday:"x",weekends:"",startDate:"10/7/2025",payRate:"$20/hr",certified:"No",nonNeg:"",notes:"After school 3-5pm",fileUrl:""},
-    {program:"LAUSD",location:"Los Angeles, CA",school:"Manual Arts HS",dateRequested:"10/1/2025",projected:4,needed:4,subject:"Chemistry & Physics",mode:"In Person",mon:"7:30-2:00",tues:"7:30-2:00",wed:"",thurs:"7:30-2:00",friday:"7:30-2:00",weekends:"",startDate:"10/15/2025",payRate:"$20/hr",certified:"Yes",nonNeg:"Science credential",notes:"AP classes",fileUrl:""},
-    {program:"Compton USD",location:"Compton, CA",school:"Compton HS",dateRequested:"10/5/2025",projected:3,needed:3,subject:"ELA & Math",mode:"In Person",mon:"x",tues:"x",wed:"x",thurs:"x",friday:"",weekends:"",startDate:"ASAP",payRate:"$21/hr",certified:"No",nonNeg:"Bilingual Spanish",notes:"Title I",fileUrl:""},
-    {program:"Compton USD",location:"Compton, CA",school:"Whaley MS",dateRequested:"10/12/2025",projected:2,needed:1,subject:"Math 7th",mode:"Virtual",mon:"",tues:"",wed:"3:30-5:00",thurs:"",friday:"3:30-5:00",weekends:"",startDate:"10/28/2025",payRate:"$21/hr",certified:"No",nonNeg:"",notes:"Virtual after school",fileUrl:""},
-    {program:"Inglewood USD",location:"Inglewood, CA",school:"Inglewood HS",dateRequested:"10/8/2025",projected:4,needed:2,subject:"Algebra I",mode:"In Person",mon:"x",tues:"x",wed:"x",thurs:"x",friday:"x",weekends:"",startDate:"10/20/2025",payRate:"$20/hr",certified:"Yes",nonNeg:"",notes:"",fileUrl:""},
-    {program:"Lynwood USD",location:"Lynwood, CA",school:"Lynwood HS",dateRequested:"9/28/2025",projected:3,needed:1,subject:"Biology",mode:"In Person",mon:"",tues:"8:00-12:00",wed:"",thurs:"8:00-12:00",friday:"",weekends:"",startDate:"10/7/2025",payRate:"$20/hr",certified:"Yes",nonNeg:"Bio credential",notes:"Lab support",fileUrl:""},
-    {program:"Lynwood USD",location:"Lynwood, CA",school:"Hosler MS",dateRequested:"10/20/2025",projected:3,needed:3,subject:"Math & ELA",mode:"In Person",mon:"x",tues:"",wed:"x",thurs:"",friday:"x",weekends:"",startDate:"ASAP",payRate:"$20/hr",certified:"No",nonNeg:"",notes:"",fileUrl:""},
-    {program:"Centinela Valley",location:"Hawthorne, CA",school:"Hawthorne HS",dateRequested:"10/3/2025",projected:2,needed:2,subject:"Geometry",mode:"In Person",mon:"x",tues:"x",wed:"",thurs:"x",friday:"",weekends:"",startDate:"10/14/2025",payRate:"$21/hr",certified:"No",nonNeg:"",notes:"",fileUrl:""},
-    {program:"Centinela Valley",location:"Lawndale, CA",school:"Lawndale HS",dateRequested:"10/18/2025",projected:3,needed:1,subject:"ELA 9th & 10th",mode:"Virtual",mon:"",tues:"4:00-6:00",wed:"",thurs:"4:00-6:00",friday:"",weekends:"",startDate:"11/1/2025",payRate:"$21/hr",certified:"No",nonNeg:"",notes:"Evening virtual",fileUrl:""},
-    {program:"Pasadena USD",location:"Pasadena, CA",school:"Pasadena HS",dateRequested:"10/10/2025",projected:4,needed:2,subject:"AP Calculus",mode:"In Person",mon:"x",tues:"x",wed:"x",thurs:"x",friday:"",weekends:"",startDate:"10/21/2025",payRate:"$23/hr",certified:"Yes",nonNeg:"Math credential",notes:"AP exam prep",fileUrl:""},
-    {program:"Arizona",location:"Phoenix, AZ",school:"Camelback HS",dateRequested:"10/15/2025",projected:3,needed:3,subject:"Math & Reading",mode:"In Person",mon:"8:00-2:00",tues:"8:00-2:00",wed:"8:00-2:00",thurs:"8:00-2:00",friday:"",weekends:"",startDate:"ASAP",payRate:"$19/hr",certified:"No",nonNeg:"AZ fingerprint card",notes:"Mostly 9th graders",fileUrl:""},
-    {program:"Arizona",location:"Tempe, AZ",school:"McClintock HS",dateRequested:"10/20/2025",projected:2,needed:2,subject:"ELA",mode:"Virtual",mon:"",tues:"3:00-5:00",wed:"",thurs:"3:00-5:00",friday:"",weekends:"",startDate:"11/5/2025",payRate:"$19/hr",certified:"No",nonNeg:"",notes:"After school virtual",fileUrl:""},
-    {program:"Pomona USD",location:"Pomona, CA",school:"Pomona HS",dateRequested:"10/14/2025",projected:3,needed:3,subject:"Math & ELA",mode:"In Person",mon:"x",tues:"x",wed:"x",thurs:"x",friday:"",weekends:"",startDate:"ASAP",payRate:"$20/hr",certified:"No",nonNeg:"Bilingual",notes:"Title I",fileUrl:""},
-  ];
-  data.forEach(d=>{d.pc=pcMap[d.program]||'';d.rdp=rdpMap[d.program]||''});
-  document.getElementById('lastUpdated').textContent='Sample Data';
-  document.getElementById('statusBadge').innerHTML='Demo Mode';
-  document.getElementById('statusBadge').className='bdg bdg-d';
-}
+                    <button type="button" id="add-student-btn" class="add-student-btn">
+                        <span>+</span> Add Another Student/Group
+                    </button>
 
-function buildAll(){
-  if(userRole==='rdp'&&userRdp){data=data.filter(d=>d.rdp===userRdp);}
-  const p=[...new Set(data.map(d=>d.program))];
-  p.forEach((v,i)=>{progColors[v]=pal[i%pal.length]});
-  buildCards();buildCharts();buildFilters();renderTable();buildPending();setTimeout(buildMap,100);
-  if(userRole==='rdp')document.getElementById('filterRDP').style.display='none';
-}
-function getFilteredForCharts(){
-  const rdpf=document.getElementById('filterRDP').value,
-    pf=document.getElementById('filterProgram').value,
-    pcf=document.getElementById('filterPC').value;
-  return data.filter(d=>{
-    if(isPaused(d))return false;
-    if(rdpf&&d.rdp!==rdpf)return false;
-    if(pf&&d.program!==pf)return false;
-    if(pcf&&d.pc!==pcf)return false;
-    return true;
-  });
-}
+                    <!-- Overall Request Notes -->
+                    <div class="form-group request-notes-section" style="margin-top: 1.5rem;">
+                        <label for="request-notes">Additional Notes for This Request</label>
+                        <textarea id="request-notes" name="requestNotes" rows="3" placeholder="Any special notes, instructions, or context for the curriculum team..."></textarea>
+                    </div>
+                </section>
 
-function buildCards(){
-  const fd=getFilteredForCharts();
-  const tn=fd.reduce((s,d)=>s+d.needed,0),tp=fd.reduce((s,d)=>s+d.projected,0),
-    pr=[...new Set(fd.map(d=>d.program))],lo=[...new Set(fd.map(d=>d.school))],
-    urgCnt=fd.filter(d=>isUrgent(d)).length,
-    pcs=[...new Set(fd.map(d=>d.pc))].filter(Boolean).length,
-    fillPct=tp?Math.round((tp-tn)/tp*100):0;
-  document.getElementById('summaryCards').innerHTML=
-    `<div class="card glass"><div class="ci"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><div class="cl">Total Tutors Needed</div><div class="cv">${tn}</div><div class="cs">of ${tp} projected</div></div>`+
-    `<div class="card glass" style="cursor:pointer" onclick="const f=document.getElementById('filterUrgent');if(f.value==='asap'){f.value='';this.style.outline=''}else{f.value='asap';this.style.outline='2px solid var(--red)'}onFilterChange()"><div class="ci"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div><div class="cl">ASAP Positions</div><div class="cv">${urgCnt}</div><div class="cs">need immediate placement</div></div>`+
-    `<div class="card glass"><div class="ci"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></div><div class="cl">Active Programs</div><div class="cv">${pr.length}</div><div class="cs">${lo.length} schools &middot; ${pcs} PCs</div></div>`+
-    `<div class="card glass"><div class="ci"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div><div class="cl">Fill Rate</div><div class="cv">${fillPct}%</div><div class="cs">${tp-tn} of ${tp} filled</div></div>`+
-    `<div class="card glass"><div class="ci"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="10" y1="15" x2="10" y2="9"/><line x1="14" y1="15" x2="14" y2="9"/></svg></div><div class="cl">Pending Contacts</div><div class="cv">${getPendingCount()}</div><div class="cs">interviewed, awaiting contact</div></div>`;
-}
+                <!-- Form Actions -->
+                <div class="form-actions">
+                    <button type="reset" class="btn btn-secondary">Clear Form</button>
+                    <button type="submit" class="btn btn-primary">Submit Request</button>
+                </div>
+            </form>
+        </main>
 
-let chP,chF;
-function buildCharts(){
-  const fd=getFilteredForCharts();
-  const allPr=[...new Set(fd.map(d=>d.program))],allPn=allPr.map(p=>fd.filter(d=>d.program===p).reduce((s,d)=>s+d.needed,0));
-  const pr=[],pn=[],co=[];allPr.forEach((p,i)=>{if(allPn[i]>0){pr.push(p);pn.push(allPn[i]);co.push(progColors[p])}});
-  if(chP)chP.destroy();
-  chP=new Chart(document.getElementById('chartProgram').getContext('2d'),{type:'bar',data:{labels:pr,datasets:[{data:pn,backgroundColor:co.map(c=>c+'22'),borderColor:co,borderWidth:1.5,borderRadius:8}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#9ca3af',font:{size:10,family:'Inter'}},grid:{display:false},border:{display:false}},y:{ticks:{color:'#9ca3af',font:{size:10},stepSize:2},grid:{color:'rgba(0,0,0,.04)'},border:{display:false},beginAtZero:true}}}});
+        <footer>
+            <p>&copy; 2026 One on One Learning - Material Request System</p>
+        </footer>
+    </div>
 
-  // Fill rate doughnut
-  const tp=fd.reduce((s,d)=>s+d.projected,0),tn=fd.reduce((s,d)=>s+d.needed,0),filled=tp-tn,pct=tp?Math.round(filled/tp*100):0;
-  if(chF)chF.destroy();
-  chF=new Chart(document.getElementById('chartFill').getContext('2d'),{
-    type:'doughnut',
-    data:{labels:['Filled','Still Needed'],datasets:[{data:[filled,tn],backgroundColor:['rgba(45,138,78,.25)','rgba(200,35,44,.2)'],borderColor:['#2d8a4e','#c8232c'],borderWidth:2,hoverOffset:6}]},
-    options:{responsive:true,maintainAspectRatio:false,cutout:'75%',plugins:{legend:{position:'bottom',labels:{color:'#9ca3af',font:{size:11,family:'Inter'},padding:14,usePointStyle:true,pointStyleWidth:10}}}}
-  });
-  document.getElementById('fillCenter').innerHTML=`<div class="fill-pct">${pct}%</div><div class="fill-label">${filled} of ${tp} filled</div>`;
-}
+    <!-- Student Card Template -->
+    <template id="student-template">
+        <div class="student-card" data-student-index="">
+            <div class="student-header">
+                <span class="student-number">Student/Group 1</span>
+                <button type="button" class="remove-student-btn">Remove</button>
+            </div>
 
-function buildFilters(){
-  const pr=[...new Set(data.map(d=>d.program))].sort(),s=document.getElementById('filterProgram'),c=s.value;
-  s.innerHTML='<option value="">All Programs</option>'+pr.map(p=>`<option value="${p}">${p}</option>`).join('');s.value=c;
-  const pcs=[...new Set(Object.values(pcMap))].filter(Boolean).sort(),ps=document.getElementById('filterPC'),pc=ps.value;
-  ps.innerHTML='<option value="">All PCs</option>'+pcs.map(p=>`<option value="${p}">${p}</option>`).join('');ps.value=pc;
-  const rdps=[...new Set(Object.values(rdpMap))].filter(Boolean).sort(),rs=document.getElementById('filterRDP'),rc=rs.value;
-  rs.innerHTML='<option value="">All RDPs</option>'+rdps.map(r=>`<option value="${r}">${r}</option>`).join('');rs.value=rc;
-}
-document.getElementById('searchInput').addEventListener('input',renderTable);
-function onFilterChange(){buildCards();buildCharts();renderTable();buildPending();buildMap()}
-document.getElementById('filterProgram').addEventListener('change',onFilterChange);
-document.getElementById('filterPC').addEventListener('change',onFilterChange);
-document.getElementById('filterRDP').addEventListener('change',onFilterChange);
-document.getElementById('filterUrgent').addEventListener('change',renderTable);
-document.getElementById('hideFilled').addEventListener('change',renderTable);
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Student/Group Name <span class="required">*</span></label>
+                    <input type="text" name="studentName" required placeholder="Full name (or group + # of copies)">
+                </div>
 
-function fmtSched(d){
-  const days=[{k:'mon',l:'Mon'},{k:'tues',l:'Tue'},{k:'wed',l:'Wed'},{k:'thurs',l:'Thu'},{k:'friday',l:'Fri'},{k:'weekends',l:'Wknd'}];
-  let html='<div class="sched">';
-  for(const day of days){
-    const v=d[day.k];
-    if(v&&v.toString().trim()&&v.toString().trim()!=='0'){
-      const isTime=v.toString().includes(':');
-      html+=`<div class="sd sd-yes"><div class="sd-label">${day.l}</div><div class="sd-time">${isTime?v:'✓'}</div></div>`;
-    }
-  }
-  return html+'</div>';
-}
-function fmtCert(v){if(!v)return'<span class="cert-n">—</span>';const s=v.toString().toLowerCase();if(s==='yes'||s==='y')return'<span class="cert-y">Yes</span>';if(s==='no'||s==='n')return'<span class="cert-n">No</span>';return`<span class="cert-n">${v}</span>`}
-function fmtStart(d){if(isUrgent(d))return'<span class="urgent-tag"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>ASAP</span>';return d.startDate||'—'}
+                <div class="form-group">
+                    <label>Current Grade <span class="required">*</span></label>
+                    <select name="currentGrade" required>
+                        <option value="">Select grade</option>
+                        <!-- Grades populated by JavaScript -->
+                    </select>
+                </div>
+            </div>
 
-const compactCols=[{key:'asap',label:'⚠️'},{key:'pause',label:'⏸'},{key:'program',label:'Program'},{key:'rdp',label:'RDP'},{key:'pc',label:'PC'},{key:'school',label:'School'},{key:'location',label:'Location'},{key:'needed',label:'# Need'},{key:'subject',label:'Subject'},{key:'schedule',label:'Schedule'},{key:'startDate',label:'Start/End'},{key:'payRate',label:'Pay'},{key:'expand',label:''}];
-const fullCols=[{key:'asap',label:'⚠️'},{key:'pause',label:'⏸'},{key:'program',label:'Program'},{key:'rdp',label:'RDP'},{key:'pc',label:'PC'},{key:'school',label:'School'},{key:'location',label:'Location'},{key:'dateRequested',label:'Date Req'},{key:'projected',label:'Proj'},{key:'needed',label:'# Need'},{key:'subject',label:'Subject'},{key:'mode',label:'Mode'},{key:'schedule',label:'Schedule'},{key:'startDate',label:'Start/End'},{key:'payRate',label:'Pay'},{key:'certified',label:'Cert'},{key:'nonNeg',label:'Non-Negotiables'},{key:'notes',label:'Notes'}];
-function getCols(){return viewMode==='compact'?compactCols:fullCols}
+            <!-- Add Materials Buttons -->
+            <div class="add-materials-buttons">
+                <button type="button" class="add-material-btn math-btn" data-subject="math">
+                    <span class="btn-icon">+</span> Math Materials
+                </button>
+                <button type="button" class="add-material-btn ela-btn" data-subject="ela">
+                    <span class="btn-icon">+</span> ELA Materials
+                </button>
+            </div>
 
-function buildTableHead(){document.getElementById('tableHead').innerHTML=getCols().map(c=>{if(c.key==='expand'||c.key==='schedule')return`<th>${c.label}</th>`;if(c.key==='asap')return`<th style="text-align:center;width:50px">${c.label}</th>`;return`<th class="${sortCol===c.key?'sorted':''}" onclick="sortTable('${c.key}')">${c.label}<span class="sa">${sortCol===c.key?(sortAsc?'▲':'▼'):'⇅'}</span></th>`}).join('')}
-function sortTable(k){if(sortCol===k)sortAsc=!sortAsc;else{sortCol=k;sortAsc=true}renderTable()}
-function toggleRow(i){if(expandedRows.has(i))expandedRows.delete(i);else expandedRows.add(i);renderTable()}
+            <!-- Math Section (Hidden by default) -->
+            <div class="subject-section math-section" data-subject="math" style="display: none;">
+                <div class="subject-header">
+                    <div class="subject-title math">Math Materials</div>
+                    <button type="button" class="remove-subject-btn" data-subject="math">Remove</button>
+                </div>
 
-function renderTable(){
-  const s=document.getElementById('searchInput').value.toLowerCase(),
-    pf=document.getElementById('filterProgram').value,
-    pcf=document.getElementById('filterPC').value,
-    rdpf=document.getElementById('filterRDP').value,
-    uf=document.getElementById('filterUrgent').value,
-    hf=document.getElementById('hideFilled').checked;
-  let f=data.filter(d=>{
-    if(pf&&d.program!==pf)return false;
-    if(pcf&&d.pc!==pcf)return false;
-    if(rdpf&&d.rdp!==rdpf)return false;
-    if(uf==='asap'&&!isUrgent(d))return false;
-    if(hf&&d.needed<=0)return false;
-    if(s){const h=(d.location+d.school+d.subject+d.program+d.notes+d.nonNeg+d.pc+d.rdp).toLowerCase();if(!h.includes(s))return false}
-    return true;
-  });
-  if(sortCol)f.sort((a,b)=>{let va=a[sortCol],vb=b[sortCol];if(typeof va==='number')return sortAsc?va-vb:vb-va;va=(va||'').toString().toLowerCase();vb=(vb||'').toString().toLowerCase();return sortAsc?va.localeCompare(vb):vb.localeCompare(va)});
-  buildTableHead();
-  const tb=document.getElementById('tableBody'),cols=getCols();
-  if(f.length===0){tb.innerHTML=`<tr><td colspan="${cols.length}"><div class="es"><h3>No matching records</h3><p style="color:var(--text-dim);font-size:.85rem">Try adjusting your filters</p></div></td></tr>`;document.getElementById('rowCount').textContent='';return}
-  let html='';
-  f.forEach((d,i)=>{
-    const di=data.indexOf(d);
-    const nc=d.needed>=3?'nh':d.needed>=2?'nm':'nl',
-      mc=d.mode.toLowerCase().includes('virtual')?'m-v':'m-ip',
-      c=progColors[d.program]||'#c8232c',urg=isUrgent(d),
-      ptag=d.fileUrl?`<a href="${d.fileUrl}" target="_blank" class="pt" style="background:${c}11;color:${c}">${d.program}</a>`:`<span class="pt" style="background:${c}11;color:${c}">${d.program}</span>`,
-      const paused=isPaused(d);
-      asapBtn=`<td style="text-align:center">${userRole==='admin'?`<button onclick="toggleAsap(${di})" style="background:${urg?'var(--red)':'transparent'};color:${urg?'white':'var(--text-light)'};border:1px solid ${urg?'var(--red)':'rgba(0,0,0,.12)'};border-radius:100px;padding:3px 8px;font-size:.7rem;cursor:pointer;font-weight:600;transition:all .2s">${urg?'ASAP':'—'}</button>`:urg?'<span style="color:var(--red);font-weight:600;font-size:.7rem">ASAP</span>':'—'}</td><td style="text-align:center">${userRole==='admin'?`<button onclick="togglePause(${di})" style="background:${paused?'var(--text-dim)':'transparent'};color:${paused?'white':'var(--text-light)'};border:1px solid ${paused?'var(--text-dim)':'rgba(0,0,0,.12)'};border-radius:100px;padding:3px 8px;font-size:.7rem;cursor:pointer;font-weight:600;transition:all .2s">${paused?'PAUSED':'—'}</button>`:paused?'<span style="color:var(--text-dim);font-weight:600;font-size:.7rem">PAUSED</span>':'—'}</td>`;
-    if(viewMode==='compact'){
-      html+=`<tr${urg?' class="urgent-row"':''}${paused?' style="opacity:.4"':''}>`;
-      html+=asapBtn;
-      html+=`<td>${ptag}</td><td class="pc-cell">${d.rdp||'—'}</td><td class="pc-cell">${d.pc||'—'}</td>`;
-      html+=`<td style="font-weight:500">${d.school||'—'}</td><td>${d.location||'—'}</td>`;
-      html+=`<td class="${nc}">${d.needed}</td><td>${d.subject||'—'}</td>`;
-      html+=`<td style="min-width:180px">${fmtSched(d)}</td>`;
-      html+=`<td>${fmtStart(d)}</td><td>${d.payRate||'—'}</td>`;
-      html+=`<td><button class="expand-btn" onclick="toggleRow(${i})">${expandedRows.has(i)?'Less':'More'}</button></td></tr>`;
-      if(expandedRows.has(i)){
-        html+=`<tr class="detail-row"><td colspan="${cols.length}"><div class="detail-grid">`;
-        html+=`<div><div class="dg-label">Date Requested</div><div class="dg-val">${d.dateRequested||'—'}</div></div>`;
-        html+=`<div><div class="dg-label">Projected</div><div class="dg-val">${d.projected}</div></div>`;
-        html+=`<div><div class="dg-label">Mode</div><div class="dg-val">${d.mode||'—'}</div></div>`;
-        html+=`<div><div class="dg-label">Certified</div><div class="dg-val">${d.certified||'—'}</div></div>`;
-        html+=`<div><div class="dg-label">Non-Negotiables</div><div class="dg-val">${d.nonNeg||'—'}</div></div>`;
-        html+=`<div><div class="dg-label">Notes</div><div class="dg-val">${d.notes||'—'}</div></div>`;
-        html+=`</div></td></tr>`;
-      }
-    }else{
-      html+=`<tr${urg?' class="urgent-row"':''}${paused?' style="opacity:.4"':''}>`; 
-      html+=asapBtn;
-      html+=`<td>${ptag}</td><td class="pc-cell">${d.rdp||'—'}</td><td class="pc-cell">${d.pc||'—'}</td>`;
-      html+=`<td style="font-weight:500">${d.school||'—'}</td><td>${d.location||'—'}</td>`;
-      html+=`<td>${d.dateRequested||'—'}</td><td>${d.projected}</td><td class="${nc}">${d.needed}</td>`;
-      html+=`<td>${d.subject||'—'}</td><td><span class="mb ${mc}">${d.mode||'—'}</span></td>`;
-      html+=`<td style="min-width:200px">${fmtSched(d)}</td>`;
-      html+=`<td>${fmtStart(d)}</td><td>${d.payRate||'—'}</td>`;
-      html+=`<td>${fmtCert(d.certified)}</td>`;
-      html+=`<td class="notes-cell">${d.nonNeg||'—'}</td><td class="notes-cell">${d.notes||'—'}</td></tr>`;
-    }
-  });
-  tb.innerHTML=html;
-  document.getElementById('rowCount').textContent=`Showing ${f.length} of ${data.length} positions`;
-}
-let needsMap=null,mapMarkers=[],geoCache={},geocoding=false,newGeocodes=0;
+                <!-- Request Type Radio Group -->
+                <div class="form-group request-type-group">
+                    <label class="request-type-label">I want to request worksheets based on:</label>
+                    <div class="request-type-options">
+                        <label class="request-type-option">
+                            <input type="radio" name="mathRequestType" value="code-page" class="request-type-radio">
+                            <span class="request-type-option-content">
+                                <span class="request-type-option-title">Resource Code + Page Number</span>
+                                <span class="request-type-option-desc">I have a specific resource code and page</span>
+                            </span>
+                        </label>
+                        <label class="request-type-option">
+                            <input type="radio" name="mathRequestType" value="state-standard" class="request-type-radio">
+                            <span class="request-type-option-content">
+                                <span class="request-type-option-title">State Standard</span>
+                                <span class="request-type-option-desc">Match materials to a specific standard/benchmark</span>
+                            </span>
+                        </label>
+                        <label class="request-type-option">
+                            <input type="radio" name="mathRequestType" value="booster" class="request-type-radio">
+                            <span class="request-type-option-content">
+                                <span class="request-type-option-title">Booster Skill Package</span>
+                                <span class="request-type-option-desc">Pre-packaged skill bundle by grade band</span>
+                            </span>
+                        </label>
+                    </div>
+                </div>
 
-function cleanAddr(a){return(a||'').replace(/\\n/g,' ').replace(/\n/g,' ').replace(/[\r\t]/g,' ').replace(/\s+/g,' ').trim()}
+                <!-- Pane: Resource Code + Page Number -->
+                <div class="request-type-pane math-pane-code-page" style="display:none;">
+                    <div class="dcl-link-row">
+                        <span>Find resource codes in the </span>
+                        <a href="https://netorgft11829358.sharepoint.com/:x:/s/LIC/IQCF3AspuPw-TpGakPhUZJbkAXuA-46jQBTwI__wl0V65OQ?e=vvRWIQ" target="_blank" class="dcl-link">Digital Curriculum Library</a>
+                    </div>
+                    <div class="code-page-pairs">
+                        <div class="code-page-pair">
+                            <input type="text" name="mathCode[]" placeholder="Resource Code (e.g. MA-K-01)">
+                            <input type="text" name="mathPage[]" placeholder="Page #">
+                        </div>
+                        <div class="code-page-pair">
+                            <input type="text" name="mathCode[]" placeholder="Resource Code (e.g. MA-K-01)">
+                            <input type="text" name="mathPage[]" placeholder="Page #">
+                        </div>
+                        <div class="code-page-pair">
+                            <input type="text" name="mathCode[]" placeholder="Resource Code (e.g. MA-K-01)">
+                            <input type="text" name="mathPage[]" placeholder="Page #">
+                        </div>
+                        <div class="code-page-pair">
+                            <input type="text" name="mathCode[]" placeholder="Resource Code (e.g. MA-K-01)">
+                            <input type="text" name="mathPage[]" placeholder="Page #">
+                        </div>
+                        <div class="code-page-pair">
+                            <input type="text" name="mathCode[]" placeholder="Resource Code (e.g. MA-K-01)">
+                            <input type="text" name="mathPage[]" placeholder="Page #">
+                        </div>
+                    </div>
+                </div>
 
-async function geocodeAddress(addr){
-  const clean=cleanAddr(addr);
-  if(!clean||clean.length<5)return null;
-  if(geoCache[clean]&&geoCache[clean]!=='miss')return geoCache[clean];
-  if(geoCache[clean]==='miss')return null;
-  try{
-    const r=await fetch(`https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${encodeURIComponent(clean)}`,{headers:{'User-Agent':'OOOLDashboard/1.0'}});
-    const j=await r.json();
-    if(j&&j.length>0){const c=[parseFloat(j[0].lat),parseFloat(j[0].lon)];geoCache[clean]=c;newGeocodes++;return c;}
-    const parts=clean.split(',');
-    if(parts.length>=2){
-      const short=parts.slice(-2).join(',').trim();
-      const r2=await fetch(`https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${encodeURIComponent(short)}`,{headers:{'User-Agent':'OOOLDashboard/1.0'}});
-      const j2=await r2.json();
-      if(j2&&j2.length>0){const c=[parseFloat(j2[0].lat),parseFloat(j2[0].lon)];geoCache[clean]=c;newGeocodes++;return c;}
-    }
-    geoCache[clean]='miss';return null;
-  }catch(e){return null;}
-}
+                <!-- Pane: State Standard -->
+                <div class="request-type-pane math-pane-state-standard" style="display:none;">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Math Request Grade</label>
+                            <select name="mathGrade">
+                                <option value="">Select grade for materials</option>
+                                <!-- Grades populated by JavaScript -->
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="math-standards-label">Select Materials (max 4)</label>
+                        <div class="standards-container math-standards">
+                            <p class="empty-state">Select a math grade to see available standards/benchmarks</p>
+                        </div>
+                        <p class="standards-note math-standards-note">Select up to 4 standards/benchmarks</p>
+                    </div>
+                </div>
 
-async function saveGeocache(){}
+                <!-- Pane: Booster Skill Package -->
+                <div class="request-type-pane math-pane-booster" style="display:none;">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Grade Band</label>
+                            <select name="mathBoosterBand">
+                                <option value="">Select a grade band</option>
+                                <option value="K-2">K–2</option>
+                                <option value="3-5">3–5</option>
+                                <option value="6-8">6–8</option>
+                                <option value="HS">9–12</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="booster-packets-label">Select Packets (max 3)</label>
+                        <div class="standards-container booster-packets-container math-booster-packets">
+                            <p class="empty-state">Select a grade band to see available packets</p>
+                        </div>
+                        <p class="standards-note booster-packets-note math-booster-note">Select up to 3 packets</p>
+                    </div>
+                </div>
 
-async function buildMap(){
-  const fd=getFilteredForCharts();
-  const rows=fd.filter(d=>d.needed>0&&d.location);
-  if(!needsMap){
-    needsMap=L.map('needsMap').setView([37.5,-96],4);
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{
-      attribution:'&copy; OpenStreetMap &copy; CARTO',maxZoom:18
-    }).addTo(needsMap);
-  }
-  mapMarkers.forEach(m=>needsMap.removeLayer(m));
-  mapMarkers=[];
-  if(rows.length===0){document.getElementById('mapStatus').textContent='No locations with needs';return;}
-  const mapStatus=document.getElementById('mapStatus');
-  const bounds=[];
-  let placed=0,uncached=[];
-  rows.forEach(d=>{
-    const loc=cleanAddr(d.location);
-    if(!loc||loc.length<5||loc.toLowerCase()==='all schools'||loc.toLowerCase().includes('substitute'))return;
-    const cached=geoCache[loc];
-    if(cached&&cached!=='miss'&&Array.isArray(cached)){
-      addMapMarker(d,cached);bounds.push(cached);placed++;
-    }else if(!cached){
-      uncached.push({d,loc});
-    }
-  });
-  if(mapStatus)mapStatus.textContent=placed>0?`${placed} locations mapped`+(uncached.length>0?`, geocoding ${uncached.length} new...`:''):`Geocoding ${uncached.length} locations...`;
-  if(bounds.length>1)needsMap.fitBounds(bounds,{padding:[30,30]});
-  else if(bounds.length===1)needsMap.setView(bounds[0],10);
-  if(uncached.length>0){
-    if(mapStatus)mapStatus.textContent=`${placed} locations mapped (${uncached.length} not in geocache)`;
-  }
-}
+                <!-- Not Found Checkbox -->
+                <div class="form-group not-found-group">
+                    <label class="not-found-checkbox-label">
+                        <input type="checkbox" name="mathNotFound" class="not-found-checkbox">
+                        <span>I wasn't able to find what I needed</span>
+                    </label>
+                    <div class="not-found-extra" style="display:none;">
+                        <textarea name="mathNotFoundNote" rows="2" placeholder="Enter grade and materials you were looking for..."></textarea>
+                    </div>
+                </div>
+            </div>
 
-async function toggleAsap(idx){
-  const d=data[idx];if(!d)return;
-  const key=getRowKey(d);
-  if(asapFlags[key])delete asapFlags[key];else asapFlags[key]=true;
-  buildCards();buildCharts();renderTable();buildMap();
-  saveAsapFlags();
-}
-let asapSha='';
-async function saveAsapFlags(){
-  const tk=getGHToken();
-  try{
-    const gr=await fetch(`https://api.github.com/repos/${GH_REPO}/contents/asap-flags.json`,{headers:{'Authorization':'Bearer '+tk,'Accept':'application/vnd.github.v3+json','User-Agent':'OOOLDashboard'}});
-    if(gr.ok){const gj=await gr.json();asapSha=gj.sha||'';}
-    const body={message:'Update ASAP flags',content:btoa(unescape(encodeURIComponent(JSON.stringify(asapFlags,null,2))))};
-    if(asapSha)body.sha=asapSha;
-    const pr=await fetch(`https://api.github.com/repos/${GH_REPO}/contents/asap-flags.json`,{
-      method:'PUT',headers:{'Authorization':'Bearer '+tk,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json','User-Agent':'OOOLDashboard'},
-      body:JSON.stringify(body)
-    });
-    if(pr.ok){const pj=await pr.json();asapSha=pj.content?.sha||'';}
-  }catch(e){console.log('ASAP save error:',e)}
-}
-function addMapMarker(d,coords){
-  const r=Math.max(8,Math.min(25,d.needed*6));
-  const color=d.needed>=3?'#c8232c':d.needed>=2?'#d4930d':'#3b6eb5';
-  const circle=L.circleMarker(coords,{
-    radius:r,fillColor:color,color:color,weight:1.5,opacity:.9,fillOpacity:.3
-  }).addTo(needsMap);
-  circle.bindPopup(`<strong>${d.school||'Unknown'}</strong><br><span style="color:#666">${d.program}</span><br><strong>${d.needed}</strong> tutor${d.needed>1?'s':''} needed<br><small>${d.subject||''}</small><br><small>${d.location}</small>`);
-  mapMarkers.push(circle);
-}
+            <!-- ELA Section (Hidden by default) -->
+            <div class="subject-section ela-section" data-subject="ela" style="display: none;">
+                <div class="subject-header">
+                    <div class="subject-title ela">ELA Materials</div>
+                    <button type="button" class="remove-subject-btn" data-subject="ela">Remove</button>
+                </div>
 
-async function togglePause(idx){
-  const d=data[idx];
-  const key=getRowKey(d);
-  if(pauseFlags[key])delete pauseFlags[key];else pauseFlags[key]=true;
-  buildCards();buildCharts();renderTable();buildPending();buildMap();
-  savePauseFlags();
-}
+                <!-- Request Type Radio Group -->
+                <div class="form-group request-type-group">
+                    <label class="request-type-label">I want to request worksheets based on:</label>
+                    <div class="request-type-options">
+                        <label class="request-type-option">
+                            <input type="radio" name="elaRequestType" value="code-page" class="request-type-radio">
+                            <span class="request-type-option-content">
+                                <span class="request-type-option-title">Resource Code + Page Number</span>
+                                <span class="request-type-option-desc">I have a specific resource code and page</span>
+                            </span>
+                        </label>
+                        <label class="request-type-option">
+                            <input type="radio" name="elaRequestType" value="state-standard" class="request-type-radio">
+                            <span class="request-type-option-content">
+                                <span class="request-type-option-title">State Standard</span>
+                                <span class="request-type-option-desc">Match materials to a specific standard/benchmark</span>
+                            </span>
+                        </label>
+                        <label class="request-type-option">
+                            <input type="radio" name="elaRequestType" value="booster" class="request-type-radio">
+                            <span class="request-type-option-content">
+                                <span class="request-type-option-title">Booster Skill Package</span>
+                                <span class="request-type-option-desc">Pre-packaged skill bundle by grade band</span>
+                            </span>
+                        </label>
+                    </div>
+                </div>
 
-let pauseSha='';
-async function savePauseFlags(){
-  const tk=getGHToken();
-  try{
-    const gr=await fetch(`https://api.github.com/repos/${GH_REPO}/contents/pause-flags.json`,{headers:{'Authorization':'Bearer '+tk,'Accept':'application/vnd.github.v3+json','User-Agent':'OOOLDashboard'}});
-    if(gr.ok){const gj=await gr.json();pauseSha=gj.sha||'';}
-    const body={message:'Update pause flags',content:btoa(unescape(encodeURIComponent(JSON.stringify(pauseFlags,null,2))))};
-    if(pauseSha)body.sha=pauseSha;
-    const pr=await fetch(`https://api.github.com/repos/${GH_REPO}/contents/pause-flags.json`,{
-      method:'PUT',headers:{'Authorization':'Bearer '+tk,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json','User-Agent':'OOOLDashboard'},
-      body:JSON.stringify(body)
-    });
-    if(pr.ok){const pj=await pr.json();pauseSha=pj.content?.sha||'';}
-  }catch(e){console.log('Pause save error:',e)}
-}
+                <!-- Pane: Resource Code + Page Number -->
+                <div class="request-type-pane ela-pane-code-page" style="display:none;">
+                    <div class="dcl-link-row">
+                        <span>Find resource codes in the </span>
+                        <a href="https://netorgft11829358.sharepoint.com/:x:/s/LIC/IQCF3AspuPw-TpGakPhUZJbkAXuA-46jQBTwI__wl0V65OQ?e=vvRWIQ" target="_blank" class="dcl-link">Digital Curriculum Library</a>
+                    </div>
+                    <div class="code-page-pairs">
+                        <div class="code-page-pair">
+                            <input type="text" name="elaCode[]" placeholder="Resource Code (e.g. ELA-K-01)">
+                            <input type="text" name="elaPage[]" placeholder="Page #">
+                        </div>
+                        <div class="code-page-pair">
+                            <input type="text" name="elaCode[]" placeholder="Resource Code (e.g. ELA-K-01)">
+                            <input type="text" name="elaPage[]" placeholder="Page #">
+                        </div>
+                        <div class="code-page-pair">
+                            <input type="text" name="elaCode[]" placeholder="Resource Code (e.g. ELA-K-01)">
+                            <input type="text" name="elaPage[]" placeholder="Page #">
+                        </div>
+                        <div class="code-page-pair">
+                            <input type="text" name="elaCode[]" placeholder="Resource Code (e.g. ELA-K-01)">
+                            <input type="text" name="elaPage[]" placeholder="Page #">
+                        </div>
+                        <div class="code-page-pair">
+                            <input type="text" name="elaCode[]" placeholder="Resource Code (e.g. ELA-K-01)">
+                            <input type="text" name="elaPage[]" placeholder="Page #">
+                        </div>
+                    </div>
+                </div>
 
-function getPendingCount(){
-  const rdpf=document.getElementById('filterRDP')?.value||'';
-  const pf=document.getElementById('filterProgram')?.value||'';
-  let filtered=pendingData;
-  if(rdpf)filtered=filtered.filter(p=>rdpMap[p.program]===rdpf);
-  if(pf)filtered=filtered.filter(p=>p.program===pf);
-  if(userRole==='rdp'&&userRdp)filtered=filtered.filter(p=>rdpMap[p.program]===userRdp);
-  return filtered.length;
-}
+                <!-- Pane: State Standard -->
+                <div class="request-type-pane ela-pane-state-standard" style="display:none;">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>ELA Request Grade</label>
+                            <select name="elaGrade">
+                                <option value="">Select grade for materials</option>
+                                <!-- Grades populated by JavaScript -->
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="ela-standards-label">Select Materials (max 4)</label>
+                        <div class="standards-container ela-standards">
+                            <p class="empty-state">Select an ELA grade to see available standards/benchmarks</p>
+                        </div>
+                        <p class="standards-note ela-standards-note">Select up to 4 standards/benchmarks</p>
+                    </div>
+                </div>
 
-function buildPending(){
-  const rdpf=document.getElementById('filterRDP')?.value||'';
-  const pf=document.getElementById('filterProgram')?.value||'';
-  let filtered=pendingData;
-  if(rdpf)filtered=filtered.filter(p=>rdpMap[p.program]===rdpf);
-  if(pf)filtered=filtered.filter(p=>p.program===pf);
-  if(userRole==='rdp'&&userRdp)filtered=filtered.filter(p=>rdpMap[p.program]===userRdp);
-  const grouped={};
-  filtered.forEach(p=>{grouped[p.program]=(grouped[p.program]||0)+1});
-  const entries=Object.entries(grouped).sort((a,b)=>b[1]-a[1]);
-  const total=entries.reduce((s,e)=>s+e[1],0);
-  document.getElementById('pendingCount').textContent=total;
-  const tb=document.getElementById('pendingTableBody');
-  const empty=document.getElementById('pendingEmpty');
-  if(entries.length===0){tb.innerHTML='';empty.style.display='block';return;}
-  empty.style.display='none';
-  tb.innerHTML=entries.map(([prog,cnt])=>`<tr style="border-bottom:1px solid rgba(0,0,0,.04)"><td style="padding:8px 12px">${prog}</td><td style="text-align:center;padding:8px 12px"><span style="background:var(--amber-dim);color:var(--amber);padding:2px 10px;border-radius:100px;font-weight:600;font-size:.85rem">${cnt}</span></td></tr>`).join('');
-}
+                <!-- Pane: Booster Skill Package -->
+                <div class="request-type-pane ela-pane-booster" style="display:none;">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Grade Band</label>
+                            <select name="elaBoosterBand">
+                                <option value="">Select a grade band</option>
+                                <option value="K-2">K–2</option>
+                                <option value="3-5">3–5</option>
+                                <option value="6-8">6–8</option>
+                                <option value="HS">9–12</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="booster-packets-label">Select Packets (max 3)</label>
+                        <div class="standards-container booster-packets-container ela-booster-packets">
+                            <p class="empty-state">Select a grade band to see available packets</p>
+                        </div>
+                        <p class="standards-note booster-packets-note ela-booster-note">Select up to 3 packets</p>
+                    </div>
+                </div>
 
-// loadData called after auth via initAuth
-</script>
+                <!-- Not Found Checkbox -->
+                <div class="form-group not-found-group">
+                    <label class="not-found-checkbox-label">
+                        <input type="checkbox" name="elaNotFound" class="not-found-checkbox">
+                        <span>I wasn't able to find what I needed</span>
+                    </label>
+                    <div class="not-found-extra" style="display:none;">
+                        <textarea name="elaNotFoundNote" rows="2" placeholder="Enter grade and materials you were looking for..."></textarea>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </template>
+
+    <!-- Success Modal -->
+    <div id="success-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <div class="modal-icon">&#10003;</div>
+            <h2>Request Submitted!</h2>
+            <p>Your material request has been successfully submitted.</p>
+            <p class="request-id">Request ID: <span id="request-id"></span></p>
+            <button class="btn btn-primary" id="close-modal">Close</button>
+        </div>
+    </div>
+
+    <!-- Constants from index folder -->
+    <script src="index/programcoordinators.js"></script>
+    <script src="index/standards.js"></script>
+    <script src="index/boosters.js"></script>
+    <!-- Main application script -->
+    <script src="script.js"></script>
 </body>
 </html>
