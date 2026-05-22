@@ -514,6 +514,59 @@ $('btn-save-status').addEventListener('click', async () => {
     }
 });
 
+// ── Delete Request ───────────────────────────────────────────────────
+$('btn-delete-request').addEventListener('click', async () => {
+    if (selectedId === null) return;
+
+    const req = allRequests.find(r => r.id === selectedId);
+    if (!req) return;
+
+    const confirmed = window.confirm(
+        `Delete request ${req.requestId} from ${req.tutorName}?\n\nThis cannot be undone.`
+    );
+    if (!confirmed) return;
+
+    const btn = $('btn-delete-request');
+    btn.disabled    = true;
+    btn.textContent = '...';
+
+    try {
+        await deleteRequest(selectedId);
+        allRequests = allRequests.filter(r => r.id !== selectedId);
+        selectedId  = null;
+        updateCounts();
+        renderList();
+        $('detail-view').classList.add('hidden');
+        $('detail-empty').classList.remove('hidden');
+    } catch (err) {
+        console.error('Delete failed:', err);
+        btn.textContent      = 'Failed';
+        btn.style.background = '#991b1b';
+        setTimeout(() => {
+            btn.textContent      = 'Delete';
+            btn.style.background = '';
+            btn.disabled         = false;
+        }, 2000);
+    }
+});
+
+async function deleteRequest(itemId) {
+    const account = msalInstance.getAllAccounts()[0];
+    const token   = await getToken(account);
+    const url     = `${SP_SITE}/_api/web/lists/getbytitle('${activeListName}')/items(${itemId})`;
+
+    const res = await fetch(url, {
+        method: 'DELETE',
+        headers: {
+            Authorization: `Bearer ${token}`,
+            Accept:        'application/json;odata=nometadata',
+            'IF-MATCH':    '*'
+        }
+    });
+
+    if (!res.ok && res.status !== 204) throw new Error(`HTTP ${res.status}`);
+}
+
 // ── School Year Selector ─────────────────────────────────────────────
 function populateYearSelector() {
     const sel = $('year-selector');

@@ -162,6 +162,21 @@ body {
 .btn-primary:active { transform: scale(0.97); }
 .btn-primary.btn-sm { padding: 0.4rem 0.85rem; font-size: 0.8rem; }
 
+.btn-danger {
+    background:    #991b1b;
+    color:         #fff;
+    border:        none;
+    border-radius: var(--radius);
+    padding:       0.55rem 1.1rem;
+    font-size:     0.875rem;
+    font-weight:   600;
+    cursor:        pointer;
+    transition:    background 0.15s, transform 0.1s;
+}
+.btn-danger:hover  { background: #7f1d1d; }
+.btn-danger:active { transform: scale(0.97); }
+.btn-danger.btn-sm { padding: 0.4rem 0.85rem; font-size: 0.8rem; }
+
 .btn-ghost {
     background:    var(--glass);
     backdrop-filter: var(--blur);
