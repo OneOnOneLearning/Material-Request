@@ -88,6 +88,7 @@ let activeFilter = 'all';
 let activePCFilter = 'all';
 let searchQuery  = '';
 let selectedId   = null;
+let exportIds    = new Set();
 
 // ── Element refs ─────────────────────────────────────────────────────
 const $ = id => document.getElementById(id);
@@ -311,22 +312,40 @@ function renderList() {
 
     emptyEl.classList.add('hidden');
     listEl.innerHTML = items.map(r => `
-        <div class="request-item ${r.id === selectedId ? 'selected' : ''}" data-id="${r.id}">
-            <div class="item-row1">
-                <span class="item-tutor">${esc(r.tutorName)}</span>
-                ${badge(r.status)}
+        <div class="request-item ${r.id === selectedId ? 'selected' : ''} ${exportIds.has(r.id) ? 'export-checked' : ''}" data-id="${r.id}">
+            <div class="item-cb-wrap">
+                <input type="checkbox" class="item-cb" data-id="${r.id}" ${exportIds.has(r.id) ? 'checked' : ''}>
             </div>
-            <div class="item-row2">
-                <span class="item-school">${esc(r.school)}</span>
-                <span class="item-date">${formatDate(r.submittedAt)}</span>
+            <div class="item-content">
+                <div class="item-row1">
+                    <span class="item-tutor">${esc(r.tutorName)}</span>
+                    ${badge(r.status)}
+                </div>
+                <div class="item-row2">
+                    <span class="item-school">${esc(r.school)}</span>
+                    <span class="item-date">${formatDate(r.submittedAt)}</span>
+                </div>
+                <div class="item-meta">${r.studentCount} student${r.studentCount !== 1 ? 's' : ''}</div>
             </div>
-            <div class="item-meta">${r.studentCount} student${r.studentCount !== 1 ? 's' : ''}</div>
         </div>
     `).join('');
 
     listEl.querySelectorAll('.request-item').forEach(el => {
         el.addEventListener('click', () => selectRequest(parseInt(el.dataset.id)));
     });
+
+    listEl.querySelectorAll('.item-cb').forEach(cb => {
+        cb.addEventListener('click', e => e.stopPropagation());
+        cb.addEventListener('change', e => {
+            const id = parseInt(cb.dataset.id);
+            if (cb.checked) exportIds.add(id); else exportIds.delete(id);
+            const item = cb.closest('.request-item');
+            item.classList.toggle('export-checked', cb.checked);
+            updateExportBar();
+        });
+    });
+
+    updateExportBar();
 }
 
 function selectRequest(id) {
@@ -717,6 +736,80 @@ async function triggerCompletionNotification(req) {
         console.error('Completion notification failed:', err);
     }
 }
+
+// ── Export ───────────────────────────────────────────────────────────
+function updateExportBar() {
+    const btn      = $('btn-export');
+    const selectCb = $('cb-select-all');
+    const visible  = getFiltered().map(r => r.id);
+    const n        = exportIds.size;
+
+    btn.textContent = n > 0 ? `⬇ Export (${n})` : '⬇ Export All';
+
+    const allChecked  = visible.length > 0 && visible.every(id => exportIds.has(id));
+    const someChecked = visible.some(id => exportIds.has(id));
+    selectCb.checked       = allChecked;
+    selectCb.indeterminate = !allChecked && someChecked;
+}
+
+function csvCell(value) {
+    return `"${String(value || '').replace(/"/g, '""')}"`;
+}
+
+function exportToCSV() {
+    const items = exportIds.size > 0
+        ? allRequests.filter(r => exportIds.has(r.id))
+        : getFiltered();
+
+    if (items.length === 0) return;
+
+    const headers = [
+        'Request ID', 'Date Submitted', 'Status',
+        'Tutor Name', 'Tutor Email', 'School', 'State', 'Program Coordinator',
+        '# of Students', 'Math Materials Requested', 'ELA Materials Requested', 'Notes'
+    ];
+
+    const rows = items.map(r => [
+        r.requestId,
+        r.submittedAt,
+        r.status,
+        r.tutorName,
+        r.tutorEmail,
+        r.school,
+        r.state,
+        r.coordinator,
+        r.studentCount,
+        r.mathSummary,
+        r.elaSummary,
+        r.notes
+    ]);
+
+    const csv = [headers, ...rows]
+        .map(row => row.map(cell => csvCell(cell)).join(','))
+        .join('\r\n');
+
+    const blob = new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8;' });
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement('a');
+    a.href     = url;
+    a.download = `Material-Requests-${new Date().toISOString().slice(0, 10)}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
+
+$('btn-export').addEventListener('click', exportToCSV);
+
+$('cb-select-all').addEventListener('change', e => {
+    const visible = getFiltered().map(r => r.id);
+    if (e.target.checked) {
+        visible.forEach(id => exportIds.add(id));
+    } else {
+        visible.forEach(id => exportIds.delete(id));
+    }
+    renderList();
+});
 
 // ── Auto-start ───────────────────────────────────────────────────────
 initMsal();
