@@ -858,18 +858,18 @@ function collectFormData() {
     // Get overall request notes
     const requestNotes = document.getElementById('request-notes').value;
 
-    // Build readable summaries for SharePoint list view
+    // Build readable summaries for SharePoint list view (plain text)
     const studentsSummary = students.length > 0
-        ? students.map(s => `• <strong>${s.name}</strong> (${s.currentGrade || '—'})`).join('<br>')
+        ? students.map(s => `• ${s.name} (${s.currentGrade || '—'})`).join('\n')
         : '';
 
-    // Build detailed Math summary (HTML for email rendering)
+    // Build detailed Math summary (plain text — PA email converts \n to <br>)
     const mathList = students.map(s => buildSubjectSummaryLine(s.name, s.math)).filter(Boolean);
-    const mathSummary = mathList.join('<br><br>');
+    const mathSummary = mathList.join('\n\n');
 
-    // Build detailed ELA summary (HTML for email rendering)
+    // Build detailed ELA summary
     const elaList = students.map(s => buildSubjectSummaryLine(s.name, s.ela)).filter(Boolean);
-    const elaSummary = elaList.join('<br><br>');
+    const elaSummary = elaList.join('\n\n');
 
     const formData = {
         requestId: generateRequestId(),
@@ -965,7 +965,7 @@ function collectSubjectData(card, subject) {
 function buildSubjectSummaryLine(studentName, subjectData) {
     if (!subjectData || !subjectData.requestType) return null;
 
-    const lines = [`<strong>${studentName}</strong>`];
+    const lines = [studentName];
 
     if (subjectData.requestType === 'code-page') {
         lines.push('Request Type: Code + Page Number');
@@ -994,7 +994,7 @@ function buildSubjectSummaryLine(studentName, subjectData) {
         lines.push(`Not found: ${subjectData.notFoundNote}`);
     }
 
-    return lines.join('<br>');
+    return lines.join('\n');
 }
 
 // Power Automate Flow URL
