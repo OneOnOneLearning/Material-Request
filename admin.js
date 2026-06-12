@@ -31,6 +31,7 @@ const SP_SITE = 'https://netorgft11829358.sharepoint.com/sites/MaterialRequests'
 //      (copy the columns from the old list)
 //   3. Add a new entry at the TOP of SCHOOL_YEARS below
 const SCHOOL_YEARS = [
+    { label: '2026–2027', listName: 'Material Requests 2026-2027' },
     { label: '2025–2026', listName: 'Material Requests 2025-2026' },
 ];
 
