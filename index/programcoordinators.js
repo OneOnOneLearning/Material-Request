@@ -10,17 +10,15 @@
  */
 
 const PROGRAM_COORDINATORS = [
-    { name: "Amber Barnes", email: "abarnes@oneononelearning.com" },
     { name: "Christine Simo", email: "csimo@oneononelearning.com" },
     { name: "Cristina Morejon", email: "cmorejon@oneononelearning.com" },
     { name: "Eli Coenen", email: "ecoenen@oneononelearning.com" },
     { name: "Ester Solano", email: "esolano@oneononelearning.com" },
     { name: "Gabbrielle Pinder", email: "gpinder@oneononelearning.com" },
     { name: "Gayle Thurston", email: "gthurston@oneononelearning.com" },
-    { name: "Giselle Lujan", email: "glujan@oneononelearning.com" },    
+    { name: "Giselle Lujan", email: "glujan@oneononelearning.com" },
     { name: "Gretchen Ruiz", email: "gruizvazquez@oneononelearning.com" },
     { name: "James Justice", email: "jjustice@oneononelearning.com" },
-    { name: "Katia Almeida", email: "kalmeida@oneononelearning.com" },
     { name: "Kelly Pippin", email: "kpippin@oneononelearning.com" },
     { name: "Margiet Zuniga", email: "mhernandez@oneononelearning.com" },
     { name: "Susan Nguyen", email: "snguyen@oneononelearning.com" },
