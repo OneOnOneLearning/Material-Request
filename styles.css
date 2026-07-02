@@ -414,6 +414,38 @@ textarea {
     color: var(--ela-color);
 }
 
+/* Framework Picker */
+.framework-picker {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.framework-btn {
+    flex: 1;
+    padding: 0.5rem 0.75rem;
+    border: 2px solid var(--border-color);
+    border-radius: var(--border-radius);
+    background: transparent;
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: var(--transition);
+    text-align: center;
+}
+
+.framework-btn:hover {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+.framework-btn.active {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+    color: #ffffff;
+}
+
 /* Standards Checkboxes */
 .standards-container {
     display: grid;

@@ -335,6 +335,14 @@ function addStudent() {
             renderBoosterPackets(card, subject, e.target.value);
         });
 
+        // Framework picker buttons
+        const frameworkPane = card.querySelector(`.${subject}-pane-state-standard`);
+        if (frameworkPane) {
+            frameworkPane.querySelectorAll('.framework-btn').forEach(btn => {
+                btn.addEventListener('click', () => handleFrameworkChange(card, subject, btn));
+            });
+        }
+
         // Not-found checkbox
         const notFoundCb = card.querySelector(`input[name="${subject}NotFound"]`);
         const notFoundExtra = notFoundCb.closest('.not-found-group').querySelector('.not-found-extra');
@@ -389,6 +397,14 @@ function hideSubjectSection(card, subject) {
     // Reset grade select
     const gradeSelect = section.querySelector(`select[name="${subject}Grade"]`);
     if (gradeSelect) gradeSelect.value = '';
+
+    // Reset framework picker to Florida (default)
+    const frameworkPane = section.querySelector(`.${subject}-pane-state-standard`);
+    if (frameworkPane) {
+        frameworkPane.querySelectorAll('.framework-btn').forEach((btn, i) => {
+            btn.classList.toggle('active', i === 0);
+        });
+    }
 
     // Reset standards container
     const standardsContainer = section.querySelector(`.${subject}-standards`);
@@ -508,16 +524,8 @@ function handleRequestTypeChange(card, subject, type) {
  * @param {string} grade - The selected grade
  */
 function handleGradeChange(card, subject, grade) {
-    const state = stateSelect.value;
     const container = card.querySelector(`.${subject}-standards`);
     const noteElement = card.querySelector(`.${subject}-standards-note`);
-
-    if (!state) {
-        container.innerHTML = '<p class="empty-state">Please select a state first</p>';
-        container.classList.remove('has-type-toggle');
-        noteElement.textContent = 'Select up to 4 items';
-        return;
-    }
 
     if (!grade) {
         container.innerHTML = `<p class="empty-state">Select ${subject === 'math' ? 'a math' : 'an ELA'} grade to see available options</p>`;
@@ -526,8 +534,19 @@ function handleGradeChange(card, subject, grade) {
         return;
     }
 
-    const data = getStandardsData(state, subject, grade);
-    const framework = getStandardsFramework(state);
+    // Determine which framework is active from the picker buttons
+    const pane = card.querySelector(`.${subject}-pane-state-standard`);
+    const activeFrameworkBtn = pane ? pane.querySelector('.framework-btn.active') : null;
+    const framework = activeFrameworkBtn ? activeFrameworkBtn.dataset.framework : 'florida';
+
+    let data, frameworkLabel;
+    if (framework === 'common-core') {
+        data = getCCStandardsData(subject, grade);
+        frameworkLabel = 'Common Core';
+    } else {
+        data = getStandardsData('FL', subject, grade);
+        frameworkLabel = getStandardsFramework('FL');
+    }
 
     // State Standard pane always shows standards only (no skills toggle)
     container.classList.remove('has-type-toggle');
@@ -547,7 +566,34 @@ function handleGradeChange(card, subject, grade) {
         return;
     }
 
-    renderItemsInto(container, noteElement, items, true, card, subject, framework);
+    renderItemsInto(container, noteElement, items, true, card, subject, frameworkLabel);
+}
+
+/**
+ * Handle framework picker button click — switch between Florida and Common Core
+ * @param {HTMLElement} card - The student card
+ * @param {string} subject - 'math' or 'ela'
+ * @param {HTMLElement} btn - The clicked framework button
+ */
+function handleFrameworkChange(card, subject, btn) {
+    const pane = card.querySelector(`.${subject}-pane-state-standard`);
+    pane.querySelectorAll('.framework-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    // Clear the standards container
+    const container = card.querySelector(`.${subject}-standards`);
+    const noteElement = card.querySelector(`.${subject}-standards-note`);
+    const labelEl = card.querySelector(`.${subject}-standards-label`);
+    container.innerHTML = `<p class="empty-state">Select ${subject === 'math' ? 'a math' : 'an ELA'} grade to see available standards/benchmarks</p>`;
+    container.classList.remove('has-type-toggle');
+    noteElement.textContent = 'Select up to 4 standards/benchmarks';
+    if (labelEl) labelEl.textContent = 'Select Materials (max 4)';
+
+    // Re-render if a grade is already selected
+    const gradeSelect = card.querySelector(`select[name="${subject}Grade"]`);
+    if (gradeSelect && gradeSelect.value) {
+        handleGradeChange(card, subject, gradeSelect.value);
+    }
 }
 
 /**
@@ -645,6 +691,9 @@ function renderItemsInto(itemsContainer, noteElement, items, isStandards, card, 
         }).join('');
         noteElement.textContent = `Select up to 4 skills`;
     }
+
+    // Store framework label so enforceMaxStandards can display it
+    itemsContainer._frameworkLabel = framework || '';
 
     // Enforce max selection within this items container
     const checkboxes = itemsContainer.querySelectorAll('input[type="checkbox"]');
@@ -774,9 +823,9 @@ function enforceMaxStandards(container, noteElement, isStandards = true, max = M
     if (checkedCount >= max) {
         noteElement.innerHTML = `<span class="max-reached">Maximum ${max} ${itemType} selected</span>`;
     } else {
-        const framework = getStandardsFramework(stateSelect.value);
+        const frameworkLabel = container._frameworkLabel || getStandardsFramework(stateSelect.value);
         if (isStandards) {
-            noteElement.textContent = `${checkedCount}/${max} standards selected (${framework})`;
+            noteElement.textContent = `${checkedCount}/${max} standards selected (${frameworkLabel})`;
         } else {
             noteElement.textContent = `${checkedCount}/${max} packets selected`;
         }
@@ -944,7 +993,10 @@ function collectSubjectData(card, subject) {
     if (requestType === 'state-standard') {
         const grade = (section.querySelector(`select[name="${subject}Grade"]`) || {}).value || '';
         const standards = getSelectedStandards(card, subject);
-        return { requestType, requestGrade: grade, standards, notFound, notFoundNote };
+        const ssPane = section.querySelector(`.${subject}-pane-state-standard`);
+        const activeFrameworkBtn = ssPane ? ssPane.querySelector('.framework-btn.active') : null;
+        const framework = activeFrameworkBtn && activeFrameworkBtn.dataset.framework === 'common-core' ? 'common-core' : 'florida';
+        return { requestType, requestGrade: grade, standards, framework, notFound, notFoundNote };
     }
 
     if (requestType === 'booster') {
@@ -975,7 +1027,8 @@ function buildSubjectSummaryLine(studentName, subjectData) {
             });
         }
     } else if (subjectData.requestType === 'state-standard') {
-        lines.push(`Request Type: State Standard (${subjectData.requestGrade || '—'})`);
+        const frameworkLabel = subjectData.framework === 'common-core' ? 'Common Core Standards' : 'Florida Standards';
+        lines.push(`Request Type: ${frameworkLabel} (${subjectData.requestGrade || '—'})`);
         if (subjectData.standards && subjectData.standards.length > 0) {
             subjectData.standards.forEach(st => {
                 if (st.description) {
