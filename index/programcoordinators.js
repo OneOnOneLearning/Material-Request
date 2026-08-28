@@ -10,10 +10,8 @@
  */
 
 const PROGRAM_COORDINATORS = [
-    { name: "Christine Simo", email: "csimo@oneononelearning.com" },
     { name: "Cristina Morejon", email: "cmorejon@oneononelearning.com" },
     { name: "Eli Coenen", email: "ecoenen@oneononelearning.com" },
-    { name: "Ester Solano", email: "esolano@oneononelearning.com" },
     { name: "Gabbrielle Pinder", email: "gpinder@oneononelearning.com" },
     { name: "Gayle Thurston", email: "gthurston@oneononelearning.com" },
     { name: "Giselle Lujan", email: "glujan@oneononelearning.com" },
