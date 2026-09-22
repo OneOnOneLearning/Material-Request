@@ -757,10 +757,7 @@ function escHtml(str) {
 }
 
 function buildStandardsGroupSection(items) {
-    // Gather all standards across all students across all requests
-    // Returns HTML string for the "grouped overview" section
-    const mathMap = {};
-    const elaMap  = {};
+    const maps = { mathStd: {}, elaStd: {}, mathCP: {}, elaCP: {} };
 
     items.forEach(req => {
         let students = [];
@@ -768,19 +765,29 @@ function buildStandardsGroupSection(items) {
         students.forEach(s => {
             ['math','ela'].forEach(subj => {
                 const d = s[subj];
-                if (!d || d.requestType !== 'state-standard') return;
-                const map = subj === 'math' ? mathMap : elaMap;
-                (d.standards || []).forEach(std => {
-                    const key = std.code || std.description || '';
-                    if (!key) return;
-                    if (!map[key]) map[key] = { code: std.code || '', desc: std.description || '', count: 0 };
-                    map[key].count++;
-                });
+                if (!d) return;
+                if (d.requestType === 'state-standard') {
+                    const map = subj === 'math' ? maps.mathStd : maps.elaStd;
+                    (d.standards || []).forEach(std => {
+                        const key = std.code || std.description || '';
+                        if (!key) return;
+                        if (!map[key]) map[key] = { code: std.code || '', desc: std.description || '', count: 0 };
+                        map[key].count++;
+                    });
+                } else if (d.requestType === 'code-page') {
+                    const map = subj === 'math' ? maps.mathCP : maps.elaCP;
+                    (d.codePairs || []).forEach(p => {
+                        const key = `${p.code || ''}||${p.page || ''}`;
+                        if (key === '||') return;
+                        if (!map[key]) map[key] = { code: p.code || '', page: p.page || '', count: 0 };
+                        map[key].count++;
+                    });
+                }
             });
         });
     });
 
-    function groupRows(map) {
+    function stdRows(map) {
         return Object.values(map)
             .sort((a,b) => b.count - a.count)
             .map(s => `<tr>
@@ -790,30 +797,53 @@ function buildStandardsGroupSection(items) {
             </tr>`).join('');
     }
 
-    const mathRows = groupRows(mathMap);
-    const elaRows  = groupRows(elaMap);
-    if (!mathRows && !elaRows) return '';
+    function cpRows(map) {
+        return Object.values(map)
+            .sort((a,b) => b.count - a.count)
+            .map(s => `<tr>
+                <td class="std-code">${escHtml(s.code)}</td>
+                <td>Page ${escHtml(s.page)}</td>
+                <td class="std-count"><span class="badge">${s.count}</span></td>
+            </tr>`).join('');
+    }
 
-    return `
+    const mathStdRows = stdRows(maps.mathStd);
+    const elaStdRows  = stdRows(maps.elaStd);
+    const mathCPRows  = cpRows(maps.mathCP);
+    const elaCPRows   = cpRows(maps.elaCP);
+
+    if (!mathStdRows && !elaStdRows && !mathCPRows && !elaCPRows) return '';
+
+    function col(title, rows, headers) {
+        if (!rows) return '';
+        return `<div class="group-col">
+            <h3>${title}</h3>
+            <table class="std-table">
+                <thead><tr>${headers.map(h=>`<th>${h}</th>`).join('')}</tr></thead>
+                <tbody>${rows}</tbody>
+            </table>
+        </div>`;
+    }
+
+    const stdSection = (mathStdRows || elaStdRows) ? `
     <section class="group-section">
         <h2>Standards Overview — All Selected Requests</h2>
         <div class="group-cols">
-            ${mathRows ? `<div class="group-col">
-                <h3>Math Standards</h3>
-                <table class="std-table">
-                    <thead><tr><th>Code</th><th>Standard</th><th>#</th></tr></thead>
-                    <tbody>${mathRows}</tbody>
-                </table>
-            </div>` : ''}
-            ${elaRows ? `<div class="group-col">
-                <h3>ELA Standards</h3>
-                <table class="std-table">
-                    <thead><tr><th>Code</th><th>Standard</th><th>#</th></tr></thead>
-                    <tbody>${elaRows}</tbody>
-                </table>
-            </div>` : ''}
+            ${col('Math Standards', mathStdRows, ['Code','Standard','#'])}
+            ${col('ELA Standards', elaStdRows, ['Code','Standard','#'])}
         </div>
-    </section>`;
+    </section>` : '';
+
+    const cpSection = (mathCPRows || elaCPRows) ? `
+    <section class="group-section">
+        <h2>Specific Code / Page Overview — All Selected Requests</h2>
+        <div class="group-cols">
+            ${col('Math — Code / Page', mathCPRows, ['Code','Page','#'])}
+            ${col('ELA — Code / Page', elaCPRows, ['Code','Page','#'])}
+        </div>
+    </section>` : '';
+
+    return stdSection + cpSection;
 }
 
 function buildSubjectCell(d) {
