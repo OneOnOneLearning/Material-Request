@@ -786,7 +786,7 @@ function buildStandardsGroupSection(items) {
             .map(s => `<tr>
                 <td class="std-code">${escHtml(s.code)}</td>
                 <td>${escHtml(s.desc)}</td>
-                <td class="std-count">${s.count > 1 ? `<span class="badge">${s.count}</span>` : ''}</td>
+                <td class="std-count"><span class="badge">${s.count}</span></td>
             </tr>`).join('');
     }
 
@@ -817,7 +817,7 @@ function buildStandardsGroupSection(items) {
 }
 
 function buildSubjectCell(d) {
-    if (!d || !d.requestType) return '<td class="cell-empty">—</td>';
+    if (!d || (!d.requestType && !d.notFound)) return '<td class="cell-empty">—</td>';
     let lines = [];
     if (d.requestType === 'state-standard') {
         const fw = d.framework === 'common-core' ? 'Common Core' : 'Florida Standards';
@@ -836,7 +836,9 @@ function buildSubjectCell(d) {
             lines.push(`• Code: ${escHtml(p.code || '')} / Page: ${escHtml(p.page || '')}`);
         });
     }
-    if (d.notFound) lines.push(`<em class="not-found">Not found — ${escHtml(d.notFoundNote || '')}</em>`);
+    if (d.notFound) {
+        lines.push(`<span class="not-found-block">⚠ Not Found${d.notFoundNote ? `: ${escHtml(d.notFoundNote)}` : ''}</span>`);
+    }
     return `<td>${lines.join('<br>')}</td>`;
 }
 
@@ -925,6 +927,7 @@ function openPrintView() {
   .std-pill { display: inline-block; background: #e8eeff; color: #003087; border-radius: 3px; padding: 0 4px; font-size: 10px; font-family: monospace; white-space: nowrap; }
   .cell-empty { color: #aaa; text-align: center; }
   .not-found { color: #c0392b; }
+  .not-found-block { display: inline-block; background: #fff0ee; color: #c0392b; border: 1px solid #f5c6c2; border-radius: 3px; padding: 1px 5px; font-weight: 600; font-size: 11px; }
   .card-notes { margin-top: 0.5rem; font-size: 11px; color: #555; }
   .no-students { color: #888; font-size: 11px; padding: 0.25rem 0; }
   @media print {
