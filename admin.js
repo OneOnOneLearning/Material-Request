@@ -737,14 +737,14 @@ async function triggerCompletionNotification(req) {
     }
 }
 
-// ── Export ───────────────────────────────────────────────────────────
+// ── Print / PDF ──────────────────────────────────────────────────────
 function updateExportBar() {
     const btn      = $('btn-export');
     const selectCb = $('cb-select-all');
     const visible  = getFiltered().map(r => r.id);
     const n        = exportIds.size;
 
-    btn.textContent = n > 0 ? `⬇ Export (${n})` : '⬇ Export All';
+    btn.textContent = n > 0 ? `🖨 Print / PDF (${n})` : '🖨 Print / PDF';
 
     const allChecked  = visible.length > 0 && visible.every(id => exportIds.has(id));
     const someChecked = visible.some(id => exportIds.has(id));
@@ -752,54 +752,210 @@ function updateExportBar() {
     selectCb.indeterminate = !allChecked && someChecked;
 }
 
-function csvCell(value) {
-    return `"${String(value || '').replace(/"/g, '""')}"`;
+function escHtml(str) {
+    return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
-function exportToCSV() {
+function buildStandardsGroupSection(items) {
+    // Gather all standards across all students across all requests
+    // Returns HTML string for the "grouped overview" section
+    const mathMap = {};
+    const elaMap  = {};
+
+    items.forEach(req => {
+        let students = [];
+        try { students = JSON.parse(req.studentsJSON || '[]'); } catch(e) {}
+        students.forEach(s => {
+            ['math','ela'].forEach(subj => {
+                const d = s[subj];
+                if (!d || d.requestType !== 'state-standard') return;
+                const map = subj === 'math' ? mathMap : elaMap;
+                (d.standards || []).forEach(std => {
+                    const key = std.code || std.description || '';
+                    if (!key) return;
+                    if (!map[key]) map[key] = { code: std.code || '', desc: std.description || '', count: 0 };
+                    map[key].count++;
+                });
+            });
+        });
+    });
+
+    function groupRows(map) {
+        return Object.values(map)
+            .sort((a,b) => b.count - a.count)
+            .map(s => `<tr>
+                <td class="std-code">${escHtml(s.code)}</td>
+                <td>${escHtml(s.desc)}</td>
+                <td class="std-count">${s.count > 1 ? `<span class="badge">${s.count}</span>` : ''}</td>
+            </tr>`).join('');
+    }
+
+    const mathRows = groupRows(mathMap);
+    const elaRows  = groupRows(elaMap);
+    if (!mathRows && !elaRows) return '';
+
+    return `
+    <section class="group-section">
+        <h2>Standards Overview — All Selected Requests</h2>
+        <div class="group-cols">
+            ${mathRows ? `<div class="group-col">
+                <h3>Math Standards</h3>
+                <table class="std-table">
+                    <thead><tr><th>Code</th><th>Standard</th><th>#</th></tr></thead>
+                    <tbody>${mathRows}</tbody>
+                </table>
+            </div>` : ''}
+            ${elaRows ? `<div class="group-col">
+                <h3>ELA Standards</h3>
+                <table class="std-table">
+                    <thead><tr><th>Code</th><th>Standard</th><th>#</th></tr></thead>
+                    <tbody>${elaRows}</tbody>
+                </table>
+            </div>` : ''}
+        </div>
+    </section>`;
+}
+
+function buildSubjectCell(d) {
+    if (!d || !d.requestType) return '<td class="cell-empty">—</td>';
+    let lines = [];
+    if (d.requestType === 'state-standard') {
+        const fw = d.framework === 'common-core' ? 'Common Core' : 'Florida Standards';
+        lines.push(`<strong>${escHtml(fw)}</strong> — Grade ${escHtml(d.requestGrade || '—')}`);
+        (d.standards || []).forEach(s => {
+            lines.push(`<span class="std-pill">${escHtml(s.code || '')}</span> ${escHtml(s.description || '')}`);
+        });
+    } else if (d.requestType === 'booster') {
+        lines.push(`<strong>Booster</strong> — ${escHtml(d.boosterBand || '—')}`);
+        (d.boosterPackets || []).forEach(p => {
+            lines.push(`• ${escHtml(p.name || '')}${p.info ? ` <em>(${escHtml(p.info)})</em>` : ''}`);
+        });
+    } else if (d.requestType === 'code-page') {
+        lines.push(`<strong>Specific Code/Page</strong>`);
+        (d.codePairs || []).forEach(p => {
+            lines.push(`• Code: ${escHtml(p.code || '')} / Page: ${escHtml(p.page || '')}`);
+        });
+    }
+    if (d.notFound) lines.push(`<em class="not-found">Not found — ${escHtml(d.notFoundNote || '')}</em>`);
+    return `<td>${lines.join('<br>')}</td>`;
+}
+
+function buildRequestCard(req) {
+    let students = [];
+    try { students = JSON.parse(req.studentsJSON || '[]'); } catch(e) {}
+
+    const studentRows = students.map(s => `<tr>
+        <td>${escHtml(s.name || '—')}</td>
+        <td class="grade-cell">${escHtml(s.currentGrade || '—')}</td>
+        ${buildSubjectCell(s.math)}
+        ${buildSubjectCell(s.ela)}
+    </tr>`).join('');
+
+    const date = req.submittedAt ? new Date(req.submittedAt).toLocaleDateString('en-US', {month:'short',day:'numeric',year:'numeric'}) : '—';
+
+    return `
+    <section class="request-card">
+        <div class="card-header">
+            <div class="card-id">${escHtml(req.requestId || '')}</div>
+            <div class="card-meta">
+                <span>${escHtml(req.tutorName || '—')}</span>
+                <span>${escHtml(req.school || '—')}</span>
+                <span>${escHtml(req.coordinator || '—')}</span>
+                <span>${date}</span>
+                <span class="card-status">${escHtml(req.status || '—')}</span>
+            </div>
+        </div>
+        ${students.length > 0 ? `
+        <table class="student-table">
+            <thead><tr>
+                <th>Student</th><th>Grade</th><th>Math</th><th>ELA</th>
+            </tr></thead>
+            <tbody>${studentRows}</tbody>
+        </table>` : '<p class="no-students">No student detail available.</p>'}
+        ${req.notes ? `<p class="card-notes"><strong>Notes:</strong> ${escHtml(req.notes)}</p>` : ''}
+    </section>`;
+}
+
+function openPrintView() {
     const items = exportIds.size > 0
         ? allRequests.filter(r => exportIds.has(r.id))
         : getFiltered();
 
     if (items.length === 0) return;
 
-    const headers = [
-        'Request ID', 'Date Submitted', 'Status',
-        'Tutor Name', 'Tutor Email', 'School', 'State', 'Program Coordinator',
-        '# of Students', 'Math Materials Requested', 'ELA Materials Requested', 'Notes'
-    ];
+    const groupSection = buildStandardsGroupSection(items);
+    const cards = items.map(buildRequestCard).join('');
+    const today = new Date().toLocaleDateString('en-US', {month:'long', day:'numeric', year:'numeric'});
 
-    const rows = items.map(r => [
-        r.requestId,
-        r.submittedAt,
-        r.status,
-        r.tutorName,
-        r.tutorEmail,
-        r.school,
-        r.state,
-        r.coordinator,
-        r.studentCount,
-        r.mathSummary,
-        r.elaSummary,
-        r.notes
-    ]);
+    const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Material Requests — ${escHtml(today)}</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: #111; background: #fff; padding: 1.5rem; }
+  .print-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; padding-bottom: 0.75rem; border-bottom: 2px solid #003087; }
+  .print-header img { height: 48px; }
+  .print-header h1 { font-size: 18px; color: #003087; }
+  .print-header .sub { font-size: 12px; color: #555; margin-top: 2px; }
+  .print-btn { margin-left: auto; padding: 0.5rem 1.25rem; background: #003087; color: #fff; border: none; border-radius: 6px; font-size: 13px; cursor: pointer; }
+  .group-section { margin-bottom: 2rem; page-break-inside: avoid; }
+  .group-section h2 { font-size: 14px; color: #003087; margin-bottom: 0.75rem; }
+  .group-cols { display: flex; gap: 1.5rem; }
+  .group-col { flex: 1; }
+  .group-col h3 { font-size: 12px; font-weight: 700; margin-bottom: 0.4rem; color: #444; border-bottom: 1px solid #ddd; padding-bottom: 3px; }
+  .std-table { width: 100%; border-collapse: collapse; font-size: 11px; }
+  .std-table th { background: #f0f4ff; text-align: left; padding: 4px 6px; border: 1px solid #ccd; font-weight: 600; }
+  .std-table td { padding: 3px 6px; border: 1px solid #dde; vertical-align: top; }
+  .std-table tr:nth-child(even) td { background: #f9faff; }
+  .std-code { white-space: nowrap; font-family: monospace; color: #003087; }
+  .std-count { text-align: center; }
+  .badge { background: #003087; color: #fff; border-radius: 10px; padding: 1px 6px; font-size: 10px; font-weight: 700; }
+  .request-card { border: 1px solid #ccc; border-radius: 6px; padding: 0.75rem; margin-bottom: 1.25rem; page-break-inside: avoid; }
+  .card-header { display: flex; align-items: flex-start; gap: 1rem; margin-bottom: 0.6rem; }
+  .card-id { font-weight: 700; color: #003087; font-size: 13px; white-space: nowrap; }
+  .card-meta { display: flex; flex-wrap: wrap; gap: 0.3rem 1rem; font-size: 11px; color: #555; }
+  .card-status { font-weight: 600; color: #333; }
+  .student-table { width: 100%; border-collapse: collapse; font-size: 11px; }
+  .student-table th { background: #003087; color: #fff; text-align: left; padding: 4px 6px; }
+  .student-table td { padding: 4px 6px; border: 1px solid #dde; vertical-align: top; }
+  .student-table tr:nth-child(even) td { background: #f9faff; }
+  .grade-cell { text-align: center; white-space: nowrap; }
+  .std-pill { display: inline-block; background: #e8eeff; color: #003087; border-radius: 3px; padding: 0 4px; font-size: 10px; font-family: monospace; white-space: nowrap; }
+  .cell-empty { color: #aaa; text-align: center; }
+  .not-found { color: #c0392b; }
+  .card-notes { margin-top: 0.5rem; font-size: 11px; color: #555; }
+  .no-students { color: #888; font-size: 11px; padding: 0.25rem 0; }
+  @media print {
+    .print-btn { display: none; }
+    body { padding: 0; }
+    .request-card { page-break-inside: avoid; }
+    .group-section { page-break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+<div class="print-header">
+  <img src="https://oneononelearning.github.io/Material-Request/logo.png" alt="One on One Learning">
+  <div>
+    <h1>Material Requests</h1>
+    <div class="sub">Printed ${escHtml(today)} &nbsp;·&nbsp; ${items.length} request${items.length !== 1 ? 's' : ''} selected</div>
+  </div>
+  <button class="print-btn" onclick="window.print()">🖨 Print / Save as PDF</button>
+</div>
+${groupSection}
+${cards}
+</body>
+</html>`;
 
-    const csv = [headers, ...rows]
-        .map(row => row.map(cell => csvCell(cell)).join(','))
-        .join('\r\n');
-
-    const blob = new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8;' });
+    const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
     const url  = URL.createObjectURL(blob);
-    const a    = document.createElement('a');
-    a.href     = url;
-    a.download = `Material-Requests-${new Date().toISOString().slice(0, 10)}.csv`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+    window.open(url, '_blank');
+    setTimeout(() => URL.revokeObjectURL(url), 60000);
 }
 
-$('btn-export').addEventListener('click', exportToCSV);
+$('btn-export').addEventListener('click', openPrintView);
 
 $('cb-select-all').addEventListener('change', e => {
     const visible = getFiltered().map(r => r.id);
