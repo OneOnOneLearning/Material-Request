@@ -725,6 +725,7 @@ async function triggerCompletionNotification(req) {
                 tutorEmail:              req.tutorEmail,
                 programCoordinator:      req.coordinator,
                 programCoordinatorEmail: pcEntry ? pcEntry.email : '',
+                rdpiEmail:               pcEntry ? (pcEntry.rdpi || '') : '',
                 school:                  req.school,
                 state:                   req.state,
                 mathSummary:             req.mathSummary,

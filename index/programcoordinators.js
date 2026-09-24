@@ -10,19 +10,19 @@
  */
 
 const PROGRAM_COORDINATORS = [
-    { name: "Cristina Morejon", email: "cmorejon@oneononelearning.com" },
-    { name: "Eli Coenen", email: "ecoenen@oneononelearning.com" },
-    { name: "Gabbrielle Pinder", email: "gpinder@oneononelearning.com" },
-    { name: "Gayle Thurston", email: "gthurston@oneononelearning.com" },
-    { name: "Giselle Lujan", email: "glujan@oneononelearning.com" },
-    { name: "Gretchen Ruiz", email: "gruizvazquez@oneononelearning.com" },
-    { name: "Idaliz De Jesus", email: "idejesus@oneononelearning.com" },
-    { name: "James Justice", email: "jjustice@oneononelearning.com" },
-    { name: "Kelly Pippin", email: "kpippin@oneononelearning.com" },
-    { name: "Margiet Zuniga", email: "mhernandez@oneononelearning.com" },
-    { name: "Susan Nguyen", email: "snguyen@oneononelearning.com" },
-    { name: "Tauheedah Barnes", email: "tbarnes@oneononelearning.com" },
-    { name: "Yesenia Miranda", email: "ymiranda@oneononelearning.com" },
+    { name: "Cristina Morejon",  email: "cmorejon@oneononelearning.com",    rdpi: "mhill@oneononelearning.com" },
+    { name: "Eli Coenen",        email: "ecoenen@oneononelearning.com",      rdpi: "kberry@oneononelearning.com" },
+    { name: "Gabbrielle Pinder", email: "gpinder@oneononelearning.com",      rdpi: "llandera@oneononelearning.com" },
+    { name: "Gayle Thurston",    email: "gthurston@oneononelearning.com",    rdpi: "jlove@oneononelearning.com" },
+    { name: "Giselle Lujan",     email: "glujan@oneononelearning.com",       rdpi: "mhill@oneononelearning.com" },
+    { name: "Gretchen Ruiz",     email: "gruizvazquez@oneononelearning.com", rdpi: "jlove@oneononelearning.com" },
+    { name: "Idaliz De Jesus",   email: "idejesus@oneononelearning.com",     rdpi: "jlove@oneononelearning.com" },
+    { name: "James Justice",     email: "jjustice@oneononelearning.com",     rdpi: "jlove@oneononelearning.com" },
+    { name: "Kelly Pippin",      email: "kpippin@oneononelearning.com",      rdpi: "jlove@oneononelearning.com" },
+    { name: "Margiet Zuniga",    email: "mhernandez@oneononelearning.com",   rdpi: "mhill@oneononelearning.com" },
+    { name: "Susan Nguyen",      email: "snguyen@oneononelearning.com",      rdpi: "kberry@oneononelearning.com" },
+    { name: "Tauheedah Barnes",  email: "tbarnes@oneononelearning.com",      rdpi: "mhill@oneononelearning.com" },
+    { name: "Yesenia Miranda",   email: "ymiranda@oneononelearning.com",     rdpi: "jlove@oneononelearning.com" },
 ];
 
 // Export for use in other files (if using modules)

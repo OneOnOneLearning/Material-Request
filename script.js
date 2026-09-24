@@ -889,6 +889,11 @@ function collectFormData() {
         coordinatorEmail = ''; // No email for custom coordinators
     }
 
+    const pcEntry = (typeof PROGRAM_COORDINATORS !== 'undefined')
+        ? PROGRAM_COORDINATORS.find(p => p.email === coordinatorEmail)
+        : null;
+    const rdpiEmail = pcEntry ? (pcEntry.rdpi || '') : '';
+
     // Collect all students data
     const students = [];
     const cards = studentsContainer.querySelectorAll('.student-card');
@@ -929,6 +934,7 @@ function collectFormData() {
         tutorEmail: document.getElementById('tutor-email').value,
         programCoordinator: coordinatorName,
         programCoordinatorEmail: coordinatorEmail,
+        rdpiEmail: rdpiEmail,
         school: document.getElementById('school').value,
         state: stateSelect.value,
 
