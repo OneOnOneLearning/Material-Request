@@ -1021,7 +1021,7 @@ function collectSubjectData(card, subject) {
  * @returns {string|null}
  */
 function buildSubjectSummaryLine(studentName, subjectData) {
-    if (!subjectData || !subjectData.requestType) return null;
+    if (!subjectData || (!subjectData.requestType && !subjectData.notFound)) return null;
 
     const lines = [studentName];
 
@@ -1049,8 +1049,8 @@ function buildSubjectSummaryLine(studentName, subjectData) {
         (subjectData.boosterPackets || []).forEach(p => lines.push(`• ${p.name}`));
     }
 
-    if (subjectData.notFound && subjectData.notFoundNote) {
-        lines.push(`Not found: ${subjectData.notFoundNote}`);
+    if (subjectData.notFound) {
+        lines.push(`Not found: ${subjectData.notFoundNote || '(no additional details provided)'}`);
     }
 
     return lines.join('\n');
