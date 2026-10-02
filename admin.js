@@ -730,6 +730,7 @@ async function triggerCompletionNotification(req) {
                 state:                   req.state,
                 mathSummary:             req.mathSummary,
                 elaSummary:              req.elaSummary,
+                requestNotes:            req.notes || '',
                 completedDate:           new Date().toISOString()
             })
         });
