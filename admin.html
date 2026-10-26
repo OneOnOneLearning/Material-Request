@@ -158,6 +158,15 @@
                     <p id="d-notes" class="notes-body"></p>
                 </div>
 
+                <div class="detail-card glass curriculum-notes-card">
+                    <h3 class="card-title">Curriculum Notes <span class="admin-only-badge">Admin Only</span></h3>
+                    <textarea id="d-curriculum-notes" class="curriculum-notes-input" placeholder="Add internal notes for the curriculum team..."></textarea>
+                    <div class="curriculum-notes-footer">
+                        <button id="btn-save-notes" class="btn-ghost btn-sm">Save Notes</button>
+                        <span id="notes-saved-indicator" class="notes-saved-indicator hidden">Saved ✓</span>
+                    </div>
+                </div>
+
             </div>
         </main>
 
@@ -167,5 +176,18 @@
 <script src="index/programcoordinators.js"></script>
 <script src="msal-browser.min.js"></script>
 <script src="admin.js"></script>
+
+<!-- ── Complete Without Notes Modal ──────────────────────────────────── -->
+<div id="complete-modal" class="modal-overlay hidden">
+    <div class="modal-card glass-strong">
+        <div class="modal-icon">📝</div>
+        <h3 class="modal-title">No notes added</h3>
+        <p class="modal-body">You're about to mark this request as completed without any curriculum notes. Would you like to add notes first?</p>
+        <div class="modal-actions">
+            <button id="modal-add-notes" class="btn-ghost">Add Notes</button>
+            <button id="modal-complete-anyway" class="btn-primary">Complete Anyway</button>
+        </div>
+    </div>
+</div>
 </body>
 </html>

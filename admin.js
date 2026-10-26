@@ -51,7 +51,8 @@ const COLS = {
     notes:        'field_13',
     studentsJSON:  'field_14',
     status:        'field_1',
-    completedDate: 'CompletedDate'
+    completedDate: 'CompletedDate',
+    curriculumNotes: 'CurriculumNotes'
 };
 
 const SP_SCOPES = ['https://netorgft11829358.sharepoint.com/.default'];
@@ -229,7 +230,8 @@ function normalizeItem(raw) {
         notes:        raw[COLS.notes]        || '',
         studentsJSON:  raw[COLS.studentsJSON]  || '[]',
         status:        raw[COLS.status]        || 'New',
-        completedDate: raw[COLS.completedDate] || null
+        completedDate: raw[COLS.completedDate] || null,
+        curriculumNotes: raw[COLS.curriculumNotes] || ''
     };
 }
 
@@ -255,7 +257,22 @@ async function updateStatus(itemId, newStatus) {
     if (!res.ok && res.status !== 204) throw new Error(`HTTP ${res.status}`);
 }
 
-// ── Render ───────────────────────────────────────────────────────────
+async function saveCurriculumNotesToSP(itemId, notes) {
+    const account = msalInstance.getAllAccounts()[0];
+    const token   = await getToken(account);
+    const url     = `${SP_SITE}/_api/web/lists/getbytitle('${activeListName}')/items(${itemId})`;
+    const res = await fetch(url, {
+        method:  'PATCH',
+        headers: {
+            Authorization:  `Bearer ${token}`,
+            'Content-Type': 'application/json;odata=nometadata',
+            Accept:         'application/json;odata=nometadata',
+            'IF-MATCH':     '*'
+        },
+        body: JSON.stringify({ [COLS.curriculumNotes]: notes })
+    });
+    if (!res.ok && res.status !== 204) throw new Error(`HTTP ${res.status}`);
+}
 function renderAll() {
     updateCounts();
     renderList();
@@ -399,13 +416,17 @@ function renderDetail(req) {
     // Students
     renderStudents(req);
 
-    // Notes
+    // Notes (tutor)
     if (req.notes) {
         $('d-notes').textContent = req.notes;
         $('d-notes-card').classList.remove('hidden');
     } else {
         $('d-notes-card').classList.add('hidden');
     }
+
+    // Curriculum notes (admin only)
+    $('d-curriculum-notes').value = req.curriculumNotes || '';
+    $('notes-saved-indicator').classList.add('hidden');
 }
 
 function renderStudents(req) {
@@ -496,11 +517,29 @@ function renderStudents(req) {
 }
 
 // ── Status Save ──────────────────────────────────────────────────────
-$('btn-save-status').addEventListener('click', async () => {
+$('btn-save-status').addEventListener('click', () => {
     if (selectedId === null) return;
-
-    const btn       = $('btn-save-status');
     const newStatus = $('d-status').value;
+    const notes     = $('d-curriculum-notes').value.trim();
+    if (newStatus === 'Completed' && !notes) {
+        $('complete-modal').classList.remove('hidden');
+        return;
+    }
+    doSaveStatus(newStatus);
+});
+
+$('modal-complete-anyway').addEventListener('click', () => {
+    $('complete-modal').classList.add('hidden');
+    doSaveStatus($('d-status').value);
+});
+
+$('modal-add-notes').addEventListener('click', () => {
+    $('complete-modal').classList.add('hidden');
+    $('d-curriculum-notes').focus();
+});
+
+async function doSaveStatus(newStatus) {
+    const btn       = $('btn-save-status');
     btn.disabled    = true;
     btn.textContent = '...';
 
@@ -531,7 +570,7 @@ $('btn-save-status').addEventListener('click', async () => {
             btn.disabled         = false;
         }, 2000);
     }
-});
+}
 
 // ── Delete Request ───────────────────────────────────────────────────
 $('btn-delete-request').addEventListener('click', async () => {
@@ -586,7 +625,26 @@ async function deleteRequest(itemId) {
     if (!res.ok && res.status !== 204) throw new Error(`HTTP ${res.status}`);
 }
 
-// ── School Year Selector ─────────────────────────────────────────────
+// ── Curriculum Notes Save ─────────────────────────────────────────────
+$('btn-save-notes').addEventListener('click', async () => {
+    if (selectedId === null) return;
+    const btn   = $('btn-save-notes');
+    const notes = $('d-curriculum-notes').value;
+    btn.disabled    = true;
+    btn.textContent = '...';
+    try {
+        await saveCurriculumNotesToSP(selectedId, notes);
+        const req = allRequests.find(r => r.id === selectedId);
+        if (req) req.curriculumNotes = notes;
+        $('notes-saved-indicator').classList.remove('hidden');
+        setTimeout(() => $('notes-saved-indicator').classList.add('hidden'), 2500);
+    } catch (err) {
+        console.error('Notes save failed:', err);
+    } finally {
+        btn.textContent = 'Save Notes';
+        btn.disabled    = false;
+    }
+});
 function populateYearSelector() {
     const sel = $('year-selector');
     sel.innerHTML = '';
