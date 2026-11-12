@@ -24,6 +24,7 @@ const PROGRAM_COORDINATORS = [
     { name: "Lanette Landera",   email: "llandera@oneononelearning.com",     rdpi: "" },
     { name: "Malorie Hill",      email: "mhill@oneononelearning.com",        rdpi: "" },
     { name: "Margiet Zuniga",    email: "mhernandez@oneononelearning.com",   rdpi: "mhill@oneononelearning.com" },
+    { name: "Raeann Johnson",    email: "rjohnson@oneononelearning.com",     rdpi: "jlove@oneononelearning.com" },
     { name: "Tauheedah Barnes",  email: "tbarnes@oneononelearning.com",      rdpi: "mhill@oneononelearning.com" },
     { name: "Yesenia Miranda",   email: "ymiranda@oneononelearning.com",     rdpi: "jlove@oneononelearning.com" },
 ];
